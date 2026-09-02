@@ -44,13 +44,12 @@
   if (nav) {
     window.addEventListener('scroll', () => {
       if (window.scrollY > 20) {
-        // Efecto cristal al bajar
-        nav.classList.add('bg-white/80', 'backdrop-blur-md', 'shadow-sm', 'py-4');
+        // Efecto cristal que se adapta al modo claro y oscuro
+        nav.classList.add('bg-white/80', 'dark:bg-zinc-950/80', 'backdrop-blur-md', 'shadow-sm', 'py-4');
         nav.classList.remove('bg-transparent', 'py-6');
       } else {
-        // Transparente al estar arriba
         nav.classList.add('bg-transparent', 'py-6');
-        nav.classList.remove('bg-white/80', 'backdrop-blur-md', 'shadow-sm', 'py-4');
+        nav.classList.remove('bg-white/80', 'dark:bg-zinc-950/80', 'backdrop-blur-md', 'shadow-sm', 'py-4');
       }
     });
   }

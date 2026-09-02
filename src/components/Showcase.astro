@@ -6,8 +6,9 @@ const projectsJSON = JSON.stringify(projectsData);
 ---
 
 <!-- Agregamos los fondos dinámicos y ajustamos el margen negativo para móviles -->
-<section class="w-full h-[45vh] md:h-[50vh] min-h-[380px] md:min-h-[450px] overflow-hidden relative z-0 -mt-16 md:-mt-32 bg-[rgb(var(--color-bg))] dark:bg-[rgb(var(--color-dark))] transition-colors duration-300">
-  <div id="webgl-slider" class="w-full h-full cursor-grab active:cursor-grabbing select-none" data-projects={projectsJSON}>
+<section class="w-full h-[50vh] min-h-[450px] overflow-hidden relative z-0 -mt-24 bg-transparent">
+    <div id="webgl-slider" class="w-full h-full cursor-grab active:cursor-grabbing select-none" data-projects={projectsJSON}> 
+        <!-- El canvas de ThreeJS se inyectará aquí -->
   </div>
 </section>
 
