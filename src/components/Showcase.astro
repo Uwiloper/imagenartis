@@ -1,181 +1,170 @@
-  ---
-  import projectsData from '../data/projects.json';
+---
+import projectsData from '../data/projects.json';
 
-  // Pasamos los datos al cliente
-  const projectsJSON = JSON.stringify(projectsData);
-  ---
+// Pasamos los datos al cliente
+const projectsJSON = JSON.stringify(projectsData);
+---
 
-  <section class="w-full h-[50vh] min-h-[450px] overflow-hidden relative z-0 -mt-40">
-    <div id="webgl-slider" class="w-full h-full cursor-grab active:cursor-grabbing select-none" data-projects={projectsJSON}>
-    </div>
-  </section>
+<!-- Agregamos los fondos dinámicos y ajustamos el margen negativo para móviles -->
+<section class="w-full h-[45vh] md:h-[50vh] min-h-[380px] md:min-h-[450px] overflow-hidden relative z-0 -mt-16 md:-mt-32 bg-[rgb(var(--color-bg))] dark:bg-[rgb(var(--color-dark))] transition-colors duration-300">
+  <div id="webgl-slider" class="w-full h-full cursor-grab active:cursor-grabbing select-none" data-projects={projectsJSON}>
+  </div>
+</section>
 
+<script>
+  import * as THREE from 'three';
 
-  <!--  
-
-  <section class="w-full h-screen overflow-hidden bg-white relative">
-    <div id="webgl-slider" class="w-full h-full cursor-grab active:cursor-grabbing select-none" data-projects={projectsJSON}>
-    </div>
-  </section>
-
-  -->
-
-  <script>
-    import * as THREE from 'three';
-
-    const container = document.getElementById('webgl-slider');
+  const container = document.getElementById('webgl-slider');
+  
+  if (container) {
+    const projects = JSON.parse(container.dataset.projects || '[]');
     
-    if (container) {
-      const projects = JSON.parse(container.dataset.projects || '[]');
-      
-      const scene = new THREE.Scene();
-      //scene.background = new THREE.Color(0xffffff); 
+    const scene = new THREE.Scene();
+    // El fondo de la escena ThreeJS se mantiene transparente (alpha: true) 
+    // para que se vea el fondo de Tailwind que pusimos en el <section>
 
-      const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 2000);
+    const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 2000);
 
-      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-      
-      renderer.setSize(container.clientWidth, container.clientHeight);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      container.appendChild(renderer.domElement);
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    container.appendChild(renderer.domElement);
 
-      const carouselGroup = new THREE.Group();
-      scene.add(carouselGroup);
+    const carouselGroup = new THREE.Group();
+    scene.add(carouselGroup);
 
-      const textureLoader = new THREE.TextureLoader();
-      
-      // --- 1. CONFIGURACIÓN DINÁMICA DE TARJETAS ---
-      const cardHeight = 220; 
-      const cardWidth = 350;  
-      const gap = 0;                                                            // Espacio (en píxeles) para que las tarjetas respiren
-      
-      // Solo duplicamos las tarjetas si tienes menos de 10 proyectos. 
-      // Si tienes 15, el multiplicador se quedará en 1.
-      let multiplier = 1;
-      while (projects.length * multiplier < 10) {
-        multiplier++;
-      }
-      const totalCards = projects.length * multiplier; 
-
-      // --- 2. CÁLCULO DEL RADIO MATEMÁTICO ---
-      // Calculamos la circunferencia necesaria para acomodar todas las tarjetas
-      const circumference = totalCards * (cardWidth + gap);
-      // Extraemos el radio exacto a partir de esa circunferencia (C = 2 * PI * r)
-      const radius = Math.max(600, circumference / (Math.PI * 2)); 
-
-      const anglePerCard = cardWidth / radius; 
-      const angleStep = (Math.PI * 2) / totalCards; 
-
-      // --- 3. POSICIÓN RELATIVA DE LA CÁMARA ---
-      const distanceToCards = 650; // Qué tan cerca quieres ver la tarjeta (ajústalo a tu gusto)
-      
-      // Ubicamos la cámara cerca del borde derecho del cilindro, mirando hacia la curva exterior
-      camera.position.set(radius - distanceToCards, 0, 0); 
-      camera.lookAt(new THREE.Vector3(radius, 0, 0));
-
-      // Creamos las tarjetas
-      for (let i = 0; i < totalCards; i++) {
-        const project = projects[i % projects.length];
-        
-        // Ajuste: Iniciamos el ángulo en -anglePerCard/2 para que la tarjeta
-        // quede perfectamente centrada en la cámara
-        const geometry = new THREE.CylinderGeometry(
-          radius, radius, cardHeight, 32, 1, true, -anglePerCard / 2, anglePerCard
-        );
-        // Nota: Eliminamos el geometry.translate() antiguo porque deformaba el radio real
-
-        const material = new THREE.MeshBasicMaterial({ 
-          color: 0xffffff,
-          side: THREE.DoubleSide,
-          transparent: true,
-          opacity: 0.95
-        });
-
-        textureLoader.load(project.image, (texture) => {
-          texture.generateMipmaps = true;
-          texture.minFilter = THREE.LinearMipmapLinearFilter;
-          texture.wrapS = THREE.RepeatWrapping;
-          texture.repeat.x = -1; // Espejar para leer textos
-          
-          material.map = texture;
-          material.needsUpdate = true;
-        });
-
-        const mesh = new THREE.Mesh(geometry, material);
-        const currentAngle = i * angleStep;
-        mesh.rotation.y = currentAngle;
-        
-        carouselGroup.add(mesh);
-      }
-
-      // --- INTERACCIÓN Y FÍSICAS (Sin cambios drásticos) ---
-      let isDragging = false;
-      let startX = 0;
-      let currentRotation = 0;
-      let targetRotation = 0;
-      let velocity = 0;
-      let autoRotateSpeed = 0.001;                                              // Velocidad de rotación automática
-
-      container.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        startX = e.clientX;
-        velocity = 0;
-      });
-
-      window.addEventListener('mouseup', () => { isDragging = false; });
-
-      window.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
-        const deltaX = e.clientX - startX;
-        startX = e.clientX;
-        velocity = deltaX * 0.0015;                                             // Velocidad de arrastre
-        targetRotation += velocity;
-      });
-
-      // Soporte Táctil
-      container.addEventListener('touchstart', (e) => {
-        isDragging = true;
-        startX = e.touches[0].clientX;
-        velocity = 0;
-      }, { passive: true });
-
-      window.addEventListener('touchend', () => { isDragging = false; });
-
-      window.addEventListener('touchmove', (e) => {
-        if (!isDragging) return;
-        const deltaX = e.touches[0].clientX - startX;
-        startX = e.touches[0].clientX;
-        velocity = deltaX * 0.002;
-        targetRotation += velocity;
-      }, { passive: true });
-
-
-      // --- BUCLE DE ANIMACIÓN ---
-      const animate = () => {
-        requestAnimationFrame(animate);
-
-        if (!isDragging) {
-          if (Math.abs(velocity) > 0.0001) {
-            velocity *= 0.95; 
-            targetRotation += velocity;
-          } else {
-            targetRotation += autoRotateSpeed;
-          }
-        }
-
-        currentRotation += (targetRotation - currentRotation) * 0.1;
-        carouselGroup.rotation.y = currentRotation;
-        carouselGroup.rotation.z = Math.sin(currentRotation * 2) * 0.02;
-
-        renderer.render(scene, camera);
-      };
-
-      animate();
-
-      window.addEventListener('resize', () => {
-        camera.aspect = container.clientWidth / container.clientHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(container.clientWidth, container.clientHeight);
-      });
+    const textureLoader = new THREE.TextureLoader();
+    
+    // --- 1. CONFIGURACIÓN DINÁMICA DE TARJETAS (RESPONSIVE) ---
+    const isMobile = window.innerWidth < 768;
+    const cardHeight = isMobile ? 170 : 220; 
+    const cardWidth = isMobile ? 260 : 350;  
+    const gap = 0;                                                               
+    
+    let multiplier = 1;
+    while (projects.length * multiplier < 10) {
+      multiplier++;
     }
-  </script>
+    const totalCards = projects.length * multiplier; 
+
+    // --- 2. CÁLCULO DEL RADIO MATEMÁTICO ---
+    const circumference = totalCards * (cardWidth + gap);
+    // Reducimos el radio mínimo en móviles para que la curva se note mejor
+    const minRadius = isMobile ? 400 : 600;
+    const radius = Math.max(minRadius, circumference / (Math.PI * 2)); 
+
+    const anglePerCard = cardWidth / radius; 
+    const angleStep = (Math.PI * 2) / totalCards; 
+
+    // --- 3. POSICIÓN RELATIVA DE LA CÁMARA ---
+    // Acercamos un poco más la cámara en móviles para que las tarjetas destaquen
+    const distanceToCards = isMobile ? 550 : 650; 
+    
+    camera.position.set(radius - distanceToCards, 0, 0); 
+    camera.lookAt(new THREE.Vector3(radius, 0, 0));
+
+    // Creamos las tarjetas
+    for (let i = 0; i < totalCards; i++) {
+      const project = projects[i % projects.length];
+      
+      const geometry = new THREE.CylinderGeometry(
+        radius, radius, cardHeight, 32, 1, true, -anglePerCard / 2, anglePerCard
+      );
+
+      const material = new THREE.MeshBasicMaterial({ 
+        color: 0xffffff,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0.95
+      });
+
+      textureLoader.load(project.image, (texture) => {
+        texture.generateMipmaps = true;
+        texture.minFilter = THREE.LinearMipmapLinearFilter;
+        texture.wrapS = THREE.RepeatWrapping;
+        texture.repeat.x = -1; // Espejar para leer textos
+        
+        material.map = texture;
+        material.needsUpdate = true;
+      });
+
+      const mesh = new THREE.Mesh(geometry, material);
+      const currentAngle = i * angleStep;
+      mesh.rotation.y = currentAngle;
+      
+      carouselGroup.add(mesh);
+    }
+
+    // --- INTERACCIÓN Y FÍSICAS ---
+    let isDragging = false;
+    let startX = 0;
+    let currentRotation = 0;
+    let targetRotation = 0;
+    let velocity = 0;
+    let autoRotateSpeed = 0.001;                                                
+
+    container.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      startX = e.clientX;
+      velocity = 0;
+    });
+
+    window.addEventListener('mouseup', () => { isDragging = false; });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      const deltaX = e.clientX - startX;
+      startX = e.clientX;
+      velocity = deltaX * 0.0015;                                               
+      targetRotation += velocity;
+    });
+
+    // Soporte Táctil
+    container.addEventListener('touchstart', (e) => {
+      isDragging = true;
+      startX = e.touches[0].clientX;
+      velocity = 0;
+    }, { passive: true });
+
+    window.addEventListener('touchend', () => { isDragging = false; });
+
+    window.addEventListener('touchmove', (e) => {
+      if (!isDragging) return;
+      const deltaX = e.touches[0].clientX - startX;
+      startX = e.touches[0].clientX;
+      velocity = deltaX * 0.002;
+      targetRotation += velocity;
+    }, { passive: true });
+
+
+    // --- BUCLE DE ANIMACIÓN ---
+    const animate = () => {
+      requestAnimationFrame(animate);
+
+      if (!isDragging) {
+        if (Math.abs(velocity) > 0.0001) {
+          velocity *= 0.95; 
+          targetRotation += velocity;
+        } else {
+          targetRotation += autoRotateSpeed;
+        }
+      }
+
+      currentRotation += (targetRotation - currentRotation) * 0.1;
+      carouselGroup.rotation.y = currentRotation;
+      carouselGroup.rotation.z = Math.sin(currentRotation * 2) * 0.02;
+
+      renderer.render(scene, camera);
+    };
+
+    animate();
+
+    window.addEventListener('resize', () => {
+      // Recalcular responsividad en caso de giro de pantalla en móviles
+      camera.aspect = container.clientWidth / container.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(container.clientWidth, container.clientHeight);
+    });
+  }
+</script>
