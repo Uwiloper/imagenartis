@@ -1,0 +1,57 @@
+---
+---
+
+<header id="main-nav" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 bg-transparent py-6">
+  <div class="max-w-[1400px] mx-auto px-4 sm:px-6 flex justify-between items-center">
+    
+    <!-- Logo de Imagenartis -->
+    <a href="/" class="font-display text-2xl font-bold tracking-tight text-zinc-900 flex items-center group">
+      Imagen<span class="text-blue-600 transition-colors group-hover:text-cyan-500">artis.</span>
+    </a>
+    
+    <!-- Enlaces Desktop -->
+    <nav class="hidden md:flex items-center gap-8">
+      <a href="#servicios" class="font-sans text-sm font-medium text-zinc-500 hover:text-zinc-900 transition-colors">
+        Servicios
+      </a>
+      <a href="#portafolio" class="font-sans text-sm font-medium text-zinc-500 hover:text-zinc-900 transition-colors">
+        Proyectos
+      </a>
+      <a href="#estudio" class="font-sans text-sm font-medium text-zinc-500 hover:text-zinc-900 transition-colors">
+        El Estudio
+      </a>
+    </nav>
+    
+    <!-- Botón Cotizar Desktop -->
+    <div class="hidden md:block">
+      <a href="#contacto" class="px-6 py-2.5 bg-zinc-900 text-white font-sans text-xs font-medium uppercase tracking-wider rounded-sm hover:scale-[1.02] transition-transform">
+        Cotizar
+      </a>
+    </div>
+
+    <!-- Menú Hamburguesa Móvil -->
+    <button class="md:hidden flex flex-col justify-center items-center w-8 h-8 gap-1.5 z-50" aria-label="Menú">
+      <span class="w-6 h-[2px] bg-zinc-900 block rounded-full"></span>
+      <span class="w-6 h-[2px] bg-zinc-900 block rounded-full"></span>
+    </button>
+    
+  </div>
+</header>
+
+<script>
+  const nav = document.getElementById('main-nav');
+  
+  if (nav) {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 20) {
+        // Efecto cristal al bajar
+        nav.classList.add('bg-white/80', 'backdrop-blur-md', 'shadow-sm', 'py-4');
+        nav.classList.remove('bg-transparent', 'py-6');
+      } else {
+        // Transparente al estar arriba
+        nav.classList.add('bg-transparent', 'py-6');
+        nav.classList.remove('bg-white/80', 'backdrop-blur-md', 'shadow-sm', 'py-4');
+      }
+    });
+  }
+</script>

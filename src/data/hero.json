@@ -1,0 +1,18 @@
+{
+  "badge": "Estudio Creativo & Producción",
+  "titleStatic": "Titulo enganche",
+  "typewriterWords": [
+    "Palabra 1",
+    "Numero 2",
+    "Texto 3"
+  ],
+  "description": "Descripcion breve y/o eslogan",
+  "primaryBtn": {
+    "text": "Portafolio",
+    "url": "#"
+  },
+  "secondaryBtn": {
+    "text": "Servicios",
+    "url": "#"
+  }
+}

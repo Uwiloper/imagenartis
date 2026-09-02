@@ -1,0 +1,37 @@
+{
+  "header": {
+    "tag": "Nuestra especialidad",
+    "title": {
+      "start": "Soluciones de ",
+      "highlight": "Alto impacto",
+      "highlightStyle": "font-bold italic",
+      "end": ""
+    }
+  },
+  "items": [
+    {
+      "id": "01",
+      "title": "Rotulado Vehicular",
+      "description": "Transformamos flotas comerciales y vehículos particulares con vinilos de alta durabilidad.",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAcNcJtw0ocOotZ7Pr6LJ0LOHxaiYDwL7Re7GWKt1XCQ&s=10",
+      "url": "#contacto"
+    },
+    {
+      "id": "02",
+      "title": "Espacios y Letreros",
+      "description": "Fabricamos letreros corporativos, señalética y decoración de alto impacto que atraen miradas.",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAcNcJtw0ocOotZ7Pr6LJ0LOHxaiYDwL7Re7GWKt1XCQ&s=10",
+      "url": "#contacto"
+    },
+    {
+      "id": "03",
+      "title": "Identidad Visual",
+      "description": "Desarrollamos logotipos, paletas de color y manuales de identidad corporativa desde cero.",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAcNcJtw0ocOotZ7Pr6LJ0LOHxaiYDwL7Re7GWKt1XCQ&s=10",
+      "url": "#contacto"
+    }
+  ]
+}
+
+
+

@@ -1,0 +1,203 @@
+---
+import heroData from '../data/hero.json';
+---
+
+<section class="relative z-20 w-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 flex-1 flex flex-col justify-center pt-24 md:pt-32 pb-12 md:pb-24 text-[rgb(var(--color-text-main))] dark:text-[rgb(var(--color-bg))] min-h-[55vh] md:min-h-[60vh]">
+  
+  {heroData.badge && (
+    <div class="mb-6 w-fit">
+      <div class="available-for-btn">
+        <div class="circle">
+          <div class="dot"></div>
+          <div class="outline"></div>
+        </div>
+        <span class="font-mono text-[10px] md:text-xs tracking-widest uppercase mt-[2px]">
+          {heroData.badge}
+        </span>
+      </div>
+    </div>
+  )}
+  
+  {(heroData.titleStatic || (heroData.typewriterWords && heroData.typewriterWords.length > 0)) && (
+    <h1 class="font-display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4 max-w-4xl leading-[1.1]">
+      
+      {heroData.titleStatic && (
+        <>{heroData.titleStatic} <br class="hidden sm:block" /></>
+      )}
+      
+      {heroData.typewriterWords && heroData.typewriterWords.length > 0 && (
+        <>
+          <span 
+            id="typewriter" 
+            class="text-[rgb(var(--color-primary))] relative inline-block transition-colors"
+            data-words={JSON.stringify(heroData.typewriterWords)}
+          ></span>
+          <span class="animate-pulse text-[rgb(var(--color-primary))] font-light ml-[-4px]">|</span>
+        </>
+      )}
+      
+    </h1>
+  )}
+  
+  {heroData.description && (
+    <p class="font-sans text-sm md:text-base text-[rgb(var(--color-text-muted))] max-w-xl mb-8 leading-relaxed">
+      {heroData.description}
+    </p>
+  )}
+  
+  {(heroData.primaryBtn?.text || heroData.secondaryBtn?.text) && (
+    <div class="flex flex-col sm:flex-row gap-4">
+      
+      {heroData.primaryBtn?.text && (
+        <a href={heroData.primaryBtn.url} class="group flex items-center justify-center gap-2 px-7 py-3.5 bg-[rgb(var(--color-primary))] text-[rgb(var(--color-bg))] font-sans text-xs md:text-sm font-medium rounded-sm transition-all duration-300 hover:scale-[1.02] shadow-[0_4px_20px_rgb(var(--color-primary))/0.3] hover:shadow-[0_4px_25px_rgb(var(--color-primary))/0.5]">
+          <span>{heroData.primaryBtn.text}</span>
+          <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          </svg>
+        </a>
+      )}
+      
+      {heroData.secondaryBtn?.text && (
+        <a href={heroData.secondaryBtn.url} class="group flex items-center justify-center gap-2 px-7 py-3.5 bg-transparent text-[rgb(var(--color-text-main))] dark:text-[rgb(var(--color-bg))] border border-[rgb(var(--color-secondary))] font-sans text-xs md:text-sm font-medium rounded-sm transition-all duration-300 hover:scale-[1.02] hover:bg-[rgb(var(--color-secondary))/0.08]">
+          <span>{heroData.secondaryBtn.text}</span>
+          <svg class="w-4 h-4 transition-transform duration-300 group-hover:rotate-45 text-[rgb(var(--color-secondary))]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          </svg>
+        </a>
+      )}
+      
+    </div>
+  )}
+
+</section>
+
+<style>
+  .available-for-btn {
+    --animation: 2s ease-in-out infinite;
+    display: flex;
+    align-items: center;
+    column-gap: 2px;
+    color: #178d00;
+    background-color: #e1f9dc;
+    border-radius: 100px;
+    padding: 0.5rem 1rem 0.5rem 0.25rem;
+    font-weight: 600;
+    position: relative;
+    transition: 0.2s ease-in-out;
+  }
+  
+  :global(.dark) .available-for-btn {
+    background-color: rgba(23, 141, 0, 0.15);
+    color: #4ade80;
+  }
+
+  .circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 16px;
+    height: 16px;
+    border: solid 2px #178d00;
+    border-radius: 50%;
+    margin: 0 10px;
+    background-color: transparent;
+    animation: circle-keys var(--animation);
+  }
+  :global(.dark) .circle { border-color: #4ade80; }
+
+  .circle .dot {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #178d00;
+    animation: dot-keys var(--animation);
+  }
+  :global(.dark) .circle .dot { background-color: #4ade80; }
+
+  .circle .outline {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    animation: outline-keys var(--animation);
+    --color: #178d00;
+  }
+  :global(.dark) .circle .outline { --color: #4ade80; }
+
+  @keyframes circle-keys {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.5); opacity: 0.5; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  @keyframes dot-keys {
+    0% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(0); }
+    100% { transform: translate(-50%, -50%) scale(1); }
+  }
+
+  @keyframes outline-keys {
+    0% {
+      transform: translate(-50%, -50%) scale(0);
+      outline: solid 20px var(--color);
+      outline-offset: 0;
+      opacity: 1;
+    }
+    100% {
+      transform: translate(-50%, -50%) scale(1);
+      outline: solid 0 transparent;
+      outline-offset: 20px;
+      opacity: 0;
+    }
+  }
+</style>
+
+<script>
+  const typewriterEl = document.getElementById('typewriter');
+  
+  if (typewriterEl && typewriterEl.dataset.words) {
+    const words = JSON.parse(typewriterEl.dataset.words);
+    
+    if (words.length > 0) {
+      let wordIndex = 0;
+      let charIndex = 0;
+      let isDeleting = false;
+
+      function type() {
+        if (!typewriterEl) return; 
+
+        const currentWord = words[wordIndex];
+        
+        if (isDeleting) {
+          typewriterEl.textContent = currentWord.substring(0, charIndex - 1);
+          charIndex--;
+        } else {
+          typewriterEl.textContent = currentWord.substring(0, charIndex + 1);
+          charIndex++;
+        }
+
+        let typeSpeed = isDeleting ? 40 : 100;
+
+        if (!isDeleting && charIndex === currentWord.length) {
+          typeSpeed = 2500; 
+          isDeleting = true;
+        } else if (isDeleting && charIndex === 0) {
+          isDeleting = false;
+          wordIndex = (wordIndex + 1) % words.length;
+          typeSpeed = 500; 
+        }
+
+        setTimeout(type, typeSpeed);
+      }
+      type();
+    }
+  }
+</script>

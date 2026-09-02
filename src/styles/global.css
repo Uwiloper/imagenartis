@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+/* 1. Sintaxis corregida para Tailwind v4 estable */
+@variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Fuente para textos generales (clase predeterminada font-sans) */
+  --font-sans: 'Inter Variable', sans-serif;
+  
+  /* Fuente para títulos y encabezados (usaremos la clase font-display) */
+  --font-display: 'Space Grotesk Variable', sans-serif;
+  
+  /* Fuente para etiquetas y código (usaremos la clase font-mono) */
+  --font-mono: 'Space Mono', monospace;
+}
+
+@layer base {
+  :root {
+    /* Color Principal */
+    --color-primary: 255 0 50;
+    
+    /* Color Secundario (Actualizado al tuyo) */
+    --color-secondary: 255 170 200;
+
+    /* Color de Fondo Principal (Blanco) */
+    --color-bg: 255 255 255;
+
+    /* Color Oscuro para fondos/botones */
+    --color-dark: 24 24 27;
+
+    /* Color de Texto Principal */
+    --color-text-main: 24 24 27;
+
+    /* Color de Texto Secundario/Párrafos */
+    --color-text-muted: 82 82 91;
+  }
+}

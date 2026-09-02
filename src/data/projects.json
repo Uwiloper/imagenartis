@@ -1,0 +1,34 @@
+[    
+  {
+    "id": 1,
+    "title": "Rotulado Off-Road PRO-4X",
+    "client": "Vehículo Particular (BPT-817)",
+    "category": "Rotulado Vehicular",
+    "image": "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&q=80&w=1200&h=675",
+    "tags": ["Plotter", "Vinilo Azul", "Termoformado"]
+  },
+  {
+    "id": 2,
+    "title": "Identidad Visual Corporativa",
+    "client": "Logística Integral Lima",
+    "category": "Diseño Gráfico",
+    "image": "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80&w=1200&h=675",
+    "tags": ["Branding", "Manual de Marca"]
+  },
+  {
+    "id": 3,
+    "title": "Branding de Flota Comercial",
+    "client": "Distribuidora del Sur",
+    "category": "Rotulado Comercial",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzaEs-zsgkLzzu5AovxBrthK1tds9gf9FMo68gsF-hks2g0rdwPDCF4cmm&s=10",
+    "tags": ["Diseño 2D", "Vinilo Impreso"]
+  },
+  {
+    "id": 4,
+    "title": "Renovación de Fachada Comercial",
+    "client": "Restaurante Local",
+    "category": "Producción Visual",
+    "image": "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=1200&h=675",
+    "tags": ["Señalética", "Instalación"]
+  }
+]

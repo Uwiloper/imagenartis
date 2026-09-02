@@ -1,0 +1,48 @@
+---
+import '@fontsource-variable/space-grotesk';
+import '@fontsource-variable/inter';
+import '@fontsource/space-mono/400.css'; 
+import '@fontsource/space-mono/700.css'; 
+import '../styles/global.css';
+import Navbar from '../components/Navbar.astro';
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<!-- FUERZA EL MODO OSCURO AQUÍ PARA PROBAR (luego puedes quitar el "dark" para que el script lo automatice) -->
+<html lang="es" class="dark scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    
+    <script is:inline>
+      const checkTheme = () => {
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      };
+      checkTheme();
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', checkTheme);
+    </script>
+  </head>
+  
+  <!-- Usamos SOLO la clase base, el CSS hará la magia del cambio -->
+  <body class="bg-[rgb(var(--color-bg))] text-[rgb(var(--color-text-main))] antialiased overflow-x-hidden transition-colors duration-300">
+    <Navbar />
+    
+    <main class="relative w-full">
+      <slot />
+    </main>
+  </body>
+</html>
