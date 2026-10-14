@@ -1,0 +1,146 @@
+---
+import { 
+  Palette, 
+  RotateCcw, 
+  ShieldCheck, 
+  CircleDollarSign, 
+  BadgePercent, 
+  Clock,
+  Sparkles,
+  CheckCircle2
+} from 'lucide-react';
+
+export interface WhyFeature {
+  icon?: 'palette' | 'undo' | 'shield' | 'trending' | 'dollar' | 'clock' | 'sparkles' | 'check';
+  title: string;
+  description: string;
+}
+
+export interface Props {
+  badge?: string;
+  titleLine1?: string;
+  titleLine2Static?: string;
+  titleLine2Highlight?: string;
+  features?: WhyFeature[];
+  image?: string;
+  imageAlt?: string;
+  reverseLayout?: boolean;
+}
+
+const {
+  badge,
+  titleLine1 = '¿Por qué la gente',
+  titleLine2Static = 'elige',
+  titleLine2Highlight = 'vinil?',
+  features = [
+    {
+      icon: 'palette',
+      title: 'Colores, acabados y texturas ilimitados:',
+      description: 'mate, satinado, fibra de carbono, cromo, cambio de color y mucho más.'
+    },
+    {
+      icon: 'undo',
+      title: 'Totalmente reversible:',
+      description: 'se puede quitar en cualquier momento, la pintura original permanece intacta.'
+    },
+    {
+      icon: 'shield',
+      title: 'Protege la pintura original:',
+      description: 'protege contra los rayos UV, las astillas, la sal y los arañazos.'
+    },
+    {
+      icon: 'trending',
+      title: 'Conserva el valor de reventa:',
+      description: 'retírelo antes de venderlo, el coche parece recién salido de fábrica.'
+    },
+    {
+      icon: 'dollar',
+      title: 'Una fracción del costo de la pintura:',
+      description: 'el mismo impacto a aproximadamente un tercio del precio.'
+    },
+    {
+      icon: 'clock',
+      title: 'Instalación en días, no en semanas:',
+      description: 'la mayoría de los vinilos se instalan en 2-3 días.'
+    }
+  ],
+  image = '/images/why-vinyl-car.png',
+  imageAlt = 'Vehículo de lujo con wrap automotriz bitono de alta gama',
+  reverseLayout = false,
+} = Astro.props;
+---
+
+<section class="py-20 md:py-28 bg-white dark:bg-zinc-950 transition-colors duration-300 overflow-hidden">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class={`grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center ${reverseLayout ? 'lg:flex-row-reverse' : ''}`}>
+      
+      <!-- Columna Izquierda: Título y Lista de Beneficios -->
+      <div class={`lg:col-span-7 flex flex-col justify-center ${reverseLayout ? 'lg:order-2' : 'lg:order-1'}`}>
+        
+        {badge && (
+          <div class="mb-4">
+            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-semibold tracking-wider uppercase bg-zinc-100 text-zinc-900 dark:bg-zinc-900 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-800">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#EE2737]"></span>
+              {badge}
+            </span>
+          </div>
+        )}
+
+        <!-- Título de dos líneas con palabra en rojo -->
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display font-extrabold tracking-tight text-zinc-900 dark:text-white leading-[1.18] mb-8 lg:mb-10">
+          {titleLine1} <br class="hidden sm:inline" />
+          <span>{titleLine2Static}</span>{' '}
+          <span class="text-[#EE2737]">{titleLine2Highlight}</span>
+        </h2>
+
+        <!-- Lista de 6 Beneficios -->
+        <ul class="space-y-6 sm:space-y-7">
+          {features.map((item) => (
+            <li class="flex items-start gap-4 sm:gap-5 group">
+              <!-- Icono circular con tono suave y contraste -->
+              <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/90 dark:border-zinc-800 flex items-center justify-center shrink-0 text-zinc-700 dark:text-zinc-300 group-hover:text-[#EE2737] group-hover:border-[#EE2737]/40 transition-all duration-300">
+                {item.icon === 'palette' && <Palette size={20} strokeWidth={1.8} />}
+                {item.icon === 'undo' && <RotateCcw size={19} strokeWidth={1.8} />}
+                {item.icon === 'shield' && <ShieldCheck size={20} strokeWidth={1.8} />}
+                {item.icon === 'trending' && <CircleDollarSign size={20} strokeWidth={1.8} />}
+                {item.icon === 'dollar' && <BadgePercent size={20} strokeWidth={1.8} />}
+                {item.icon === 'clock' && <Clock size={20} strokeWidth={1.8} />}
+                {item.icon === 'sparkles' && <Sparkles size={20} strokeWidth={1.8} />}
+                {item.icon === 'check' && <CheckCircle2 size={20} strokeWidth={1.8} />}
+                {!item.icon && <CheckCircle2 size={20} strokeWidth={1.8} />}
+              </div>
+
+              <!-- Texto: Encabezado Negrita + Descripción -->
+              <div class="text-sm sm:text-[15px] leading-relaxed text-zinc-600 dark:text-zinc-400 font-sans pt-1">
+                <strong class="font-bold text-zinc-900 dark:text-white mr-1.5">
+                  {item.title}
+                </strong>
+                <span>{item.description}</span>
+              </div>
+            </li>
+          ))}
+        </ul>
+
+      </div>
+
+      <!-- Columna Derecha: Tarjeta oscura con fotografía de estudio del vehículo -->
+      <div class={`lg:col-span-5 ${reverseLayout ? 'lg:order-1' : 'lg:order-2'}`}>
+        <div class="relative w-full aspect-[4/3] sm:aspect-[16/11] lg:aspect-[4/3] rounded-3xl overflow-hidden bg-black border border-zinc-200 dark:border-zinc-800/80 shadow-2xl flex items-center justify-center group">
+          
+          <img
+            src={image}
+            alt={imageAlt}
+            loading="lazy"
+            class="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+          />
+
+          <!-- Sutil viñeta y resplandor para acabado cinematográfico de estudio -->
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none"></div>
+          <div class="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-3xl pointer-events-none"></div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>

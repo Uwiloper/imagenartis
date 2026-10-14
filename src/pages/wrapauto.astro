@@ -1,13 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import HeroWrapAuto from '../components/sections/HeroWrapAuto.astro';
+import WhyChooseVinyl from '../components/sections/WhyChooseVinyl.astro';
 import ShowcasePortfolio from '../components/sections/ShowcasePortfolio';
 import EngagementCTA from '../components/sections/EngagementCTA.astro';
 import { fetchAllSections } from '../lib/cms';
 
 const cms = await fetchAllSections();
 
-// Proyectos filtrados o destacados para wrap automotriz
+// Proyectos filtrados o destacados para wrap automotriz (reservado para activación progresiva)
 const vehicleShowcase = (cms.showcase?.items || []).filter(item => 
   item.id === 'vehiculo' || item.category?.toLowerCase().includes('veh') || item.category?.toLowerCase().includes('flota')
 );
@@ -77,13 +78,19 @@ const faqs = [
   description="Especialistas en rotulación vehicular, cambio de color y branding para flotas corporativas en Lima y todo el Perú. Vinilos 3M y Avery Dennison con garantía certificada."
 >
 
-  <!-- HERO DEDICADO DE 80% VIEWPORT CON LOS 3 PRINCIPALES -->
+  <!-- 1. HERO DEDICADO DE 80% VIEWPORT CON LOS 3 PRINCIPALES -->
   <HeroWrapAuto />
 
-  <!-- SECCIÓN DE SOLUCIONES Y ACABADOS -->
+  <!-- 2. NUEVA SECCIÓN: ¿POR QUÉ LA GENTE ELIGE VINIL? -->
+  <WhyChooseVinyl />
+
+  {/* =========================================================================
+      SECCIONES EN RESERVA (Ocultas temporalmente para activación progresiva)
+      =========================================================================
+  */}
+  {/* 
   <section id="acabados" class="py-20 md:py-28 bg-zinc-50 dark:bg-zinc-900/50 transition-colors duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      
       <div class="text-center max-w-3xl mx-auto mb-16">
         <span class="text-xs font-mono uppercase tracking-widest text-[#EE2737] font-semibold mb-2 block">
           Catálogo Especializado
@@ -99,7 +106,6 @@ const faqs = [
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {wrapSolutions.map((sol) => (
           <div class="group flex flex-col bg-white dark:bg-zinc-900 rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-300 shadow-sm">
-            
             <div class="relative aspect-[16/10] w-full overflow-hidden bg-zinc-100 dark:bg-zinc-800">
               <img
                 src={sol.image}
@@ -143,53 +149,32 @@ const faqs = [
                 </a>
               </div>
             </div>
-
           </div>
         ))}
       </div>
-
     </div>
   </section>
 
-  <!-- CASOS DE ÉXITO DE VEHÍCULOS (ANTES / DESPUÉS) -->
-  {showcaseItems && showcaseItems.length > 0 && (
-    <section class="py-20 md:py-24 bg-white dark:bg-zinc-950 transition-colors duration-300">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12 text-center">
-        <span class="text-xs font-mono uppercase tracking-widest text-[#EE2737] font-semibold mb-2 block">
-          Resultados Comprobados
-        </span>
-        <h2 class="text-3xl md:text-4xl lg:text-5xl font-display font-bold tracking-tight text-zinc-900 dark:text-white">
-          Transformaciones <span class="text-[#EE2737]">Antes y Después</span>
-        </h2>
-        <p class="mt-3 text-sm text-zinc-600 dark:text-zinc-400 font-sans">
-          Mueve el deslizador central para comparar el estado previo y el acabado final entregado al cliente.
-        </p>
-      </div>
+  <ShowcasePortfolio items={showcaseItems} client:visible />
 
-      <ShowcasePortfolio items={showcaseItems} client:visible />
-    </section>
-  )}
-
-  <!-- PREGUNTAS FRECUENTES (FAQ) -->
   <section class="py-20 md:py-24 bg-zinc-50 dark:bg-zinc-900/40 border-t border-zinc-200 dark:border-zinc-800/60 transition-colors duration-300">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-      
       <div class="text-center mb-14">
         <span class="text-xs font-mono uppercase tracking-widest text-[#EE2737] font-semibold mb-2 block">
           Resolvemos tus dudas
         </span>
         <h2 class="text-3xl md:text-4xl font-display font-bold tracking-tight text-zinc-900 dark:text-white">
-          Preguntas Frecuentes sobre <span class="text-[#EE2737]">Wrap Vehicular</span>
+          Preguntas <span class="text-[#EE2737]">Frecuentes</span>
         </h2>
       </div>
 
       <div class="space-y-4">
-        {faqs.map((faq, i) => (
-          <details class="group bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-6 [&_summary::-webkit-details-marker]:hidden transition-all duration-200 open:border-zinc-300 dark:open:border-zinc-700">
-            <summary class="flex cursor-pointer items-center justify-between gap-4 text-zinc-900 dark:text-white font-display font-semibold text-base sm:text-lg select-none">
+        {faqs.map((faq) => (
+          <details class="group bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg p-5 [&_svg]:open:-rotate-180 transition-all duration-200">
+            <summary class="flex justify-between items-center font-bold text-sm sm:text-base text-zinc-900 dark:text-white cursor-pointer list-none select-none">
               <span>{faq.q}</span>
-              <span class="shrink-0 rounded-full p-1.5 text-zinc-500 group-open:rotate-180 transition-transform duration-300">
-                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <span class="ml-4 shrink-0 text-[#EE2737] transition-transform duration-300">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                 </svg>
               </span>
@@ -200,11 +185,10 @@ const faqs = [
           </details>
         ))}
       </div>
-
     </div>
   </section>
 
-  <!-- CTA FINAL DE ENGAGEMENT -->
-  <EngagementCTA data={cms.engagement} />
+  <EngagementCTA />
+  */}
 
 </Layout>
