@@ -86,32 +86,32 @@ const {
           </div>
         )}
 
-        <!-- Título de dos líneas con palabra en rojo -->
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display font-extrabold tracking-tight text-zinc-900 dark:text-white leading-[1.18] mb-8 lg:mb-10">
+        <!-- Título proporcionado (sin desbordes ni tamaño desmedido) -->
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-display font-bold tracking-tight text-zinc-900 dark:text-white leading-[1.2] mb-6 sm:mb-8">
           {titleLine1} <br class="hidden sm:inline" />
           <span>{titleLine2Static}</span>{' '}
           <span class="text-[#EE2737]">{titleLine2Highlight}</span>
         </h2>
 
         <!-- Lista de 6 Beneficios -->
-        <ul class="space-y-6 sm:space-y-7">
+        <ul class="space-y-5 sm:space-y-6">
           {features.map((item) => (
-            <li class="flex items-start gap-4 sm:gap-5 group">
+            <li class="flex items-start gap-3.5 sm:gap-4 group">
               <!-- Icono circular con tono suave y contraste -->
-              <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/90 dark:border-zinc-800 flex items-center justify-center shrink-0 text-zinc-700 dark:text-zinc-300 group-hover:text-[#EE2737] group-hover:border-[#EE2737]/40 transition-all duration-300">
-                {item.icon === 'palette' && <Palette size={20} strokeWidth={1.8} />}
-                {item.icon === 'undo' && <RotateCcw size={19} strokeWidth={1.8} />}
-                {item.icon === 'shield' && <ShieldCheck size={20} strokeWidth={1.8} />}
-                {item.icon === 'trending' && <CircleDollarSign size={20} strokeWidth={1.8} />}
-                {item.icon === 'dollar' && <BadgePercent size={20} strokeWidth={1.8} />}
-                {item.icon === 'clock' && <Clock size={20} strokeWidth={1.8} />}
-                {item.icon === 'sparkles' && <Sparkles size={20} strokeWidth={1.8} />}
-                {item.icon === 'check' && <CheckCircle2 size={20} strokeWidth={1.8} />}
-                {!item.icon && <CheckCircle2 size={20} strokeWidth={1.8} />}
+              <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/90 dark:border-zinc-800 flex items-center justify-center shrink-0 text-zinc-700 dark:text-zinc-300 group-hover:text-[#EE2737] group-hover:border-[#EE2737]/40 transition-all duration-300">
+                {item.icon === 'palette' && <Palette size={18} strokeWidth={1.8} />}
+                {item.icon === 'undo' && <RotateCcw size={17} strokeWidth={1.8} />}
+                {item.icon === 'shield' && <ShieldCheck size={18} strokeWidth={1.8} />}
+                {item.icon === 'trending' && <CircleDollarSign size={18} strokeWidth={1.8} />}
+                {item.icon === 'dollar' && <BadgePercent size={18} strokeWidth={1.8} />}
+                {item.icon === 'clock' && <Clock size={18} strokeWidth={1.8} />}
+                {item.icon === 'sparkles' && <Sparkles size={18} strokeWidth={1.8} />}
+                {item.icon === 'check' && <CheckCircle2 size={18} strokeWidth={1.8} />}
+                {!item.icon && <CheckCircle2 size={18} strokeWidth={1.8} />}
               </div>
 
               <!-- Texto: Encabezado Negrita + Descripción -->
-              <div class="text-sm sm:text-[15px] leading-relaxed text-zinc-600 dark:text-zinc-400 font-sans pt-1">
+              <div class="text-xs sm:text-sm leading-relaxed text-zinc-600 dark:text-zinc-400 font-sans pt-0.5">
                 <strong class="font-bold text-zinc-900 dark:text-white mr-1.5">
                   {item.title}
                 </strong>
@@ -123,9 +123,9 @@ const {
 
       </div>
 
-      <!-- Columna Derecha: Tarjeta oscura con fotografía de estudio del vehículo -->
+      <!-- Columna Derecha: Tarjeta oscura SIN SOMBRAS (flat design) con fotografía de estudio -->
       <div class={`lg:col-span-5 ${reverseLayout ? 'lg:order-1' : 'lg:order-2'}`}>
-        <div class="relative w-full aspect-[4/3] sm:aspect-[16/11] lg:aspect-[4/3] rounded-3xl overflow-hidden bg-black border border-zinc-200 dark:border-zinc-800/80 shadow-2xl flex items-center justify-center group">
+        <div class="relative w-full aspect-[4/3] sm:aspect-[16/11] lg:aspect-[4/3] rounded-2xl overflow-hidden bg-black border border-zinc-200 dark:border-zinc-800/80 flex items-center justify-center group">
           
           <img
             src={image}
@@ -134,9 +134,9 @@ const {
             class="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
           />
 
-          <!-- Sutil viñeta y resplandor para acabado cinematográfico de estudio -->
-          <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none"></div>
-          <div class="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-3xl pointer-events-none"></div>
+          <!-- Sutil viñeta para contraste -->
+          <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none"></div>
+          <div class="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-2xl pointer-events-none"></div>
 
         </div>
       </div>

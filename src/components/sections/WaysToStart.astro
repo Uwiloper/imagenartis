@@ -1,0 +1,133 @@
+---
+export interface WayItem {
+  id: string;
+  titleLine1: string;
+  titleLine2: string;
+  description: string;
+  bgImage: string;
+  quoteUrl: string;
+  galleryCategory: string;
+  galleryUrl: string;
+}
+
+export interface Props {
+  barTitle?: string;
+  items?: WayItem[];
+}
+
+const {
+  barTitle = '- VARIAS FORMAS DE EMPEZAR -',
+  items = [
+    {
+      id: 'corporativo',
+      titleLine1: 'Vinilado',
+      titleLine2: 'Corporativo',
+      description: 'Descripción breve que detalla que hacemos vinilado de alta calidad para flotas vehiculares, oficinas, fachadas y espacios comerciales.',
+      bgImage: 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?q=80&w=1600&auto=format&fit=crop',
+      quoteUrl: 'https://wa.me/51994097417?text=¡Hola!%20Deseo%20cotizar%20un%20proyecto%20de%20Vinilado%20Corporativo%20o%20Flotas',
+      galleryCategory: 'corporativo',
+      galleryUrl: '/portafolio?categoria=corporativo',
+    },
+    {
+      id: 'automotriz',
+      titleLine1: 'Vinilado',
+      titleLine2: 'Automotriz',
+      description: '¡Vive el momento! Que tu auto muestre tu estilo con cambio de color premium, acabados mate, satinados y diseños personalizados exclusivos.',
+      bgImage: 'https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=1600&auto=format&fit=crop',
+      quoteUrl: 'https://wa.me/51994097417?text=¡Hola!%20Deseo%20cotizar%20un%20proyecto%20de%20Vinilado%20Automotriz%20personalizado',
+      galleryCategory: 'automotriz',
+      galleryUrl: '/portafolio?categoria=automotriz',
+    },
+    {
+      id: 'ppf',
+      titleLine1: 'Protección',
+      titleLine2: 'Invisible!',
+      description: 'Descripción breve de por qué el cliente debe usar PPF (Paint Protection Film) en su vehículo: para evitar rayaduras, proteger pintura original y ganar estética duradera.',
+      bgImage: 'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?q=80&w=1600&auto=format&fit=crop',
+      quoteUrl: 'https://wa.me/51994097417?text=¡Hola!%20Deseo%20cotizar%20el%20servicio%20de%20Protección%20PPF%20(Paint%20Protection%20Film)',
+      galleryCategory: 'ppf',
+      galleryUrl: '/portafolio?categoria=ppf',
+    },
+  ],
+} = Astro.props;
+---
+
+<section class="w-full bg-white dark:bg-zinc-950 transition-colors duration-300 border-t border-zinc-200 dark:border-zinc-800/80 overflow-hidden">
+  
+  <!-- Barra superior roja con texto centrado (estilo oficial de la referencia) -->
+  {barTitle && (
+    <div class="w-full bg-[#EE2737] py-2.5 px-4 text-center select-none">
+      <span class="text-white text-xs sm:text-sm font-mono font-bold tracking-[0.2em] uppercase">
+        {barTitle}
+      </span>
+    </div>
+  )}
+
+  <!-- Contenedor de las 3 filas horizontales con efecto hover en fondo e interacción de color -->
+  <div class="w-full divide-y divide-zinc-200 dark:divide-zinc-800/80">
+    {items.map((item) => (
+      <div 
+        class="group relative w-full min-h-[220px] lg:min-h-[240px] flex items-center bg-white dark:bg-zinc-950 transition-colors duration-500 overflow-hidden"
+      >
+        
+        <!-- Imagen de fondo que se revela en hover con opacidad progresiva -->
+        <div class="absolute inset-0 w-full h-full pointer-events-none overflow-hidden">
+          <img
+            src={item.bgImage}
+            alt={`${item.titleLine1} ${item.titleLine2}`}
+            loading="lazy"
+            class="w-full h-full object-cover object-center scale-100 group-hover:scale-105 opacity-0 group-hover:opacity-100 transition-all duration-700 ease-out"
+          />
+          
+          <!-- Capa oscura y gradiente lateral de legibilidad al pasar el mouse -->
+          <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div class="absolute inset-0 bg-gradient-to-r from-black/85 via-black/60 to-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        </div>
+
+        <!-- Contenido principal interactivo -->
+        <div class="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-12 py-10 lg:py-12 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+          
+          <!-- Columna Izquierda: Títulos y Descripción con ajuste automático de color -->
+          <div class="max-w-2xl">
+            <h3 class="text-2xl sm:text-3xl lg:text-4xl font-display font-bold tracking-tight text-zinc-900 dark:text-white group-hover:text-white transition-colors duration-300 leading-[1.15] mb-3">
+              <span>{item.titleLine1}</span><br />
+              <span class="text-[#EE2737]">{item.titleLine2}</span>
+            </h3>
+
+            <p class="text-xs sm:text-sm md:text-[15px] font-sans text-zinc-600 dark:text-zinc-400 group-hover:text-zinc-200 transition-colors duration-300 leading-relaxed max-w-xl">
+              {item.description}
+            </p>
+          </div>
+
+          <!-- Columna Derecha: Botones de Acción (Primario y Secundario a Galería) -->
+          <div class="flex flex-col sm:flex-row lg:flex-col gap-3 sm:gap-4 shrink-0 w-full sm:w-auto lg:min-w-[210px]">
+            
+            <!-- Botón Principal: Cotizar (Reutilizable oficial con WhatsApp) -->
+            <a
+              href={item.quoteUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-sm bg-[#EE2737] hover:bg-[#d61e2e] text-white text-xs font-bold uppercase tracking-wider transition-all duration-200 select-none shadow-none text-center"
+            >
+              <span>COTIZAR PROYECTO</span>
+              <span class="text-sm font-semibold transition-transform duration-200 group-hover:translate-x-0.5">→</span>
+            </a>
+
+            <!-- Botón Secundario: Ver Trabajos (Dirige a galería interactiva filtrada por categoría) -->
+            <a
+              href={item.galleryUrl}
+              class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-sm border border-zinc-300 dark:border-zinc-700 text-zinc-800 dark:text-zinc-200 bg-transparent group-hover:border-white/40 group-hover:text-white hover:!bg-white hover:!text-zinc-950 transition-all duration-200 text-xs font-bold uppercase tracking-wider select-none shadow-none text-center"
+            >
+              <span>VER TRABAJOS</span>
+              <span class="text-sm font-semibold transition-transform duration-200 group-hover:translate-x-0.5">→</span>
+            </a>
+
+          </div>
+
+        </div>
+
+      </div>
+    ))}
+  </div>
+
+</section>
