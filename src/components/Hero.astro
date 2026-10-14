@@ -1,0 +1,137 @@
+---
+import { getHeroData, type HeroData } from '../lib/cms';
+
+interface Props {
+  data?: Partial<HeroData>;
+}
+
+const raw = { ...getHeroData(), ...(Astro.props.data || {}) };
+
+const heroData = {
+  badge: raw.badge || '',
+  titleStatic: raw.titleStatic || '',
+  typewriterWords: raw.typewriterWords || [],
+  description: raw.description || '',
+  primaryBtn: {
+    text: raw.primaryBtnText || 'COTIZAR PROYECTO',
+    url: raw.primaryBtnUrl || 'https://wa.me/51994097417',
+  },
+  secondaryBtn: {
+    text: raw.secondaryBtnText || 'VER PORTAFOLIO',
+    url: raw.secondaryBtnUrl || '#portafolio',
+  },
+};
+---
+
+<section class="relative z-20 w-full h-screen min-h-[600px] flex flex-col justify-center items-center overflow-hidden">
+  
+  <!-- VIDEO DE FONDO RESPONSIVO -->
+  <video 
+    autoplay 
+    loop 
+    muted 
+    playsinline 
+    class="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none"
+  >
+    <!-- Coloca tu video en la carpeta public/videos/ -->
+    <source src="/videos/fondo-hero.mp4" type="video/mp4" />
+  </video>
+  
+  <!-- OVERLAY SEMITRANSPARENTE PARA CONTRASTE -->
+  <div class="absolute inset-0 bg-black/60 dark:bg-[#18181b]/80 z-10 transition-colors duration-500 backdrop-blur-[2px]"></div>
+  
+  <!-- CONTENIDO CENTRAL -->
+  <div class="relative z-20 w-full max-w-[1000px] mx-auto px-6 md:px-12 flex flex-col items-center text-center text-white mt-16 md:mt-0">
+    
+    {heroData.badge && (
+      <div class="mb-6 w-fit">
+        <div class="flex items-center gap-2 text-green-400 bg-green-500/10 border border-green-500/20 px-3 py-1.5 rounded-full shadow-[0_0_15px_rgba(34,197,94,0.15)]">
+          <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+          <span class="font-mono text-[10px] md:text-xs tracking-widest uppercase font-medium mt-[2px]">
+            {heroData.badge}
+          </span>
+        </div>
+      </div>
+    )}
+    
+    {(heroData.titleStatic || (heroData.typewriterWords && heroData.typewriterWords.length > 0)) && (
+      <h1 class="font-display text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 max-w-4xl leading-[1.1] text-white">
+        {heroData.titleStatic && (
+            <>{heroData.titleStatic} <br class="hidden sm:block" /></>
+        )}
+        {heroData.typewriterWords && heroData.typewriterWords.length > 0 && (
+            <>
+            <span 
+                id="typewriter" 
+                class="text-[#EE2737] relative inline-block transition-colors"
+                data-words={JSON.stringify(heroData.typewriterWords)}
+            ></span>
+            <span class="animate-pulse text-[#EE2737] font-light ml-[-4px]">|</span>
+            </>
+        )}
+       </h1>
+    )}
+    
+    {heroData.description && (
+      <p class="font-sans text-sm md:text-lg text-gray-300 max-w-2xl mb-10 leading-relaxed">
+        {heroData.description}
+      </p>
+    )}
+    
+    {(heroData.primaryBtn?.text || heroData.secondaryBtn?.text) && (
+      <div class="flex flex-col sm:flex-row gap-4 animate-fade-in-up mt-8">
+        {heroData.primaryBtn?.text && (
+            <a href={heroData.primaryBtn.url} class="group flex items-center justify-center gap-2 px-8 py-4 bg-[#EE2737] text-white border border-[#EE2737] font-sans text-sm font-bold tracking-widest uppercase rounded-sm transition-all duration-300 hover:bg-white hover:text-[#EE2737]">
+            <span>{heroData.primaryBtn.text}</span>
+            <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+            </a>
+        )}
+        {heroData.secondaryBtn?.text && (
+            <a href={heroData.secondaryBtn.url} class="group flex items-center justify-center gap-2 px-8 py-4 bg-transparent text-white border border-white/50 font-sans text-sm font-bold tracking-widest uppercase rounded-sm transition-all duration-300 hover:bg-white/10">
+            <span>{heroData.secondaryBtn.text}</span>
+            <span class="text-lg leading-none mb-[2px]">+</span>
+            </a>
+        )}
+        </div>
+    )}
+
+  </div>
+  
+  <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center opacity-50 z-20 pointer-events-none">
+    <div class="w-5 h-8 border-2 border-gray-400 rounded-full flex justify-center pt-1.5">
+      <div class="w-1 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+    </div>
+  </div>
+</section>
+
+<!-- SCRIPT TYPEWRITER -->
+<script>
+  const typewriterEl = document.getElementById('typewriter');
+  if (typewriterEl && typewriterEl.dataset.words) {
+    const words = JSON.parse(typewriterEl.dataset.words);
+    if (words.length > 0) {
+      let wordIndex = 0, charIndex = 0, isDeleting = false;
+      function type() {
+        if (!typewriterEl) return;
+        const currentWord = words[wordIndex];
+        if (isDeleting) {
+          typewriterEl.textContent = currentWord.substring(0, charIndex - 1);
+          charIndex--;
+        } else {
+          typewriterEl.textContent = currentWord.substring(0, charIndex + 1);
+          charIndex++;
+        }
+        let typeSpeed = isDeleting ? 40 : 100;
+        if (!isDeleting && charIndex === currentWord.length) {
+          typeSpeed = 2500; isDeleting = true;
+        } else if (isDeleting && charIndex === 0) {
+          isDeleting = false; wordIndex = (wordIndex + 1) % words.length; typeSpeed = 500;
+        }
+        setTimeout(type, typeSpeed);
+      }
+      type();
+    }
+  }
+</script>

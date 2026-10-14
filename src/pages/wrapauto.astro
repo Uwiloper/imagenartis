@@ -1,0 +1,210 @@
+---
+import Layout from '../layouts/Layout.astro';
+import HeroWrapAuto from '../components/sections/HeroWrapAuto.astro';
+import ShowcasePortfolio from '../components/sections/ShowcasePortfolio';
+import EngagementCTA from '../components/sections/EngagementCTA.astro';
+import { fetchAllSections } from '../lib/cms';
+
+const cms = await fetchAllSections();
+
+// Proyectos filtrados o destacados para wrap automotriz
+const vehicleShowcase = (cms.showcase?.items || []).filter(item => 
+  item.id === 'vehiculo' || item.category?.toLowerCase().includes('veh') || item.category?.toLowerCase().includes('flota')
+);
+const showcaseItems = vehicleShowcase.length > 0 ? vehicleShowcase : cms.showcase?.items;
+
+const wrapSolutions = [
+  {
+    title: "Flotas Comerciales & Corporativas",
+    tag: "B2B / Empresas",
+    description: "Identidad homogénea y rotulación de alto impacto para furgonetas, camiones de reparto y flotas de ventas. Máxima visibilidad de marca en las calles.",
+    features: [
+      "Diseño adaptado a plantillas vehiculares exactas",
+      "Instalación programada por lotes (sin detener tu operación)",
+      "Laminado anti-rayones y resistente a lavado a presión"
+    ],
+    image: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=800&q=80",
+    cta: "Cotizar Flota Corporativa"
+  },
+  {
+    title: "Cambio de Color & Personalización VIP",
+    tag: "Estilo & Protección",
+    description: "Renueva completamente la estética de tu vehículo particular o deportivo sin dañar la pintura original. Acabados mate, satinados, tornasol y fibra de carbono.",
+    features: [
+      "Paleta con más de 200 tonalidades 3M y Avery",
+      "Desmontaje y montaje técnico de piezas sin cortes en carrocería",
+      "Removible al 100% conservando el valor de reventa"
+    ],
+    image: "https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&w=800&q=80",
+    cta: "Ver Catálogo de Colores"
+  },
+  {
+    title: "Protección PPF (Paint Protection Film)",
+    tag: "Blindaje Transparente",
+    description: "Película de uretano transparente de alta resistencia que absorbe impactos de piedras, gravilla e insectos en carretera. Propiedad auto-regenerativa con calor.",
+    features: [
+      "Capa autoreparable ante micro-rayas y arañazos",
+      "Brillo hidrofóbico que repele agua, polvo y suciedad",
+      "Hasta 10 años de garantía contra decoloración"
+    ],
+    image: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&w=800&q=80",
+    cta: "Consultar Protección PPF"
+  }
+];
+
+const faqs = [
+  {
+    q: "¿El vinil wrap daña la pintura original de mi vehículo?",
+    a: "No. Al contrario, el vinil fundido de calidad 3M y Avery Dennison actúa como un escudo protector contra la radiación UV, rasguños superficiales y salpicaduras. Al retirarse años después, la pintura de fábrica se conserva intacta."
+  },
+  {
+    q: "¿Cuánto tiempo dura una rotulación vehicular?",
+    a: "Dependiendo de la exposición solar y cuidados, nuestros viniles fundidos con laminación UV garantizan entre 3 y 7 años de durabilidad sin decolorarse ni despegarse en los bordes."
+  },
+  {
+    q: "¿Cuánto tiempo toma el proceso de instalación?",
+    a: "Para vehículos comerciales o cambio de color individual suele tardar entre 2 y 4 días hábiles. En flotas corporativas coordinamos cronogramas por lotes o turnos especiales para no interrumpir tu logística comercial."
+  },
+  {
+    q: "¿Se puede lavar el vehículo normalmente después del wrap?",
+    a: "Sí. Recomendamos lavado a mano o con manguera de presión moderada manteniendo al menos 30 cm de distancia de los bordes. Evitamos rodillos automáticos abrasivos."
+  }
+];
+---
+
+<Layout 
+  title="Wrap Automotriz y Rotulación de Flotas en Lima | Imagenartis"
+  description="Especialistas en rotulación vehicular, cambio de color y branding para flotas corporativas en Lima y todo el Perú. Vinilos 3M y Avery Dennison con garantía certificada."
+>
+
+  <!-- HERO DEDICADO DE 80% VIEWPORT CON LOS 3 PRINCIPALES -->
+  <HeroWrapAuto />
+
+  <!-- SECCIÓN DE SOLUCIONES Y ACABADOS -->
+  <section id="acabados" class="py-20 md:py-28 bg-zinc-50 dark:bg-zinc-900/50 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="text-xs font-mono uppercase tracking-widest text-[#EE2737] font-semibold mb-2 block">
+          Catálogo Especializado
+        </span>
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-display font-bold tracking-tight text-zinc-900 dark:text-white">
+          Soluciones de Wrap para <span class="text-[#EE2737]">cada necesidad</span>
+        </h2>
+        <p class="mt-4 text-sm sm:text-base text-zinc-600 dark:text-zinc-400 font-sans leading-relaxed">
+          Ya sea una flota corporativa de 50 camiones o la personalización de tu auto de uso diario, utilizamos las mejores marcas de vinil fundido del mundo.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {wrapSolutions.map((sol) => (
+          <div class="group flex flex-col bg-white dark:bg-zinc-900 rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-300 shadow-sm">
+            
+            <div class="relative aspect-[16/10] w-full overflow-hidden bg-zinc-100 dark:bg-zinc-800">
+              <img
+                src={sol.image}
+                alt={sol.title}
+                loading="lazy"
+                class="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
+              />
+              <div class="absolute top-3 left-3 bg-black/70 backdrop-blur-md px-3 py-1 rounded-full text-[11px] font-mono font-semibold tracking-wider text-white border border-white/10 uppercase">
+                {sol.tag}
+              </div>
+            </div>
+
+            <div class="flex-1 flex flex-col justify-between p-6 sm:p-7">
+              <div>
+                <h3 class="text-xl font-bold font-display text-zinc-900 dark:text-white tracking-tight mb-3">
+                  {sol.title}
+                </h3>
+                <p class="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-sans leading-relaxed mb-6">
+                  {sol.description}
+                </p>
+
+                <ul class="space-y-2.5 mb-8">
+                  {sol.features.map(f => (
+                    <li class="flex items-start gap-2.5 text-xs sm:text-sm text-zinc-700 dark:text-zinc-300 font-sans">
+                      <span class="text-[#EE2737] font-bold mt-0.5">✓</span>
+                      <span>{f}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div class="pt-5 border-t border-zinc-100 dark:border-zinc-800/80">
+                <a
+                  href={`https://wa.me/51994097417?text=¡Hola!%20Deseo%20cotizar%20el%20servicio%20de:%20${encodeURIComponent(sol.title)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="group/btn flex items-center justify-between w-full py-3 px-4 rounded-sm bg-zinc-100 dark:bg-zinc-800/60 hover:bg-[#EE2737] hover:text-white text-zinc-900 dark:text-white font-sans text-xs font-bold tracking-wider uppercase transition-all duration-300"
+                >
+                  <span>{sol.cta}</span>
+                  <span class="transition-transform duration-300 group-hover/btn:translate-x-1">→</span>
+                </a>
+              </div>
+            </div>
+
+          </div>
+        ))}
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CASOS DE ÉXITO DE VEHÍCULOS (ANTES / DESPUÉS) -->
+  {showcaseItems && showcaseItems.length > 0 && (
+    <section class="py-20 md:py-24 bg-white dark:bg-zinc-950 transition-colors duration-300">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12 text-center">
+        <span class="text-xs font-mono uppercase tracking-widest text-[#EE2737] font-semibold mb-2 block">
+          Resultados Comprobados
+        </span>
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-display font-bold tracking-tight text-zinc-900 dark:text-white">
+          Transformaciones <span class="text-[#EE2737]">Antes y Después</span>
+        </h2>
+        <p class="mt-3 text-sm text-zinc-600 dark:text-zinc-400 font-sans">
+          Mueve el deslizador central para comparar el estado previo y el acabado final entregado al cliente.
+        </p>
+      </div>
+
+      <ShowcasePortfolio items={showcaseItems} client:visible />
+    </section>
+  )}
+
+  <!-- PREGUNTAS FRECUENTES (FAQ) -->
+  <section class="py-20 md:py-24 bg-zinc-50 dark:bg-zinc-900/40 border-t border-zinc-200 dark:border-zinc-800/60 transition-colors duration-300">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center mb-14">
+        <span class="text-xs font-mono uppercase tracking-widest text-[#EE2737] font-semibold mb-2 block">
+          Resolvemos tus dudas
+        </span>
+        <h2 class="text-3xl md:text-4xl font-display font-bold tracking-tight text-zinc-900 dark:text-white">
+          Preguntas Frecuentes sobre <span class="text-[#EE2737]">Wrap Vehicular</span>
+        </h2>
+      </div>
+
+      <div class="space-y-4">
+        {faqs.map((faq, i) => (
+          <details class="group bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-6 [&_summary::-webkit-details-marker]:hidden transition-all duration-200 open:border-zinc-300 dark:open:border-zinc-700">
+            <summary class="flex cursor-pointer items-center justify-between gap-4 text-zinc-900 dark:text-white font-display font-semibold text-base sm:text-lg select-none">
+              <span>{faq.q}</span>
+              <span class="shrink-0 rounded-full p-1.5 text-zinc-500 group-open:rotate-180 transition-transform duration-300">
+                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </span>
+            </summary>
+            <p class="mt-4 text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-sans leading-relaxed border-t border-zinc-100 dark:border-zinc-800/60 pt-4">
+              {faq.a}
+            </p>
+          </details>
+        ))}
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CTA FINAL DE ENGAGEMENT -->
+  <EngagementCTA data={cms.engagement} />
+
+</Layout>

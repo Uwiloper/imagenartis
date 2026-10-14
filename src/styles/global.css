@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+/* Sintaxis para modo oscuro basado en clase */
+@variant dark (&:where(.dark, .dark *));
+
+@layer utilities {
+  .font-sans {
+    font-family: 'Inter', sans-serif;
+  }
+  .font-heading {
+    font-family: 'Space Grotesk', sans-serif;
+  }
+}
+
+@theme {
+  /* Tipografías */
+  --font-sans: 'Inter Variable', sans-serif;
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+  
+  /* Colores Nativos de Imagenartis */
+  --color-primary: #ff0032;
+  --color-secondary: #ffaac8;
+  --color-bg: #ffffff;
+  --color-dark: #18181b;
+  --color-text-main: #18181b;
+  --color-text-muted: #5a5a64;
+}

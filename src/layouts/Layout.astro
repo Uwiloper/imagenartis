@@ -1,0 +1,77 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import '../styles/global.css';
+
+import Navbar from '../components/ui/Navbar.tsx';
+import Footer from '../components/Footer.astro';
+import { fetchAllSections } from '../lib/cms';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { 
+  title, 
+  description = "Imagenartis | Especialistas en branding corporativo, rotulación vehicular, letreros y diseño en Lima." 
+} = Astro.props;
+
+const cms = await fetchAllSections();
+const navbarData = cms.navbar;
+---
+
+<!doctype html>
+<html lang="es" class="scroll-smooth">
+  <head>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+
+    <ClientRouter />
+
+    <script is:inline>
+      const applyTheme = (isDark) => {
+        if (isDark) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      };
+
+      const initTheme = () => {
+        const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        applyTheme(darkModeQuery.matches);
+        darkModeQuery.onchange = (e) => applyTheme(e.matches);
+      };
+
+      initTheme();
+      document.addEventListener('astro:after-swap', initTheme);
+    </script>
+  </head>
+  
+  <body class="bg-bg text-text-main dark:bg-dark dark:text-white antialiased transition-colors duration-300 font-sans">
+    
+    <Navbar data={navbarData} client:only="react"/>
+
+    
+
+    
+    
+    <main>
+
+      <slot />
+    </main>
+
+    <Footer />
+    
+  </body>
+</html>

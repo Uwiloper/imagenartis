@@ -1,0 +1,32 @@
+{
+  "navLinks": [
+    {
+      "label": "Inicio",
+      "href": "/"
+    },
+    {
+      "label": "Galería",
+      "href": "/portafolio"
+    },
+    {
+      "label": "Nosotros",
+      "href": "/nosotros"
+    }
+  ],
+  "services": [
+    {
+      "name": "Wrap Automotriz",
+      "href": "/wrapauto"
+    },
+    {
+      "name": "Branding Corporativo",
+      "href": "/brand"
+    },
+    {
+      "name": "Diseño e Identidad",
+      "href": "/diseno"
+    }
+  ],
+  "ctaText": "COTIZAR",
+  "ctaUrl": "https://wa.me/51994097417?text=¡Hola!%20Me%20gustaría%20cotizar%20unos%20stickers%20para%20mi%20"
+}

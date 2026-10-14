@@ -1,0 +1,71 @@
+---
+import { getMiniGalleryData } from '../../lib/cms';
+
+interface Props {
+  data?: ReturnType<typeof getMiniGalleryData>;
+}
+
+const { data } = Astro.props;
+const gallery = data || getMiniGalleryData();
+---
+
+<section id="galeria-inicio" class="py-20 md:py-28 bg-white dark:bg-zinc-950 transition-colors duration-300 overflow-hidden">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <!-- Encabezado de la Sección con tamaño homogeneizado -->
+    <div class="text-center max-w-2xl mx-auto mb-12 md:mb-16">
+      <h2 class="text-3xl md:text-4xl font-display font-bold tracking-tight text-center text-zinc-900 dark:text-white">
+        {gallery.titleStatic}{' '}
+        <span class="text-[#EE2737]">{gallery.titleHighlight}</span>{' '}
+        {gallery.titleSuffix}
+      </h2>
+
+      {gallery.subtitle && (
+        <p class="mt-4 text-sm sm:text-base text-zinc-600 dark:text-zinc-400 font-sans leading-relaxed">
+          {gallery.subtitle}
+        </p>
+      )}
+    </div>
+
+    <!-- Grid de 6 Proyectos (con bordes redondeados rounded-xl y sin sombras) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+      {gallery.items.map((item) => (
+        <a 
+          href={item.linkUrl || '/portafolio'}
+          class="group relative block aspect-[16/11] w-full overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/90 dark:border-zinc-800/90 hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors duration-200"
+        >
+          <!-- Badge de ubicación / cliente en la esquina superior izquierda -->
+          <span class="absolute top-3.5 left-3.5 inline-flex items-center px-3 py-1 rounded-md text-xs font-semibold bg-white/95 text-zinc-900 border border-zinc-200/60 dark:bg-zinc-900/90 dark:text-zinc-100 dark:border-zinc-700/60 z-10 backdrop-blur-xs">
+            {item.location}
+          </span>
+
+          <!-- Imagen con micro-zoom en hover -->
+          <img
+            src={item.image}
+            alt={item.title}
+            loading="lazy"
+            class="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+          />
+
+          <!-- Sutil gradiente interactivo para contraste -->
+          <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+            <span class="text-white text-xs font-semibold font-sans tracking-wide">
+              {item.title}
+            </span>
+          </div>
+        </a>
+      ))}
+    </div>
+
+    <!-- Botón CTA centrado que lleva a la página de portafolio / galería -->
+    <div class="flex justify-center mt-12 md:mt-14">
+      <a
+        href={gallery.buttonUrl || '/portafolio'}
+        class="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-sm font-semibold tracking-wide bg-[#18181b] text-white hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-100 transition-colors duration-200"
+      >
+        <span>{gallery.buttonText || 'Ver todos los proyectos →'}</span>
+      </a>
+    </div>
+
+  </div>
+</section>

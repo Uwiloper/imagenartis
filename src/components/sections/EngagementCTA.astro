@@ -1,0 +1,115 @@
+---
+import { getEngagementData } from '../../lib/cms';
+import InteractiveDotCanvas from '../ui/InteractiveDotCanvas';
+
+interface Props {
+  data?: ReturnType<typeof getEngagementData>;
+}
+
+const { data } = Astro.props;
+const engagement = data || getEngagementData();
+
+const isVideo = engagement.bgType === 'video' || (!engagement.bgType && !!engagement.bgVideo);
+const videoSrc = engagement.bgVideo || '/videos/fondo-hero.mp4';
+const imageSrc = engagement.bgImage || 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&w=1920&q=80';
+---
+
+<!-- SECCIÓN A ANCHO COMPLETO CON FONDO ROJO PRIMARIO (#ff0032 de global.css) -->
+<section id="cotizar" class="relative w-full overflow-hidden bg-[#ff0032] text-white min-h-[500px] md:min-h-[560px] flex items-center justify-center py-20 md:py-28 cursor-pointer select-none">
+  
+  <!-- FONDO: VIDEO O IMAGEN INTEGRADO CON TINTE ROJO PRIMARIO -->
+  {isVideo ? (
+    <video
+      autoplay
+      loop
+      muted
+      playsinline
+      poster={imageSrc}
+      class="absolute inset-0 w-full h-full object-cover object-center pointer-events-none opacity-20 mix-blend-screen select-none"
+    >
+      <source src={videoSrc} type="video/mp4" />
+    </video>
+  ) : (
+    <img
+      src={imageSrc}
+      alt="Fondo Cotización"
+      loading="lazy"
+      class="absolute inset-0 w-full h-full object-cover object-center pointer-events-none opacity-20 mix-blend-screen select-none"
+    />
+  )}
+
+  <!-- OVERLAY CINEMÁTICO ROJO PRIMARIO PARA VIBRACIÓN Y LEGIBILIDAD -->
+  <div class="absolute inset-0 bg-gradient-to-b from-[#ff0032]/95 via-[#ff0032]/85 to-[#e0002b]/95 pointer-events-none"></div>
+
+  <!-- LIENZO DE PUNTOS: MOVIMIENTO ULTRA SUAVE Y LIGERO + ONDA EN GOTA DE AGUA AL CLICKEAR -->
+  <InteractiveDotCanvas 
+    client:load
+    className="opacity-80"
+    dotColor="rgba(255, 255, 255, 0.45)"
+    gap={26}
+    radius={1.8}
+    repelRadius={85}
+  />
+
+  <!-- CONTENIDO CENTRAL CENTRADO -->
+  <div class="relative z-20 max-w-4xl mx-auto px-6 sm:px-8 text-center flex flex-col items-center pointer-events-auto">
+    
+    <!-- Badge superior minimalista con redondeado mínimo (rounded-sm) -->
+    {engagement.badge && (
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-sm text-xs font-heading font-semibold tracking-widest uppercase bg-white/20 text-white border border-white/30 backdrop-blur-xs mb-6">
+        <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+        <span>{engagement.badge}</span>
+      </div>
+    )}
+
+    <!-- Título con palabra destacada en contraste editorial -->
+    <h2 class="text-3xl md:text-5xl font-display font-bold tracking-tight text-center text-white leading-tight">
+      {engagement.titleStatic}{' '}
+      <span class="text-[#ff0032] bg-white px-3 py-1 rounded-sm inline-block font-extrabold mx-1">{engagement.titleHighlight}</span>{' '}
+      {engagement.titleSuffix}
+    </h2>
+
+    <!-- Descripción persuasiva en blanco translúcido -->
+    {engagement.description && (
+      <p class="mt-5 text-base sm:text-lg text-white/90 max-w-2xl mx-auto font-sans leading-relaxed">
+        {engagement.description}
+      </p>
+    )}
+
+    <!-- GRUPO DE BOTONES CON REDONDEADO MÍNIMO (rounded-sm) -->
+    <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
+      
+      <!-- Botón Principal: WhatsApp estilo Navbar (Fondo blanco, texto rojo, hover verde) con animación expansiva -->
+      <a
+        href={engagement.primaryBtnUrl || 'https://wa.me/51994097417?text=¡Hola!%20Deseo%20cotizar%20un%20proyecto%20con%20Imagenartis'}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="group inline-flex items-center justify-center bg-white text-[#ff0032] hover:bg-green-700 hover:text-white font-heading font-bold tracking-wider px-8 py-3.5 rounded-sm text-sm transition-all duration-300 overflow-hidden w-full sm:w-auto uppercase"
+      >
+        <!-- Icono de WhatsApp que se expande suavemente en hover -->
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          class="w-0 opacity-0 group-hover:w-[18px] group-hover:opacity-100 group-hover:mr-2.5 transition-all duration-300 shrink-0"
+        >
+          <path d="M12.004 2C6.48 2 2 6.48 2 12.004c0 1.764.46 3.42 1.268 4.868L2 22l5.244-1.376A9.96 9.96 0 0 0 12.004 22c5.524 0 10.004-4.48 10.004-10.004C22.008 6.48 17.528 2 12.004 2zm0 18.336c-1.576 0-3.1-.424-4.436-1.228l-.316-.188-3.296.864.88-3.212-.208-.332A8.28 8.28 0 0 1 3.664 12c0-4.596 3.74-8.336 8.34-8.336 4.596 0 8.336 3.74 8.336 8.336 0 4.596-3.74 8.336-8.336 8.336zm4.568-6.236c-.252-.124-1.484-.732-1.712-.816-.228-.084-.396-.124-.56.124-.168.252-.648.816-.796.984-.148.168-.296.188-.548.064-.252-.124-1.064-.392-2.028-1.252-.748-.668-1.256-1.492-1.404-1.744-.148-.252-.016-.388.108-.512.112-.112.252-.296.38-.444.124-.148.168-.252.252-.42.084-.168.04-.316-.02-.44-.06-.124-.56-1.348-.768-1.848-.2-.488-.404-.424-.56-.432l-.476-.008c-.168 0-.44.064-.672.316-.228.252-.876.856-.876 2.088s.896 2.42 1.02 2.588c.124.168 1.764 2.692 4.272 3.776.596.256 1.064.408 1.428.524.6.192 1.144.164 1.576.1.48-.072 1.484-.608 1.692-1.196.208-.588.208-1.092.148-1.196-.06-.104-.224-.168-.476-.292z" />
+        </svg>
+        <span>{engagement.primaryBtnText || 'COTIZAR POR WHATSAPP'}</span>
+      </a>
+
+      <!-- Botón Secundario: Outline Glass blanco sobre fondo rojo -->
+      {engagement.secondaryBtnText && (
+        <a
+          href={engagement.secondaryBtnUrl || '/portafolio'}
+          class="inline-flex items-center justify-center px-8 py-3.5 rounded-sm text-sm font-heading font-bold tracking-wider border border-white/40 bg-white/10 hover:bg-white/20 text-white backdrop-blur-xs transition-all duration-300 w-full sm:w-auto uppercase"
+        >
+          <span>{engagement.secondaryBtnText}</span>
+        </a>
+      )}
+
+    </div>
+
+  </div>
+
+</section>

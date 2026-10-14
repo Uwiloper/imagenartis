@@ -1,0 +1,37 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+import Hero from '../components/Hero.astro';
+import ClientLogos from '../components/sections/ClientLogos';
+import ProcessSection from '../components/sections/ProcessSection.astro';
+import ShowcasePortfolio from '../components/sections/ShowcasePortfolio';
+import MiniGallery from '../components/sections/MiniGallery.astro';
+import EngagementCTA from '../components/sections/EngagementCTA.astro';
+
+import { fetchAllSections } from '../lib/cms';
+
+// Consulta en vivo a Supabase (1 sola petición para todas las secciones unificadas)
+const cms = await fetchAllSections();
+const sectionsOrder = cms.homeLayout;
+---
+
+<Layout title="Imagenartis | Inicio">
+  {sectionsOrder.map((sectionId) => {
+    switch (sectionId) {
+      case 'hero':
+        return <Hero data={cms.hero} />;
+      case 'marcas':
+        return <ClientLogos data={cms.marcas} client:only="react" />;
+      case 'proceso':
+        return <ProcessSection data={cms.proceso} />;
+      case 'showcase':
+        return <ShowcasePortfolio items={cms.showcase?.items} client:visible />;
+      case 'miniGallery':
+        return <MiniGallery data={cms.miniGallery} />;
+      case 'cta':
+        return <EngagementCTA data={cms.engagement} />;
+      default:
+        return null;
+    }
+  })}
+</Layout>

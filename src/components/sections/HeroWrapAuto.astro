@@ -1,0 +1,151 @@
+---
+export interface HighlightItem {
+  value: string;
+  label: string;
+}
+
+interface Props {
+  badge?: string;
+  titleStatic?: string;
+  titleHighlight?: string;
+  description?: string;
+  primaryBtnText?: string;
+  primaryBtnUrl?: string;
+  secondaryBtnText?: string;
+  secondaryBtnUrl?: string;
+  bgImage?: string;
+  bgVideo?: string;
+  highlights?: HighlightItem[];
+}
+
+const {
+  badge = "ROTULACIÓN VEHICULAR & FLOTAS",
+  titleStatic = "Que tu auto se",
+  titleHighlight = "luzca por ti",
+  description = "Infinidad de texturas y acabados: diseñados a medida e instalados por profesionales certificados en todo el país.",
+  primaryBtnText = "COTIZAR PROYECTO",
+  primaryBtnUrl = "https://wa.me/51994097417?text=¡Hola!%20Deseo%20cotizar%20un%20servicio%20de%20Wrap%20Automotriz%20para%20mi%20vehículo",
+  secondaryBtnText = "VER ACABADOS",
+  secondaryBtnUrl = "#acabados",
+  bgImage = "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=1920&auto=format&fit=crop",
+  bgVideo,
+  highlights = [
+    { value: "Infinidad", label: "Colores y texturas disponibles" },
+    { value: "3M & Avery", label: "Material de primera calidad" },
+    { value: "3 - 5 años", label: "Vida útil garantizada del vinil" },
+  ]
+} = Astro.props;
+---
+
+<section class="relative w-full overflow-hidden">
+  
+  <!-- HERO VISUAL: 80% DEL VIEWPORT (min 540px, max 780px) -->
+  <div class="relative w-full h-[75vh] md:h-[80vh] min-h-[540px] max-h-[780px] flex items-center overflow-hidden">
+    
+    <!-- FONDO: VIDEO O FOTO CINEMATOGRÁFICA -->
+    {bgVideo ? (
+      <video
+        autoplay
+        loop
+        muted
+        playsinline
+        class="absolute inset-0 w-full h-full object-cover object-center z-0 pointer-events-none"
+      >
+        <source src={bgVideo} type="video/mp4" />
+      </video>
+    ) : (
+      <img
+        src={bgImage}
+        alt="Wrap Automotriz de alta gama - Imagen Artis"
+        class="absolute inset-0 w-full h-full object-cover object-center md:object-[center_right] z-0 transition-transform duration-1000 scale-[1.02]"
+        loading="eager"
+      />
+    )}
+
+    <!-- DEGRADADO CINEMATOGRÁFICO LATERAL Y VERTICAL PARA MÁXIMA LEGIBILIDAD -->
+    <div class="absolute inset-0 bg-gradient-to-r from-black/95 via-black/80 to-black/40 sm:to-black/30 md:via-black/70 md:to-transparent z-10 transition-colors duration-500 backdrop-blur-[0.5px]"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/40 z-10 pointer-events-none"></div>
+
+    <!-- CONTENIDO EDITORIAL IZQUIERDO -->
+    <div class="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 md:pt-24 pb-8 flex flex-col justify-center">
+      <div class="max-w-2xl text-left">
+        
+        <!-- BADGE CON PULSO -->
+        {badge && (
+          <div class="mb-5 inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-zinc-900/85 border border-white/10 text-white backdrop-blur-md shadow-sm">
+            <span class="w-2 h-2 rounded-full bg-[#EE2737] animate-pulse"></span>
+            <span class="font-mono text-[10px] sm:text-xs tracking-widest uppercase font-semibold text-zinc-200">
+              {badge}
+            </span>
+          </div>
+        )}
+
+        <!-- TÍTULO DE IMPACTO (MÁS COMPACTO QUE EL INDEX) -->
+        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] font-display font-extrabold tracking-tight text-white leading-[1.08] mb-4 drop-shadow-sm">
+          {titleStatic}{' '}
+          <span class="text-[#EE2737] relative inline-block">
+            {titleHighlight}
+          </span>
+        </h1>
+
+        <!-- DESCRIPCIÓN CON PALABRAS CLAVE ENFATIZADAS -->
+        {description && (
+          <p class="text-sm sm:text-base md:text-lg text-zinc-300 font-sans max-w-xl mb-8 leading-relaxed font-normal">
+            {description}
+          </p>
+        )}
+
+        <!-- BOTONES DE ACCIÓN (MISMO ESTILO ROUNDED-SM DE IMAGEN ARTIS) -->
+        <div class="flex flex-wrap items-center gap-4 pt-2">
+          {primaryBtnText && (
+            <a
+              href={primaryBtnUrl}
+              target={primaryBtnUrl.startsWith('http') ? '_blank' : '_self'}
+              rel={primaryBtnUrl.startsWith('http') ? 'noopener noreferrer' : undefined}
+              class="group inline-flex items-center justify-center gap-2.5 px-7 py-3.5 bg-[#EE2737] text-white font-sans text-xs sm:text-sm font-bold tracking-widest uppercase rounded-sm transition-all duration-300 hover:bg-white hover:text-[#EE2737] shadow-lg shadow-[#EE2737]/25"
+            >
+              <span>{primaryBtnText}</span>
+              <span class="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
+            </a>
+          )}
+
+          {secondaryBtnText && (
+            <a
+              href={secondaryBtnUrl}
+              class="group inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-black/40 hover:bg-white/10 text-white border border-white/30 font-sans text-xs sm:text-sm font-bold tracking-widest uppercase rounded-sm transition-all duration-300 backdrop-blur-md"
+            >
+              <span>{secondaryBtnText}</span>
+              <span class="text-base leading-none transition-transform duration-300 group-hover:translate-y-0.5">↓</span>
+            </a>
+          )}
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- FRANJA INFERIOR CON LOS 3 PRINCIPALES (RESPONSIVE + TEMA CLARO Y OSCURO) -->
+  <div class="w-full bg-white dark:bg-zinc-950 border-y border-zinc-200 dark:border-zinc-800/80 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-0">
+        {highlights.map((item, index) => (
+          <div
+            class={`flex flex-col justify-center px-4 sm:px-8 text-center sm:text-left transition-colors ${
+              index !== highlights.length - 1
+                ? 'sm:border-r border-zinc-200 dark:border-zinc-800/80'
+                : ''
+            }`}
+          >
+            <span class="text-2xl sm:text-3xl md:text-4xl font-display font-extrabold tracking-tight text-zinc-900 dark:text-white transition-colors duration-300">
+              {item.value}
+            </span>
+            <span class="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-sans mt-1.5 font-medium transition-colors duration-300">
+              {item.label}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+
+</section>

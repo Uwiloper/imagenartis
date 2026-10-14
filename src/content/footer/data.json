@@ -1,0 +1,14 @@
+{
+  "description": "Transformamos vehículos y espacios comerciales con acabados de nivel corporativo. No improvisamos; garantizamos calidad, precisión y asesoría experta.",
+  "services": [
+    { "name": "Branding Automotriz", "href": "/servicios/automotriz" },
+    { "name": "Interiores Comerciales", "href": "/servicios/interiores" },
+    { "name": "Letreros Corporativos", "href": "/servicios/letreros" },
+    { "name": "Diseño e Identidad", "href": "/servicios/diseno" }
+  ],
+  "legalLinks": [
+    { "name": "Políticas de Privacidad", "href": "/politicas-de-privacidad" },
+    { "name": "Libro de Reclamaciones", "href": "/libro-de-reclamaciones" }
+  ],
+  "copyrightText": "Imagenartis. Todos los derechos reservados."
+}
