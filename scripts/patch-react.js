@@ -29,37 +29,50 @@ module.exports.CompositionEvent = dummyEvent;
   }
 }
 
-// 2. Patch react/jsx-dev-runtime.js with explicit named exports for Rolldown/Vite
-const reactDevRuntimePath = path.resolve('node_modules/react/jsx-dev-runtime.js');
-if (fs.existsSync(reactDevRuntimePath)) {
-  const devRuntimePatch = `'use strict';
-
-const runtime = process.env.NODE_ENV === 'production'
-  ? require('./cjs/react-jsx-dev-runtime.production.js')
-  : require('./cjs/react-jsx-dev-runtime.development.js');
-
-module.exports = runtime;
-exports.Fragment = runtime.Fragment;
-exports.jsxDEV = runtime.jsxDEV;
+// 2. Create native ESM .mjs files for jsx-dev-runtime and jsx-runtime
+// Using import * as to support both Rollup/Rolldown strict CJS interop and esbuild
+const reactDevRuntimeMjs = path.resolve('node_modules/react/jsx-dev-runtime.mjs');
+const devRuntimeMjsContent = `import * as dev from './cjs/react-jsx-dev-runtime.development.js';
+export const Fragment = dev.Fragment;
+export const jsxDEV = dev.jsxDEV;
+export default dev;
 `;
-  fs.writeFileSync(reactDevRuntimePath, devRuntimePatch);
-  console.log('[patch-react] Applied explicit named exports to react/jsx-dev-runtime.js');
-}
+fs.writeFileSync(reactDevRuntimeMjs, devRuntimeMjsContent);
+console.log('[patch-react] Created native ESM react/jsx-dev-runtime.mjs');
 
-// 3. Patch react/jsx-runtime.js with explicit named exports for Rolldown/Vite
-const reactRuntimePath = path.resolve('node_modules/react/jsx-runtime.js');
-if (fs.existsSync(reactRuntimePath)) {
-  const runtimePatch = `'use strict';
-
-const runtime = process.env.NODE_ENV === 'production'
-  ? require('./cjs/react-jsx-runtime.production.js')
-  : require('./cjs/react-jsx-runtime.development.js');
-
-module.exports = runtime;
-exports.Fragment = runtime.Fragment;
-exports.jsx = runtime.jsx;
-exports.jsxs = runtime.jsxs;
+const reactRuntimeMjs = path.resolve('node_modules/react/jsx-runtime.mjs');
+const runtimeMjsContent = `import * as prod from './cjs/react-jsx-runtime.production.js';
+export const Fragment = prod.Fragment;
+export const jsx = prod.jsx;
+export const jsxs = prod.jsxs;
+export default prod;
 `;
-  fs.writeFileSync(reactRuntimePath, runtimePatch);
-  console.log('[patch-react] Applied explicit named exports to react/jsx-runtime.js');
+fs.writeFileSync(reactRuntimeMjs, runtimeMjsContent);
+console.log('[patch-react] Created native ESM react/jsx-runtime.mjs');
+
+// 3. Patch react/package.json exports to point import condition to .mjs files
+const reactPkgPath = path.resolve('node_modules/react/package.json');
+if (fs.existsSync(reactPkgPath)) {
+  const pkg = JSON.parse(fs.readFileSync(reactPkgPath, 'utf-8'));
+  let changed = false;
+  if (pkg.exports?.['./jsx-dev-runtime'] && !pkg.exports['./jsx-dev-runtime'].import) {
+    pkg.exports['./jsx-dev-runtime'] = {
+      'react-server': './jsx-dev-runtime.react-server.js',
+      'import': './jsx-dev-runtime.mjs',
+      'default': './jsx-dev-runtime.js'
+    };
+    changed = true;
+  }
+  if (pkg.exports?.['./jsx-runtime'] && !pkg.exports['./jsx-runtime'].import) {
+    pkg.exports['./jsx-runtime'] = {
+      'react-server': './jsx-runtime.react-server.js',
+      'import': './jsx-runtime.mjs',
+      'default': './jsx-runtime.js'
+    };
+    changed = true;
+  }
+  if (changed) {
+    fs.writeFileSync(reactPkgPath, JSON.stringify(pkg, null, 2) + '\n');
+    console.log('[patch-react] Updated react/package.json exports with .mjs import targets');
+  }
 }

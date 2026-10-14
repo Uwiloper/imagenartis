@@ -192,18 +192,10 @@ export async function fetchAllSections(): Promise<AllCmsData> {
       map[row.id] = row.data;
     }
 
-    // Soporte unificado de showcase en site_sections (con fallback inteligente a tabla de proyectos o local)
+    // Soporte unificado de showcase en site_sections
     let showcaseData = defaults.showcase;
     if (map.showcase && Array.isArray(map.showcase.items) && map.showcase.items.length > 0) {
       showcaseData = { ...defaults.showcase, ...map.showcase };
-    } else {
-      // Si aún no está en site_sections, leemos de showcase_projects de forma transparente
-      try {
-        const legacyItems = await fetchShowcaseProjects();
-        if (legacyItems && legacyItems.length > 0) {
-          showcaseData = { ...defaults.showcase, items: legacyItems };
-        }
-      } catch {}
     }
 
     return {
@@ -224,30 +216,20 @@ export async function fetchAllSections(): Promise<AllCmsData> {
   }
 }
 
-// Lector de casos de éxito desde Supabase con respaldo local
+// Lector de casos de éxito con respaldo unificado
 export async function fetchShowcaseProjects(): Promise<ShowcaseItem[]> {
   try {
-    const { data, error } = await supabase
-      .from('showcase_projects')
-      .select('*')
-      .order('sort_order', { ascending: true });
+    const { data } = await supabase
+      .from('site_sections')
+      .select('data')
+      .eq('id', 'showcase')
+      .single();
 
-    if (error || !data || data.length === 0) {
-      return getShowcaseItems();
+    if (data?.data?.items && Array.isArray(data.data.items) && data.data.items.length > 0) {
+      return data.data.items;
     }
-
-    return data.map((row) => ({
-      id: row.id,
-      title: row.id,
-      category: row.category,
-      beforeImage: row.before_image,
-      afterImage: row.after_image,
-      testimonial: row.testimonial || '',
-      clientName: row.client_name || '',
-      order: row.sort_order ?? 1,
-    }));
+    return getShowcaseItems();
   } catch (err) {
-    console.error('Error al conectar con Supabase en fetchShowcaseProjects, usando respaldo:', err);
     return getShowcaseItems();
   }
 }

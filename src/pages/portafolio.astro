@@ -1,0 +1,36 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ShowcasePortfolio from '../components/sections/ShowcasePortfolio';
+import MiniGallery from '../components/sections/MiniGallery.astro';
+import EngagementCTA from '../components/sections/EngagementCTA.astro';
+import { fetchAllSections } from '../lib/cms';
+
+const cms = await fetchAllSections();
+---
+
+<Layout title="Imagenartis | Galería & Portafolio">
+  <!-- Header de Portafolio -->
+  <section class="pt-32 pb-16 bg-zinc-950 text-white border-b border-zinc-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-mono font-semibold tracking-wider uppercase bg-white/10 text-white border border-white/10 mb-4">
+        <span class="w-1.5 h-1.5 rounded-full bg-[#EE2737]"></span>
+        Galería de Proyectos
+      </span>
+      <h1 class="text-4xl md:text-5xl lg:text-6xl font-display font-extrabold tracking-tight">
+        Casos de Éxito & <span class="text-[#EE2737]">Transformaciones</span>
+      </h1>
+      <p class="mt-4 max-w-2xl mx-auto text-sm sm:text-base text-zinc-400 font-sans">
+        Explora nuestros trabajos recientes en wrapping vehicular, rotulación de flotas y gráfica publicitaria de alta precisión.
+      </p>
+    </div>
+  </section>
+
+  <!-- Showcase interactivo antes y después -->
+  <ShowcasePortfolio items={cms.showcase?.items} client:visible />
+
+  <!-- Galería completa de proyectos -->
+  <MiniGallery data={cms.miniGallery} />
+
+  <!-- CTA de contacto -->
+  <EngagementCTA data={cms.engagement} />
+</Layout>
