@@ -1,9 +1,17 @@
 ---
+export interface TechnicalSpec {
+  label: string;
+  value: string;
+}
+
 export interface VehicularServiceItem {
   id: string;
+  tabNumber: string;
   tag: string;
   title: string;
+  subtitle: string;
   description: string;
+  specs: TechnicalSpec[];
   features: string[];
   image: string;
   imageAlt?: string;
@@ -24,79 +32,107 @@ export interface Props {
 
 const {
   badge = "LÍNEAS ESPECIALIZADAS",
-  titleStatic = "Nuestras soluciones en",
+  titleStatic = "Nuestras 4 especialidades en",
   titleHighlight = "wrap y protección vehicular",
-  description = "Cuatro especialidades automotrices de alta precisión para cubrir desde la identidad comercial de flotas de alta exigencia hasta la personalización y protección integral de tu vehículo.",
+  description = "Cada necesidad automotriz requiere una técnica y materiales específicos. Explora nuestras cuatro divisiones técnicas certificadas:",
   services = [
     {
       id: "flotas-corporativas",
+      tabNumber: "01",
       tag: "B2B / Flotas Comerciales",
       title: "Vinil Corporativo para Flotas",
-      description: "Rotulación publicitaria y uniformidad corporativa para furgonetas, camiones de reparto y flotas de servicio. Máxima visibilidad de marca y resistencia para trabajo pesado continuo.",
+      subtitle: "Uniformidad comercial y rotulado publicitario de alto impacto",
+      description: "Desarrollamos e implementamos branding vehicular a gran escala para furgonetas, camiones de reparto y flotas comerciales. Diseñado sobre plantillas a escala milimétrica para garantizar uniformidad corporativa y resistencia extrema al trabajo continuo.",
+      specs: [
+        { label: "Material", value: "Vinil Fundido 3M / Avery Cast" },
+        { label: "Durabilidad", value: "3 a 7 años certificados" },
+        { label: "Instalación", value: "Por lotes (sin detener tu logística)" }
+      ],
       features: [
-        "Diseño y adaptación exacta a las plantillas técnicas de cada modelo vehicular",
-        "Instalación programada por lotes y turnos para no paralizar tu logística comercial",
-        "Vinil fundido de alto rendimiento con laminado UV resistente a hidrolavado continuo"
+        "Adaptación precisa a las plantillas técnicas de cada fabricante vehicular",
+        "Laminado protector UV de grado industrial resistente a hidrolavado",
+        "Cronograma coordinado por turnos para no frenar tu operación comercial"
       ],
       image: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1200&q=80",
       imageAlt: "Flota de vehículos comerciales rotulados con vinil corporativo",
-      quoteBtnText: "Cotizar Flota",
+      quoteBtnText: "Cotizar Flota Corporativa",
       quoteUrl: "https://wa.me/51994097417?text=¡Hola!%20Deseo%20cotizar%20el%20servicio%20de%20Vinil%20Corporativo%20para%20Flotas%20Comerciales",
-      galleryBtnText: "Ver Trabajos",
+      galleryBtnText: "Ver Trabajos en Galería",
       galleryCategory: "flotas",
       galleryUrl: "/portafolio?categoria=flotas"
     },
     {
       id: "wrap-personalizado",
+      tabNumber: "02",
       tag: "Estilo & Personalización",
       title: "Vinil Automotriz al Gusto del Cliente",
-      description: "Renovación estética completa o por piezas (techo, capó, retrovisores, cromo delete). Acabados mate, satinado, ultra gloss, tornasol y fibra de carbono según tu visión personal.",
+      subtitle: "Cambio de color integral o por piezas con acabados exclusivos",
+      description: "Transforma la estética de tu auto según tu estilo personal sin alterar la pintura original. Contamos con acabados satinados, mate profundo, ultra gloss brillante, tornasol y fibra de carbono con remates invisibles sin cortes en carrocería.",
+      specs: [
+        { label: "Paleta", value: "+200 colores y texturas de gama alta" },
+        { label: "Reversibilidad", value: "100% removible sin residuos" },
+        { label: "Acabados", value: "Satinado, Mate, Gloss, Tornasol" }
+      ],
       features: [
-        "Catálogo exclusivo con más de 200 tonalidades y texturas importadas de 3M y Avery",
-        "Desmontaje técnico minucioso de piezas para remates invisibles sin cortes en pintura",
-        "100% reversible: conserva intacta la pintura de fábrica y el valor de reventa"
+        "Desmontaje minucioso de manijas, ópticas y molduras para remates ocultos",
+        "Películas 3M Serie 2080 y Avery Supreme Wrap con canales anti-burbujas",
+        "Protege la pintura original de fábrica preservando el valor de reventa"
       ],
       image: "https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&w=1200&q=80",
       imageAlt: "Auto de lujo con wrap automotriz personalizado en acabado negro satinado",
-      quoteBtnText: "Cotizar Personalización",
+      quoteBtnText: "Cotizar Cambio de Color",
       quoteUrl: "https://wa.me/51994097417?text=¡Hola!%20Deseo%20cotizar%20el%20servicio%20de%20Vinil%20Automotriz%20Personalizado%20(Cambio%20de%20Color)",
-      galleryBtnText: "Ver Trabajos",
+      galleryBtnText: "Ver Trabajos en Galería",
       galleryCategory: "wrap-personalizado",
       galleryUrl: "/portafolio?categoria=wrap-personalizado"
     },
     {
       id: "ppf-proteccion",
+      tabNumber: "03",
       tag: "Blindaje Transparente",
       title: "Protección PPF (Paint Protection Film)",
-      description: "Película de uretano transparente de alta ingeniería automotriz que actúa como un escudo protector invisible contra impactos de gravilla en carretera, piedras, arañazos y rayos UV.",
+      subtitle: "Escudo invisible de uretano óptico autorregenerable",
+      description: "La máxima protección contra piedras de carretera, gravilla, raspaduras de estacionamiento y radiación solar. Película transparente de poliuretano de alta tecnología que absorbe los impactos y se autorregenera con el calor ambiental.",
+      specs: [
+        { label: "Tecnología", value: "Auto-curación térmica ante rayones" },
+        { label: "Acabado", value: "Invisible Gloss o Satin Stealth" },
+        { label: "Protección", value: "Anti-gravilla, insectos y rayos UV" }
+      ],
       features: [
-        "Propiedad auto-regenerativa: las micro-rayas desaparecen al calor del sol o agua tibia",
-        "Efecto hidrofóbico cerámico que repele agua, manchas de agua dura y suciedad",
-        "Disponible en acabado ultra-brillante (Gloss) o satinado mate (Stealth)"
+        "Propiedad hidrofóbica que repele agua, suciedad y agentes químicos",
+        "Corte computarizado por patrones digitales milimétricos",
+        "Hasta 10 años de garantía contra amarilleamiento y agrietamiento"
       ],
       image: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&w=1200&q=80",
       imageAlt: "Vehículo deportivo de alta gama con película de protección PPF transparente",
       quoteBtnText: "Cotizar Blindaje PPF",
       quoteUrl: "https://wa.me/51994097417?text=¡Hola!%20Deseo%20cotizar%20el%20servicio%20de%20Protección%20PPF%20(Paint%20Protection%20Film)",
-      galleryBtnText: "Ver Trabajos",
+      galleryBtnText: "Ver Trabajos en Galería",
       galleryCategory: "ppf",
       galleryUrl: "/portafolio?categoria=ppf"
     },
     {
       id: "laminas-polarizados",
+      tabNumber: "04",
       tag: "Seguridad & Confort Térmico",
       title: "Láminas de Seguridad y Polarizados",
-      description: "Tratamiento técnico especializado para cristales y lunas vehiculares. Máxima reducción del calor exterior e infrarrojo combinada con blindaje multicapa anti-impacto contra intentos de asalto.",
+      subtitle: "Tratamiento nano-cerámico solar y blindaje anti-impacto",
+      description: "Protección y confort superior para lunas vehiculares. Combinamos láminas de seguridad multicapa certificadas contra vandalismo e intentos de robo con polarizados nano-cerámicos que reducen drásticamente la temperatura interior del habitáculo.",
+      specs: [
+        { label: "Rechazo Térmico", value: "Hasta 95% de calor infrarrojo (IR)" },
+        { label: "Filtro Solar", value: "99% de protección rayos UV" },
+        { label: "Grosor Seguridad", value: "Láminas de 8 a 12 micras certificadas" }
+      ],
       features: [
-        "Tecnología nano-cerámica: rechaza hasta 95% de calor infrarrojo (IR) y 99% UV",
-        "Láminas de seguridad certificadas de 8 a 12 micras para contención ante impactos",
-        "Alta claridad óptica desde el interior y privacidad total exterior según normativa legal"
+        "Contención de fragmentos de vidrio ante impactos o rotura violenta",
+        "Claridad óptica diáfana desde el interior con privacidad exterior legal",
+        "Protección total del cuero, tapicería y tableros contra resecamiento solar"
       ],
       image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80",
       imageAlt: "Vehículo con lunas polarizadas nano-cerámicas y láminas de seguridad",
       quoteBtnText: "Cotizar Láminas y Polarizados",
       quoteUrl: "https://wa.me/51994097417?text=¡Hola!%20Deseo%20cotizar%20el%20servicio%20de%20Láminas%20de%20Seguridad%20y%20Polarizados%20Vehiculares",
-      galleryBtnText: "Ver Trabajos",
+      galleryBtnText: "Ver Trabajos en Galería",
       galleryCategory: "polarizados-seguridad",
       galleryUrl: "/portafolio?categoria=polarizados-seguridad"
     }
@@ -107,8 +143,8 @@ const {
 <section id="servicios-vehiculares" class="py-20 md:py-28 bg-zinc-50 dark:bg-zinc-950 transition-colors duration-300 border-t border-zinc-200 dark:border-zinc-800/80">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     
-    <!-- Encabezado Proporcional (Flat, sin sombras) -->
-    <div class="text-center max-w-3xl mx-auto mb-14 md:mb-16">
+    <!-- Encabezado de Sección Proporcional (Flat, sin sombras) -->
+    <div class="text-center max-w-3xl mx-auto mb-12 sm:mb-14">
       {badge && (
         <div class="mb-3.5 inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-semibold tracking-wider uppercase bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-800">
           <span class="w-1.5 h-1.5 rounded-full bg-[#EE2737]"></span>
@@ -127,78 +163,171 @@ const {
       )}
     </div>
 
-    <!-- Grid 2x2 de los 4 tipos vehiculares diferenciados -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-8">
-      {services.map((item) => (
-        <div class="group flex flex-col bg-white dark:bg-zinc-900 rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-300">
-          
-          <!-- Imagen de Cabecera con Tag de Servicio -->
-          <div class="relative aspect-[16/9] w-full overflow-hidden bg-zinc-100 dark:bg-zinc-800">
-            <img
-              src={item.image}
-              alt={item.imageAlt || item.title}
-              loading="lazy"
-              class="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
-            />
-            <div class="absolute top-3.5 left-3.5 bg-black/75 backdrop-blur-md px-3 py-1 rounded-full text-[11px] font-mono font-semibold tracking-wider text-white border border-white/10 uppercase">
-              {item.tag}
-            </div>
-            <!-- Sutil viñeta para contraste del badge -->
-            <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none"></div>
+    <!-- Barra de Pestañas / Selector de Líneas Especializadas (Flat, responsive, esquinas poco redondeadas) -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3 mb-8 sm:mb-10" id="services-tabs-container">
+      {services.map((service, index) => (
+        <button
+          type="button"
+          data-tab-index={index}
+          class={`service-tab-btn group text-left p-3.5 sm:p-4 rounded-md border transition-all duration-200 select-none cursor-pointer ${
+            index === 0
+              ? "active bg-white dark:bg-zinc-900 border-[#EE2737] text-zinc-900 dark:text-white"
+              : "bg-white/70 dark:bg-zinc-900/60 border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:border-zinc-300 dark:hover:border-zinc-700"
+          }`}
+        >
+          <div class="flex items-center justify-between mb-1.5">
+            <span class="tab-number text-[11px] font-mono font-bold tracking-wider text-[#EE2737]">
+              {service.tabNumber}
+            </span>
+            <span class="tab-tag hidden sm:inline-block text-[10px] font-mono uppercase px-2 py-0.5 rounded-sm bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400">
+              {service.tag.split("/")[0].trim()}
+            </span>
           </div>
+          <span class="tab-title block text-xs sm:text-sm font-display font-bold tracking-tight text-zinc-900 dark:text-white line-clamp-1">
+            {service.title.replace("Vinil ", "").replace("Protección ", "")}
+          </span>
+        </button>
+      ))}
+    </div>
 
-          <!-- Contenido y Lista de Características -->
-          <div class="flex-1 flex flex-col justify-between p-6 sm:p-8">
-            <div>
-              <h3 class="text-xl sm:text-2xl font-bold font-display text-zinc-900 dark:text-white tracking-tight mb-2.5">
-                {item.title}
-              </h3>
-              
-              <p class="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-sans leading-relaxed mb-6">
-                {item.description}
-              </p>
+    <!-- Escenario Principal del Servicio Activo (Layout 2 columnas amplio, editorial y limpio) -->
+    <div class="w-full bg-white dark:bg-zinc-900 rounded-md border border-zinc-200 dark:border-zinc-800 overflow-hidden">
+      {services.map((service, index) => (
+        <div
+          id={`service-panel-${index}`}
+          class={`service-panel ${index === 0 ? "block" : "hidden"} transition-opacity duration-300`}
+        >
+          <div class="grid grid-cols-1 lg:grid-cols-12 items-stretch">
+            
+            <!-- Columna Izquierda: Información Técnica y Especificaciones -->
+            <div class="lg:col-span-7 p-6 sm:p-8 md:p-10 flex flex-col justify-between">
+              <div>
+                
+                <!-- Tag Superior con Pulso -->
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-sm bg-zinc-100 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 text-zinc-800 dark:text-zinc-200 text-[11px] font-mono font-semibold uppercase tracking-wider mb-4">
+                  <span class="w-1.5 h-1.5 rounded-full bg-[#EE2737]"></span>
+                  <span>{service.tag}</span>
+                </div>
 
-              <!-- Características destacadas con checkmark rojo -->
-              <ul class="space-y-3 mb-8">
-                {item.features.map((feature) => (
-                  <li class="flex items-start gap-3 text-xs sm:text-sm text-zinc-700 dark:text-zinc-300 font-sans leading-snug">
-                    <span class="text-[#EE2737] font-bold shrink-0 mt-0.5 text-sm">✓</span>
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
+                <h3 class="text-xl sm:text-2xl md:text-3xl font-display font-bold text-zinc-900 dark:text-white tracking-tight mb-2">
+                  {service.title}
+                </h3>
+                
+                <p class="text-xs sm:text-sm text-[#EE2737] font-sans font-medium mb-4">
+                  {service.subtitle}
+                </p>
+
+                <p class="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-sans leading-relaxed mb-6">
+                  {service.description}
+                </p>
+
+                <!-- Fila de Ficha Técnica (Píldoras Técnicas) -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3 py-4 mb-6 border-y border-zinc-100 dark:border-zinc-800">
+                  {service.specs.map(spec => (
+                    <div class="flex flex-col bg-zinc-50 dark:bg-zinc-800/50 p-2.5 rounded-sm border border-zinc-200/80 dark:border-zinc-800">
+                      <span class="text-[10px] font-mono text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
+                        {spec.label}
+                      </span>
+                      <span class="text-xs font-bold font-sans text-zinc-900 dark:text-white mt-0.5 line-clamp-1">
+                        {spec.value}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                <!-- Lista de 3 Ventajas Clave -->
+                <ul class="space-y-2.5 mb-8">
+                  {service.features.map(f => (
+                    <li class="flex items-start gap-2.5 text-xs sm:text-sm text-zinc-700 dark:text-zinc-300 font-sans">
+                      <span class="text-[#EE2737] font-bold shrink-0 mt-0.5 text-sm">✓</span>
+                      <span>{f}</span>
+                    </li>
+                  ))}
+                </ul>
+
+              </div>
+
+              <!-- Acciones Duales: Primario (WhatsApp) + Secundario (Galería Filtrada) -->
+              <div class="pt-6 border-t border-zinc-100 dark:border-zinc-800 flex flex-col sm:flex-row gap-3">
+                <a
+                  href={service.quoteUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="group/btn flex-1 inline-flex items-center justify-center gap-2 py-3 px-6 rounded-sm bg-[#EE2737] hover:bg-[#d61e2e] text-white font-sans text-xs font-bold tracking-wider uppercase transition-all duration-200 select-none text-center shadow-none"
+                >
+                  <span>{service.quoteBtnText || "Cotizar Servicio"}</span>
+                  <span class="transition-transform duration-200 group-hover/btn:translate-x-0.5">→</span>
+                </a>
+
+                <a
+                  href={service.galleryUrl}
+                  class="group/btn2 inline-flex items-center justify-center gap-2 py-3 px-6 rounded-sm border border-zinc-300 dark:border-zinc-700 hover:border-zinc-900 dark:hover:border-white text-zinc-800 dark:text-zinc-200 hover:text-zinc-950 dark:hover:text-white bg-transparent font-sans text-xs font-bold tracking-wider uppercase transition-all duration-200 select-none text-center shrink-0 shadow-none"
+                >
+                  <span>{service.galleryBtnText || "Ver Trabajos"}</span>
+                  <span class="text-xs transition-transform duration-200 group-hover/btn2:translate-x-0.5">↗</span>
+                </a>
+              </div>
+
             </div>
 
-            <!-- Botones de Acción: Primario (Cotizar) y Secundario (Galería con Categoría) -->
-            <div class="pt-6 border-t border-zinc-100 dark:border-zinc-800/80 flex flex-col sm:flex-row gap-3">
+            <!-- Columna Derecha: Fotografía de Alta Gama -->
+            <div class="lg:col-span-5 relative bg-zinc-100 dark:bg-zinc-800 min-h-[280px] lg:min-h-full overflow-hidden border-t lg:border-t-0 lg:border-l border-zinc-200 dark:border-zinc-800">
+              <img
+                src={service.image}
+                alt={service.imageAlt || service.title}
+                loading="lazy"
+                class="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none"></div>
               
-              <!-- Botón Primario Oficial de Cotización -->
-              <a
-                href={item.quoteUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="group/btn flex-1 inline-flex items-center justify-center gap-2 py-3 px-5 rounded-sm bg-[#EE2737] hover:bg-[#d61e2e] text-white font-sans text-xs font-bold tracking-wider uppercase transition-all duration-200 select-none text-center"
-              >
-                <span>{item.quoteBtnText || "Cotizar Servicio"}</span>
-                <span class="transition-transform duration-200 group-hover/btn:translate-x-0.5">→</span>
-              </a>
-
-              <!-- Botón Secundario a Galería Filtrada -->
-              <a
-                href={item.galleryUrl}
-                class="group/btn2 inline-flex items-center justify-center gap-2 py-3 px-5 rounded-sm border border-zinc-300 dark:border-zinc-700 hover:border-zinc-900 dark:hover:border-white text-zinc-800 dark:text-zinc-200 hover:text-zinc-950 dark:hover:text-white bg-transparent font-sans text-xs font-bold tracking-wider uppercase transition-all duration-200 select-none text-center shrink-0"
-              >
-                <span>{item.galleryBtnText || "Ver Trabajos"}</span>
-                <span class="text-xs transition-transform duration-200 group-hover/btn2:translate-x-0.5">↗</span>
-              </a>
-
+              <!-- Badge inferior con garantía en la foto -->
+              <div class="absolute bottom-4 left-4 right-4 bg-black/75 backdrop-blur-xs p-3 rounded-sm border border-white/10 text-white flex items-center justify-between text-xs font-sans">
+                <span class="font-bold">{service.title}</span>
+                <span class="text-[11px] font-mono text-[#EE2737] uppercase font-semibold">Garantía Certificada</span>
+              </div>
             </div>
 
           </div>
-
         </div>
       ))}
     </div>
 
   </div>
 </section>
+
+<script>
+  // Script nativo ultra-ligero para alternar pestañas sin dependencias externas
+  document.addEventListener("DOMContentLoaded", () => {
+    const tabButtons = document.querySelectorAll<HTMLButtonElement>(".service-tab-btn");
+    const panels = document.querySelectorAll<HTMLDivElement>(".service-panel");
+
+    tabButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const targetIndex = button.getAttribute("data-tab-index");
+        if (targetIndex === null) return;
+
+        // Actualizar estado visual de los botones de pestañas
+        tabButtons.forEach((btn, idx) => {
+          if (idx.toString() === targetIndex) {
+            btn.classList.add("active", "border-[#EE2737]", "bg-white", "dark:bg-zinc-900", "text-zinc-900", "dark:text-white");
+            btn.classList.remove("border-zinc-200", "dark:border-zinc-800", "text-zinc-600", "dark:text-zinc-400", "bg-white/70", "dark:bg-zinc-900/60");
+          } else {
+            btn.classList.remove("active", "border-[#EE2737]", "bg-white", "dark:bg-zinc-900", "text-zinc-900", "dark:text-white");
+            btn.classList.add("border-zinc-200", "dark:border-zinc-800", "text-zinc-600", "dark:text-zinc-400", "bg-white/70", "dark:bg-zinc-900/60");
+          }
+        });
+
+        // Mostrar el panel correspondiente
+        panels.forEach((panel, idx) => {
+          if (idx.toString() === targetIndex) {
+            panel.classList.remove("hidden");
+            panel.classList.add("block");
+          } else {
+            panel.classList.add("hidden");
+            panel.classList.remove("block");
+          }
+        });
+      });
+    });
+  });
+</script>

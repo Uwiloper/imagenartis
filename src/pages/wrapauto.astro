@@ -2,8 +2,10 @@
 import Layout from '../layouts/Layout.astro';
 import HeroWrapAuto from '../components/sections/HeroWrapAuto.astro';
 import WhyChooseVinyl from '../components/sections/WhyChooseVinyl.astro';
-import ShowcasePortfolio from '../components/sections/ShowcasePortfolio';
 import VehicularServices from '../components/sections/VehicularServices.astro';
+import VehicleGalleryMarquee from '../components/sections/VehicleGalleryMarquee.astro';
+import EngagementCTA from '../components/sections/EngagementCTA.astro';
+import ShowcasePortfolio from '../components/sections/ShowcasePortfolio';
 import WaysToStart from '../components/sections/WaysToStart.astro';
 import { fetchAllSections } from '../lib/cms';
 
@@ -112,130 +114,19 @@ const faqs = [
   <!-- 2. SECCIÓN: ¿POR QUÉ LA GENTE ELIGE VINIL? (6 BENEFICIOS + ESTUDIO FOTOGRÁFICO) -->
   <WhyChooseVinyl />
 
-  <!-- 3. CASOS DE ÉXITO: ANTES Y DESPUÉS INTERACTIVO (SHOWCASE VEHICULAR) -->
-  <div id="showcase-wrapauto">
-    <ShowcasePortfolio 
-      items={showcaseItems} 
-      badge="RESULTADOS REALES"
-      titleHighlight="Transformaciones" 
-      titleStatic="antes y después"
-      subtitle="Mueve el deslizador central para comparar el estado previo y el acabado de alta gama entregado al cliente."
-      client:visible 
-    />
-  </div>
-
-  <!-- 4. LÍNEAS ESPECIALIZADAS: LOS 4 TIPOS VEHICULARES DIFERENCIADOS -->
+  <!-- 3. LÍNEAS ESPECIALIZADAS: LOS 4 TIPOS VEHICULARES CON ESTUDIO INTERACTIVO -->
   <VehicularServices />
 
-  {/* =========================================================================
-      SECCIONES EN RESERVA (Ocultas visualmente para activación progresiva)
-      =========================================================================
-  */}
-  {/* 
-  <!-- Sección WaysToStart reservada en el codebase (oculta visualmente por ahora) -->
-  <WaysToStart />
-  */}
-  {/* 
-  <section id="acabados" class="py-20 md:py-28 bg-zinc-50 dark:bg-zinc-900/50 transition-colors duration-300">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center max-w-3xl mx-auto mb-16">
-        <span class="text-xs font-mono uppercase tracking-widest text-[#EE2737] font-semibold mb-2 block">
-          Catálogo Especializado
-        </span>
-        <h2 class="text-3xl md:text-4xl lg:text-5xl font-display font-bold tracking-tight text-zinc-900 dark:text-white">
-          Soluciones de Wrap para <span class="text-[#EE2737]">cada necesidad</span>
-        </h2>
-        <p class="mt-4 text-sm sm:text-base text-zinc-600 dark:text-zinc-400 font-sans leading-relaxed">
-          Ya sea una flota corporativa de 50 camiones o la personalización de tu auto de uso diario, utilizamos las mejores marcas de vinil fundido del mundo.
-        </p>
-      </div>
+  <!-- 4. NUEVO: CARRUSEL AUTOMÁTICO INFINITO DE PROYECTOS VEHICULARES (MARQUEE) -->
+  <VehicleGalleryMarquee />
 
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {wrapSolutions.map((sol) => (
-          <div class="group flex flex-col bg-white dark:bg-zinc-900 rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-300 shadow-sm">
-            <div class="relative aspect-[16/10] w-full overflow-hidden bg-zinc-100 dark:bg-zinc-800">
-              <img
-                src={sol.image}
-                alt={sol.title}
-                loading="lazy"
-                class="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
-              />
-              <div class="absolute top-3 left-3 bg-black/70 backdrop-blur-md px-3 py-1 rounded-full text-[11px] font-mono font-semibold tracking-wider text-white border border-white/10 uppercase">
-                {sol.tag}
-              </div>
-            </div>
-
-            <div class="flex-1 flex flex-col justify-between p-6 sm:p-7">
-              <div>
-                <h3 class="text-xl font-bold font-display text-zinc-900 dark:text-white tracking-tight mb-3">
-                  {sol.title}
-                </h3>
-                <p class="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-sans leading-relaxed mb-6">
-                  {sol.description}
-                </p>
-
-                <ul class="space-y-2.5 mb-8">
-                  {sol.features.map(f => (
-                    <li class="flex items-start gap-2.5 text-xs sm:text-sm text-zinc-700 dark:text-zinc-300 font-sans">
-                      <span class="text-[#EE2737] font-bold mt-0.5">✓</span>
-                      <span>{f}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div class="pt-5 border-t border-zinc-100 dark:border-zinc-800/80">
-                <a
-                  href={`https://wa.me/51994097417?text=¡Hola!%20Deseo%20cotizar%20el%20servicio%20de:%20${encodeURIComponent(sol.title)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="group/btn flex items-center justify-between w-full py-3 px-4 rounded-sm bg-zinc-100 dark:bg-zinc-800/60 hover:bg-[#EE2737] hover:text-white text-zinc-900 dark:text-white font-sans text-xs font-bold tracking-wider uppercase transition-all duration-300"
-                >
-                  <span>{sol.cta}</span>
-                  <span class="transition-transform duration-300 group-hover/btn:translate-x-1">→</span>
-                </a>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <ShowcasePortfolio items={showcaseItems} client:visible />
-
-  <section class="py-20 md:py-24 bg-zinc-50 dark:bg-zinc-900/40 border-t border-zinc-200 dark:border-zinc-800/60 transition-colors duration-300">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-14">
-        <span class="text-xs font-mono uppercase tracking-widest text-[#EE2737] font-semibold mb-2 block">
-          Resolvemos tus dudas
-        </span>
-        <h2 class="text-3xl md:text-4xl font-display font-bold tracking-tight text-zinc-900 dark:text-white">
-          Preguntas <span class="text-[#EE2737]">Frecuentes</span>
-        </h2>
-      </div>
-
-      <div class="space-y-4">
-        {faqs.map((faq) => (
-          <details class="group bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg p-5 [&_svg]:open:-rotate-180 transition-all duration-200">
-            <summary class="flex justify-between items-center font-bold text-sm sm:text-base text-zinc-900 dark:text-white cursor-pointer list-none select-none">
-              <span>{faq.q}</span>
-              <span class="ml-4 shrink-0 text-[#EE2737] transition-transform duration-300">
-                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg>
-              </span>
-            </summary>
-            <p class="mt-4 text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-sans leading-relaxed border-t border-zinc-100 dark:border-zinc-800/60 pt-4">
-              {faq.a}
-            </p>
-          </details>
-        ))}
-      </div>
-    </div>
-  </section>
-
+  <!-- 5. CALL TO ACTION FINAL CON LIENZO INTERACTIVO Y CONTACTO DIRECTO -->
   <EngagementCTA />
+
+  <!-- SECCIONES EN RESERVA (Ocultas visualmente para activación progresiva) -->
+  {/* 
+  <ShowcasePortfolio items={showcaseItems} client:visible />
+  <WaysToStart />
   */}
 
 </Layout>
