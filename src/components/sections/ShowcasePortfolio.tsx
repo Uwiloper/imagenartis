@@ -36,7 +36,21 @@ export interface PortfolioItem {
   clientName: string;
 }
 
-export default function ShowcasePortfolio({ items }: { items?: PortfolioItem[] }) {
+export interface ShowcasePortfolioProps {
+  badge?: string;
+  titleStatic?: string;
+  titleHighlight?: string;
+  subtitle?: string;
+  items?: PortfolioItem[];
+}
+
+export default function ShowcasePortfolio({ 
+  items,
+  badge,
+  titleStatic = 'que hablan por sí solos',
+  titleHighlight = 'Trabajos',
+  subtitle
+}: ShowcasePortfolioProps) {
   const dataList = items && items.length > 0 ? items : PORTFOLIO_DATA;
   const [activeCategory, setActiveCategory] = useState(dataList[0]?.id || 'vehiculo');
   const [sliderPosition, setSliderPosition] = useState(50);
@@ -90,9 +104,22 @@ export default function ShowcasePortfolio({ items }: { items?: PortfolioItem[] }
     <section className="py-20 bg-white dark:bg-[#0a0a0a] transition-colors duration-300">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
         
-        <h2 className="text-3xl md:text-4xl font-display font-bold tracking-tight mb-8 text-center text-text-main dark:text-white transition-colors duration-300">
-          <span className="text-[#EE2737]">Trabajos</span> que hablan por sí solos
+        {badge && (
+          <div className="mb-3 inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-semibold tracking-wider uppercase bg-zinc-100 text-zinc-900 dark:bg-zinc-900 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-800">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#EE2737]"></span>
+            {badge}
+          </div>
+        )}
+
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold tracking-tight mb-3 text-center text-text-main dark:text-white transition-colors duration-300">
+          <span className="text-[#EE2737]">{titleHighlight}</span> {titleStatic}
         </h2>
+
+        {subtitle && (
+          <p className="max-w-2xl text-center text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-sans mb-8">
+            {subtitle}
+          </p>
+        )}
 
         {dataList.length > 1 && (
           <div 
@@ -163,8 +190,7 @@ export default function ShowcasePortfolio({ items }: { items?: PortfolioItem[] }
               onMouseDown={() => setIsDragging(true)}
               onTouchStart={() => setIsDragging(true)}
             >
-              {/* SE AGREGÓ 'absolute' PARA EVITAR QUE SE DEFORME Y 'shadow-md' PARA MEJOR VISIBILIDAD */}
-              <div className="absolute w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md cursor-grab active:cursor-grabbing">
+              <div className="absolute w-10 h-10 bg-white dark:bg-zinc-900 rounded-full flex items-center justify-center border border-zinc-300 dark:border-zinc-700 cursor-grab active:cursor-grabbing">
                 <div className="flex gap-[3px]">
                   <div className="w-[2px] h-[12px] bg-gray-500 rounded-sm"></div>
                   <div className="w-[2px] h-[12px] bg-gray-500 rounded-sm"></div>

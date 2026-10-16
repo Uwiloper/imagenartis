@@ -2,18 +2,45 @@
 import Layout from '../layouts/Layout.astro';
 import HeroWrapAuto from '../components/sections/HeroWrapAuto.astro';
 import WhyChooseVinyl from '../components/sections/WhyChooseVinyl.astro';
-import WaysToStart from '../components/sections/WaysToStart.astro';
 import ShowcasePortfolio from '../components/sections/ShowcasePortfolio';
-import EngagementCTA from '../components/sections/EngagementCTA.astro';
+import VehicularServices from '../components/sections/VehicularServices.astro';
+import WaysToStart from '../components/sections/WaysToStart.astro';
 import { fetchAllSections } from '../lib/cms';
 
 const cms = await fetchAllSections();
 
-// Proyectos filtrados o destacados para wrap automotriz (reservado para activación progresiva)
+// Proyectos automotrices antes y después para el showcase
+const wrapAutoShowcaseItems = [
+  {
+    id: 'flota-comercial',
+    category: 'Flota Comercial',
+    beforeImage: 'https://images.unsplash.com/photo-1550355291-bbee04a92027?q=80&w=1200&auto=format&fit=crop',
+    afterImage: 'https://images.unsplash.com/photo-1619682817481-e994891cd1f5?q=80&w=1200&auto=format&fit=crop',
+    testimonial: '"Rotularon 12 unidades de nuestra flota corporativa en tiempo récord sin detener nuestra operación diaria."',
+    clientName: 'Transportes & Logística del Pacífico'
+  },
+  {
+    id: 'cambio-color',
+    category: 'Cambio de Color',
+    beforeImage: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1200&auto=format&fit=crop',
+    afterImage: 'https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=1200&auto=format&fit=crop',
+    testimonial: '"El acabado satinado es impresionante, parece pintura de fábrica. La atención al detalle en los bordes es perfecta."',
+    clientName: 'Alejandro V. - Porsche Cayman'
+  },
+  {
+    id: 'ppf-proteccion',
+    category: 'Protección PPF',
+    beforeImage: 'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?q=80&w=1200&auto=format&fit=crop',
+    afterImage: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=1200&auto=format&fit=crop',
+    testimonial: '"Instalé PPF completo en mi camioneta para viajes a provincia. Cero marcas de piedras y la pintura original está intacta."',
+    clientName: 'Gonzalo M. - Toyota Hilux 4x4'
+  }
+];
+
 const vehicleShowcase = (cms.showcase?.items || []).filter(item => 
   item.id === 'vehiculo' || item.category?.toLowerCase().includes('veh') || item.category?.toLowerCase().includes('flota')
 );
-const showcaseItems = vehicleShowcase.length > 0 ? vehicleShowcase : cms.showcase?.items;
+const showcaseItems = vehicleShowcase.length > 1 ? vehicleShowcase : wrapAutoShowcaseItems;
 
 const wrapSolutions = [
   {
@@ -80,17 +107,33 @@ const faqs = [
 >
 
   <!-- 1. HERO DEDICADO DE 80% VIEWPORT CON LOS 3 PRINCIPALES -->
-  <HeroWrapAuto />
+  <HeroWrapAuto secondaryBtnUrl="#servicios-vehiculares" />
 
-  <!-- 2. SECCIÓN: ¿POR QUÉ LA GENTE ELIGE VINIL? -->
+  <!-- 2. SECCIÓN: ¿POR QUÉ LA GENTE ELIGE VINIL? (6 BENEFICIOS + ESTUDIO FOTOGRÁFICO) -->
   <WhyChooseVinyl />
 
-  <!-- 3. SECCIÓN: VARIAS FORMAS DE EMPEZAR (INTERACTIVA EN HOVER) -->
-  <WaysToStart />
+  <!-- 3. CASOS DE ÉXITO: ANTES Y DESPUÉS INTERACTIVO (SHOWCASE VEHICULAR) -->
+  <div id="showcase-wrapauto">
+    <ShowcasePortfolio 
+      items={showcaseItems} 
+      badge="RESULTADOS REALES"
+      titleHighlight="Transformaciones" 
+      titleStatic="antes y después"
+      subtitle="Mueve el deslizador central para comparar el estado previo y el acabado de alta gama entregado al cliente."
+      client:visible 
+    />
+  </div>
+
+  <!-- 4. LÍNEAS ESPECIALIZADAS: LOS 4 TIPOS VEHICULARES DIFERENCIADOS -->
+  <VehicularServices />
 
   {/* =========================================================================
-      SECCIONES EN RESERVA (Ocultas temporalmente para activación progresiva)
+      SECCIONES EN RESERVA (Ocultas visualmente para activación progresiva)
       =========================================================================
+  */}
+  {/* 
+  <!-- Sección WaysToStart reservada en el codebase (oculta visualmente por ahora) -->
+  <WaysToStart />
   */}
   {/* 
   <section id="acabados" class="py-20 md:py-28 bg-zinc-50 dark:bg-zinc-900/50 transition-colors duration-300">

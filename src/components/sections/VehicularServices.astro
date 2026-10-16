@@ -1,0 +1,204 @@
+---
+export interface VehicularServiceItem {
+  id: string;
+  tag: string;
+  title: string;
+  description: string;
+  features: string[];
+  image: string;
+  imageAlt?: string;
+  quoteBtnText?: string;
+  quoteUrl: string;
+  galleryBtnText?: string;
+  galleryCategory: string;
+  galleryUrl: string;
+}
+
+export interface Props {
+  badge?: string;
+  titleStatic?: string;
+  titleHighlight?: string;
+  description?: string;
+  services?: VehicularServiceItem[];
+}
+
+const {
+  badge = "LÍNEAS ESPECIALIZADAS",
+  titleStatic = "Nuestras soluciones en",
+  titleHighlight = "wrap y protección vehicular",
+  description = "Cuatro especialidades automotrices de alta precisión para cubrir desde la identidad comercial de flotas de alta exigencia hasta la personalización y protección integral de tu vehículo.",
+  services = [
+    {
+      id: "flotas-corporativas",
+      tag: "B2B / Flotas Comerciales",
+      title: "Vinil Corporativo para Flotas",
+      description: "Rotulación publicitaria y uniformidad corporativa para furgonetas, camiones de reparto y flotas de servicio. Máxima visibilidad de marca y resistencia para trabajo pesado continuo.",
+      features: [
+        "Diseño y adaptación exacta a las plantillas técnicas de cada modelo vehicular",
+        "Instalación programada por lotes y turnos para no paralizar tu logística comercial",
+        "Vinil fundido de alto rendimiento con laminado UV resistente a hidrolavado continuo"
+      ],
+      image: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1200&q=80",
+      imageAlt: "Flota de vehículos comerciales rotulados con vinil corporativo",
+      quoteBtnText: "Cotizar Flota",
+      quoteUrl: "https://wa.me/51994097417?text=¡Hola!%20Deseo%20cotizar%20el%20servicio%20de%20Vinil%20Corporativo%20para%20Flotas%20Comerciales",
+      galleryBtnText: "Ver Trabajos",
+      galleryCategory: "flotas",
+      galleryUrl: "/portafolio?categoria=flotas"
+    },
+    {
+      id: "wrap-personalizado",
+      tag: "Estilo & Personalización",
+      title: "Vinil Automotriz al Gusto del Cliente",
+      description: "Renovación estética completa o por piezas (techo, capó, retrovisores, cromo delete). Acabados mate, satinado, ultra gloss, tornasol y fibra de carbono según tu visión personal.",
+      features: [
+        "Catálogo exclusivo con más de 200 tonalidades y texturas importadas de 3M y Avery",
+        "Desmontaje técnico minucioso de piezas para remates invisibles sin cortes en pintura",
+        "100% reversible: conserva intacta la pintura de fábrica y el valor de reventa"
+      ],
+      image: "https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&w=1200&q=80",
+      imageAlt: "Auto de lujo con wrap automotriz personalizado en acabado negro satinado",
+      quoteBtnText: "Cotizar Personalización",
+      quoteUrl: "https://wa.me/51994097417?text=¡Hola!%20Deseo%20cotizar%20el%20servicio%20de%20Vinil%20Automotriz%20Personalizado%20(Cambio%20de%20Color)",
+      galleryBtnText: "Ver Trabajos",
+      galleryCategory: "wrap-personalizado",
+      galleryUrl: "/portafolio?categoria=wrap-personalizado"
+    },
+    {
+      id: "ppf-proteccion",
+      tag: "Blindaje Transparente",
+      title: "Protección PPF (Paint Protection Film)",
+      description: "Película de uretano transparente de alta ingeniería automotriz que actúa como un escudo protector invisible contra impactos de gravilla en carretera, piedras, arañazos y rayos UV.",
+      features: [
+        "Propiedad auto-regenerativa: las micro-rayas desaparecen al calor del sol o agua tibia",
+        "Efecto hidrofóbico cerámico que repele agua, manchas de agua dura y suciedad",
+        "Disponible en acabado ultra-brillante (Gloss) o satinado mate (Stealth)"
+      ],
+      image: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&w=1200&q=80",
+      imageAlt: "Vehículo deportivo de alta gama con película de protección PPF transparente",
+      quoteBtnText: "Cotizar Blindaje PPF",
+      quoteUrl: "https://wa.me/51994097417?text=¡Hola!%20Deseo%20cotizar%20el%20servicio%20de%20Protección%20PPF%20(Paint%20Protection%20Film)",
+      galleryBtnText: "Ver Trabajos",
+      galleryCategory: "ppf",
+      galleryUrl: "/portafolio?categoria=ppf"
+    },
+    {
+      id: "laminas-polarizados",
+      tag: "Seguridad & Confort Térmico",
+      title: "Láminas de Seguridad y Polarizados",
+      description: "Tratamiento técnico especializado para cristales y lunas vehiculares. Máxima reducción del calor exterior e infrarrojo combinada con blindaje multicapa anti-impacto contra intentos de asalto.",
+      features: [
+        "Tecnología nano-cerámica: rechaza hasta 95% de calor infrarrojo (IR) y 99% UV",
+        "Láminas de seguridad certificadas de 8 a 12 micras para contención ante impactos",
+        "Alta claridad óptica desde el interior y privacidad total exterior según normativa legal"
+      ],
+      image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80",
+      imageAlt: "Vehículo con lunas polarizadas nano-cerámicas y láminas de seguridad",
+      quoteBtnText: "Cotizar Láminas y Polarizados",
+      quoteUrl: "https://wa.me/51994097417?text=¡Hola!%20Deseo%20cotizar%20el%20servicio%20de%20Láminas%20de%20Seguridad%20y%20Polarizados%20Vehiculares",
+      galleryBtnText: "Ver Trabajos",
+      galleryCategory: "polarizados-seguridad",
+      galleryUrl: "/portafolio?categoria=polarizados-seguridad"
+    }
+  ]
+} = Astro.props;
+---
+
+<section id="servicios-vehiculares" class="py-20 md:py-28 bg-zinc-50 dark:bg-zinc-950 transition-colors duration-300 border-t border-zinc-200 dark:border-zinc-800/80">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <!-- Encabezado Proporcional (Flat, sin sombras) -->
+    <div class="text-center max-w-3xl mx-auto mb-14 md:mb-16">
+      {badge && (
+        <div class="mb-3.5 inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-semibold tracking-wider uppercase bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-800">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#EE2737]"></span>
+          {badge}
+        </div>
+      )}
+
+      <h2 class="text-2xl sm:text-3xl md:text-4xl font-display font-bold tracking-tight text-zinc-900 dark:text-white leading-[1.2]">
+        {titleStatic} <span class="text-[#EE2737]">{titleHighlight}</span>
+      </h2>
+
+      {description && (
+        <p class="mt-4 text-xs sm:text-sm md:text-base text-zinc-600 dark:text-zinc-400 font-sans leading-relaxed max-w-2xl mx-auto">
+          {description}
+        </p>
+      )}
+    </div>
+
+    <!-- Grid 2x2 de los 4 tipos vehiculares diferenciados -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-8">
+      {services.map((item) => (
+        <div class="group flex flex-col bg-white dark:bg-zinc-900 rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-300">
+          
+          <!-- Imagen de Cabecera con Tag de Servicio -->
+          <div class="relative aspect-[16/9] w-full overflow-hidden bg-zinc-100 dark:bg-zinc-800">
+            <img
+              src={item.image}
+              alt={item.imageAlt || item.title}
+              loading="lazy"
+              class="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+            />
+            <div class="absolute top-3.5 left-3.5 bg-black/75 backdrop-blur-md px-3 py-1 rounded-full text-[11px] font-mono font-semibold tracking-wider text-white border border-white/10 uppercase">
+              {item.tag}
+            </div>
+            <!-- Sutil viñeta para contraste del badge -->
+            <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none"></div>
+          </div>
+
+          <!-- Contenido y Lista de Características -->
+          <div class="flex-1 flex flex-col justify-between p-6 sm:p-8">
+            <div>
+              <h3 class="text-xl sm:text-2xl font-bold font-display text-zinc-900 dark:text-white tracking-tight mb-2.5">
+                {item.title}
+              </h3>
+              
+              <p class="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-sans leading-relaxed mb-6">
+                {item.description}
+              </p>
+
+              <!-- Características destacadas con checkmark rojo -->
+              <ul class="space-y-3 mb-8">
+                {item.features.map((feature) => (
+                  <li class="flex items-start gap-3 text-xs sm:text-sm text-zinc-700 dark:text-zinc-300 font-sans leading-snug">
+                    <span class="text-[#EE2737] font-bold shrink-0 mt-0.5 text-sm">✓</span>
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <!-- Botones de Acción: Primario (Cotizar) y Secundario (Galería con Categoría) -->
+            <div class="pt-6 border-t border-zinc-100 dark:border-zinc-800/80 flex flex-col sm:flex-row gap-3">
+              
+              <!-- Botón Primario Oficial de Cotización -->
+              <a
+                href={item.quoteUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="group/btn flex-1 inline-flex items-center justify-center gap-2 py-3 px-5 rounded-sm bg-[#EE2737] hover:bg-[#d61e2e] text-white font-sans text-xs font-bold tracking-wider uppercase transition-all duration-200 select-none text-center"
+              >
+                <span>{item.quoteBtnText || "Cotizar Servicio"}</span>
+                <span class="transition-transform duration-200 group-hover/btn:translate-x-0.5">→</span>
+              </a>
+
+              <!-- Botón Secundario a Galería Filtrada -->
+              <a
+                href={item.galleryUrl}
+                class="group/btn2 inline-flex items-center justify-center gap-2 py-3 px-5 rounded-sm border border-zinc-300 dark:border-zinc-700 hover:border-zinc-900 dark:hover:border-white text-zinc-800 dark:text-zinc-200 hover:text-zinc-950 dark:hover:text-white bg-transparent font-sans text-xs font-bold tracking-wider uppercase transition-all duration-200 select-none text-center shrink-0"
+              >
+                <span>{item.galleryBtnText || "Ver Trabajos"}</span>
+                <span class="text-xs transition-transform duration-200 group-hover/btn2:translate-x-0.5">↗</span>
+              </a>
+
+            </div>
+
+          </div>
+
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>
