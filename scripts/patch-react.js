@@ -30,25 +30,65 @@ module.exports.CompositionEvent = dummyEvent;
 }
 
 // 2. Create native ESM .mjs files for jsx-dev-runtime and jsx-runtime
-// Using import * as to support both Rollup/Rolldown strict CJS interop and esbuild
+// Using import * as to support both Rollup/Rolldown strict CJS interop, dev/prod NODE_ENV, and esbuild
 const reactDevRuntimeMjs = path.resolve('node_modules/react/jsx-dev-runtime.mjs');
 const devRuntimeMjsContent = `import * as dev from './cjs/react-jsx-dev-runtime.development.js';
-export const Fragment = dev.Fragment;
-export const jsxDEV = dev.jsxDEV;
-export default dev;
+import * as prod from './cjs/react-jsx-runtime.production.js';
+
+export const Fragment = dev.Fragment || dev.default?.Fragment || prod.Fragment || prod.default?.Fragment || Symbol.for('react.fragment');
+const rawDev = dev.jsxDEV || dev.default?.jsxDEV;
+const rawProd = prod.jsx || prod.default?.jsx;
+export const jsxDEV = rawDev || rawProd || function(type, config, maybeKey) {
+  var key = null;
+  if (maybeKey !== undefined) key = '' + maybeKey;
+  if (config && config.key !== undefined) key = '' + config.key;
+  var props = config ? Object.assign({}, config) : {};
+  delete props.key;
+  return {
+    $$typeof: Symbol.for('react.transitional.element'),
+    type: type,
+    key: key,
+    ref: config?.ref || null,
+    props: props
+  };
+};
+export default {
+  Fragment,
+  jsxDEV
+};
 `;
 fs.writeFileSync(reactDevRuntimeMjs, devRuntimeMjsContent);
 console.log('[patch-react] Created native ESM react/jsx-dev-runtime.mjs');
 
 const reactRuntimeMjs = path.resolve('node_modules/react/jsx-runtime.mjs');
 const runtimeMjsContent = `import * as prod from './cjs/react-jsx-runtime.production.js';
-export const Fragment = prod.Fragment;
-export const jsx = prod.jsx;
-export const jsxs = prod.jsxs;
+
+export const Fragment = prod.Fragment || prod.default?.Fragment || Symbol.for('react.fragment');
+export const jsx = prod.jsx || prod.default?.jsx;
+export const jsxs = prod.jsxs || prod.default?.jsxs || prod.jsx || prod.default?.jsx;
 export default prod;
 `;
 fs.writeFileSync(reactRuntimeMjs, runtimeMjsContent);
 console.log('[patch-react] Created native ESM react/jsx-runtime.mjs');
+
+// 2b. Patch react/jsx-dev-runtime.js CJS fallback
+const reactDevRuntimeCjs = path.resolve('node_modules/react/jsx-dev-runtime.js');
+if (fs.existsSync(reactDevRuntimeCjs)) {
+  let content = fs.readFileSync(reactDevRuntimeCjs, 'utf-8');
+  if (!content.includes('fallback_jsx')) {
+    content += `
+// fallback_jsx
+if (!exports.jsxDEV) {
+  try {
+    const prodRuntime = require('./cjs/react-jsx-runtime.production.js');
+    exports.jsxDEV = prodRuntime.jsx;
+  } catch (e) {}
+}
+`;
+    fs.writeFileSync(reactDevRuntimeCjs, content);
+    console.log('[patch-react] Added fallback to react/jsx-dev-runtime.js');
+  }
+}
 
 // 3. Patch react/package.json exports to point import condition to .mjs files
 const reactPkgPath = path.resolve('node_modules/react/package.json');

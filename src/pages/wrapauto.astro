@@ -2,8 +2,8 @@
 import Layout from '../layouts/Layout.astro';
 import HeroWrapAuto from '../components/sections/HeroWrapAuto.astro';
 import WhyChooseVinyl from '../components/sections/WhyChooseVinyl.astro';
-import VehicularServices from '../components/sections/VehicularServices.astro';
-import VehicleGalleryMarquee from '../components/sections/VehicleGalleryMarquee.astro';
+import VehicularServices from '../components/sections/VehicularServices';
+import VehicleGalleryMarquee from '../components/sections/VehicleGalleryMarquee';
 import EngagementCTA from '../components/sections/EngagementCTA.astro';
 import ShowcasePortfolio from '../components/sections/ShowcasePortfolio';
 import WaysToStart from '../components/sections/WaysToStart.astro';
@@ -114,11 +114,11 @@ const faqs = [
   <!-- 2. SECCIÓN: ¿POR QUÉ LA GENTE ELIGE VINIL? (6 BENEFICIOS + ESTUDIO FOTOGRÁFICO) -->
   <WhyChooseVinyl />
 
-  <!-- 3. LÍNEAS ESPECIALIZADAS: LOS 4 TIPOS VEHICULARES CON ESTUDIO INTERACTIVO -->
-  <VehicularServices />
+  <!-- 3. LÍNEAS ESPECIALIZADAS: LOS 5 TIPOS VEHICULARES CON MINI NAVBAR Y VIDEO EN BUCLE -->
+  <VehicularServices client:visible />
 
-  <!-- 4. NUEVO: CARRUSEL AUTOMÁTICO INFINITO DE PROYECTOS VEHICULARES (MARQUEE) -->
-  <VehicleGalleryMarquee />
+  <!-- 4. NUEVO: CARRUSEL AUTOMÁTICO INFINITO ARRASTRABLE (MARQUEE DRAGGABLE) -->
+  <VehicleGalleryMarquee client:visible />
 
   <!-- 5. CALL TO ACTION FINAL CON LIENZO INTERACTIVO Y CONTACTO DIRECTO -->
   <EngagementCTA />
