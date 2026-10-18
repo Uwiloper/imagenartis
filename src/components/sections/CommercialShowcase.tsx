@@ -1,25 +1,20 @@
 import React, { useState, useEffect, useRef, MouseEvent as ReactMouseEvent, TouchEvent as ReactTouchEvent } from 'react';
-import { Sparkles, Building2, Store, Signpost, Box } from 'lucide-react';
-
-export interface CommercialAttribute {
-  label: string;
-  value: string;
-  detail?: string;
-}
+import { Truck, Car, Shield, Sparkles, Building2, Store, Film } from 'lucide-react';
 
 export interface CommercialWorkItem {
   id: string;
   tabLabel: string;
-  iconType: 'light' | 'facade' | 'retail' | 'sign' | 'box';
+  iconType: 'truck' | 'car' | 'shield' | 'roll' | string;
   title: string;
   subtitle: string;
   description: string;
+  features: string[];
   beforeImage: string;
   afterImage: string;
   imageAlt?: string;
-  attributes: CommercialAttribute[];
   galleryUrl: string;
   galleryBtnText?: string;
+  attributes?: { label: string; value: string; detail?: string }[];
 }
 
 export interface CommercialShowcaseProps {
@@ -32,179 +27,76 @@ export interface CommercialShowcaseProps {
 
 export const DEFAULT_COMMERCIAL_WORKS: CommercialWorkItem[] = [
   {
-    id: 'letreros-3d',
-    tabLabel: 'Letreros Luminosos & 3D',
-    iconType: 'light',
+    id: 'letreros-luminosos',
+    tabLabel: 'Letreros Luminosos',
+    iconType: 'truck',
     title: 'Letreros Corpóreos 3D & Cajas de Luz',
     subtitle: 'Impacto visual 24/7 con retroiluminación de grado arquitectónico',
-    description: 'Diseño y manufactura de letras en bloque macizo, acrílico con relieve, acero quirúrgico pulido y sistemas de retroiluminación indirecta tipo halo. Ideales para fachadas comerciales, recepciones y centros comerciales.',
+    description: 'Diseño y manufactura de cajas de luz, letras corpóreas 3D y sistemas LED de alta visibilidad para fachadas comerciales y recepciones corporativas.',
+    features: [
+      'Módulos LED Samsung IP67 con retroiluminación indirecta tipo halo',
+      'Manufactura de precisión en acero quirúrgico y acrílico fundido',
+      'Cableado ignífugo certificado y 100% de cumplimiento normativo INDECI'
+    ],
     beforeImage: 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?auto=format&fit=crop&w=1200&q=80',
     afterImage: 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=1200&q=80',
-    imageAlt: 'Transformación antes y después: fachada comercial previa vs letrero 3D retroiluminado',
-    attributes: [
-      {
-        label: 'Tecnología Lumínica',
-        value: 'Módulos LED Samsung IP67',
-        detail: 'Bajo consumo 12V con vida útil superior a 50,000 horas'
-      },
-      {
-        label: 'Material Estructural',
-        value: 'Acero Quirúrgico / Acrílico Cast',
-        detail: 'Corte láser CNC con soldadura TIG invisible de precisión'
-      },
-      {
-        label: 'Resistencia Climática',
-        value: 'Sellado Hermético Anti-Humedad',
-        detail: 'Tratamiento anticorrosivo para el litoral costero peruano'
-      },
-      {
-        label: 'Normativa & Seguridad',
-        value: '100% Aprobación INDECI',
-        detail: 'Cableado ignífugo libre de halógenos y fuentes certificadas'
-      }
-    ],
+    imageAlt: 'Letreros luminosos antes y después',
     galleryUrl: '/portafolio?categoria=letreros',
-    galleryBtnText: 'VER LETREROS EN GALERIA'
+    galleryBtnText: 'VER TRABAJOS EN GALERIA'
   },
   {
-    id: 'fachadas-acm',
-    tabLabel: 'Fachadas en ACM',
-    iconType: 'facade',
-    title: 'Fachadas Arquitectónicas en ACM',
-    subtitle: 'Revestimiento integral con paneles de aluminio compuesto de alta durabilidad',
-    description: 'Transformación radical de exteriores comerciales. Estructura interna de tubo negro estructural y paneles ACM termoformados con acabado mate o metalizado, otorgando una imagen corporativa sólida y moderna.',
+    id: 'interiores-exteriores',
+    tabLabel: 'Interiores y Exteriores',
+    iconType: 'car',
+    title: 'Interiores y Exteriores en ACM',
+    subtitle: 'Revestimiento arquitectónico en paneles de aluminio compuesto',
+    description: 'Transformación integral de fachadas comerciales y ambientación interior de sedes corporativas con paneles termoformados de alta resistencia climática.',
+    features: [
+      'Paneles ACM de 4mm con núcleo mineral FR y sellado estructural',
+      'Subestructura en tubo electrosoldado con cálculo sismorresistente',
+      'Pintura arquitectónica PVDF resistente a radiación UV y salinidad'
+    ],
     beforeImage: 'https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?auto=format&fit=crop&w=1200&q=80',
     afterImage: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80',
-    imageAlt: 'Transformación antes y después: edificación previa vs fachada integral en paneles de ACM',
-    attributes: [
-      {
-        label: 'Material de Panel',
-        value: 'ACM Núcleo Mineral FR',
-        detail: '4mm de espesor con lámina de aluminio de alta resistencia'
-      },
-      {
-        label: 'Subestructura',
-        value: 'Tubo Estructural Electrosoldado',
-        detail: 'Anclajes mecánicos con cálculo estructural sismorresistente'
-      },
-      {
-        label: 'Acabado Superficial',
-        value: 'Pintura PVDF Anti-Decoloración',
-        detail: 'Garantía de 10 años sin pérdida de brillo ni pigmento'
-      },
-      {
-        label: 'Ingeniería de Juntas',
-        value: 'Sellado de Silicona Estructural',
-        detail: 'Juntas de dilatación que absorben movimientos térmicos'
-      }
-    ],
+    imageAlt: 'Fachadas arquitectónicas en ACM antes y después',
     galleryUrl: '/portafolio?categoria=fachadas',
-    galleryBtnText: 'VER FACHADAS EN GALERIA'
+    galleryBtnText: 'VER TRABAJOS EN GALERIA'
   },
   {
-    id: 'vitrinas-pavonado',
-    tabLabel: 'Vitrinas Retail & Pavonado',
-    iconType: 'retail',
-    title: 'Branding de Vitrinas & Vinil Pavonado',
-    subtitle: 'Privacidad elegante y branding gráfico para retail y oficinas corporativas',
-    description: 'Cortes computarizados de vinil esmerilado tipo arenado, microperforado para escaparates comerciales y gráfica publicitaria de alta resolución para mamparas y salas de directorio.',
-    beforeImage: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1200&auto=format&fit=crop',
-    afterImage: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1200&q=80',
-    imageAlt: 'Transformación antes y después: mamparas transparentes vs mamparas con vinil pavonado de diseño',
-    attributes: [
-      {
-        label: 'Película Principal',
-        value: 'Vinil Esmerilado 3M Dusted Crystal',
-        detail: 'Textura traslúcida uniforme con excelente dispersión de luz'
-      },
-      {
-        label: 'Transmisión de Luz',
-        value: '75% Paso de Luz / 100% Privacidad',
-        detail: 'No oscurece los ambientes interiores ni genera sombras'
-      },
-      {
-        label: 'Corte Computarizado',
-        value: 'Plotter Graphtec de Alta Precisión',
-        detail: 'Corte fino de logotipos, franjas y tramas personalizadas'
-      },
-      {
-        label: 'Adhesivo Técnico',
-        value: 'Tecnología Libre de Burbujas',
-        detail: 'Removible sin dejar residuos pegajosos sobre el cristal'
-      }
+    id: 'senalizaciones',
+    tabLabel: 'Señalizaciones',
+    iconType: 'shield',
+    title: 'Señalizaciones & Wayfinding',
+    subtitle: 'Directorios flotantes, tótems y señalética normativa INDECI',
+    description: 'Sistemas completos de orientación espacial y directorios para edificios de oficinas, clínicas y centros comerciales, cumpliendo con las normas técnicas peruanas.',
+    features: [
+      'Directorio modular flotante en acrílico con pernos de acero inoxidable',
+      'Señalética de seguridad fotoluminiscente bajo norma NTP 399.010',
+      'Levantamiento técnico en obra y mapeo de rutas críticas de evacuación'
     ],
-    galleryUrl: '/portafolio?categoria=vitrinas',
-    galleryBtnText: 'VER VITRINAS EN GALERIA'
-  },
-  {
-    id: 'senaletica-corporativa',
-    tabLabel: 'Señalética & Wayfinding',
-    iconType: 'sign',
-    title: 'Señalética Arquitectónica & Wayfinding',
-    subtitle: 'Sistemas de orientación espacial, directorios y señalética 100% normada INDECI',
-    description: 'Soluciones completas de señalética interna y externa: directorios flotantes en acrílico, tótems de ingreso, placas corpóreas y señalización de evacuación fotoluminiscente conforme a normas técnicas peruanas.',
-    beforeImage: 'https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=1200&auto=format&fit=crop',
-    afterImage: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=1200&auto=format&fit=crop',
-    imageAlt: 'Transformación antes y después: pasillo sin señalización vs señalética arquitectónica y wayfinding',
-    attributes: [
-      {
-        label: 'Directorio General',
-        value: 'Acrílico Flotante con Separadores',
-        detail: 'Diseño modular con pernos de acero para actualización sencilla'
-      },
-      {
-        label: 'Señales de Seguridad',
-        value: 'Vinil Fotoluminiscente Normado',
-        detail: 'Visibles en casos de corte de energía conforme a NTP 399.010'
-      },
-      {
-        label: 'Identificación de Áreas',
-        value: 'Placas Corpóreas & Pictogramas',
-        detail: 'Diseñadas bajo la identidad gráfica exacta de la empresa'
-      },
-      {
-        label: 'Levantamiento Técnico',
-        value: 'Mapeo de Rutas & Puntos Críticos',
-        detail: 'Inspección previa in situ para definir ubicaciones óptimas'
-      }
-    ],
+    beforeImage: 'https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=1200&q=80',
+    afterImage: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1200&q=80',
+    imageAlt: 'Señalizaciones y directorios antes y después',
     galleryUrl: '/portafolio?categoria=senaletica',
-    galleryBtnText: 'VER SEÑALÉTICA EN GALERIA'
+    galleryBtnText: 'VER TRABAJOS EN GALERIA'
   },
   {
-    id: 'stands-modulos',
-    tabLabel: 'Stands & Espacios de Marca',
-    iconType: 'box',
-    title: 'Stands para Ferias & Módulos Comerciales',
-    subtitle: 'Presencia de marca memorable en eventos, centros comerciales y exposiciones',
-    description: 'Fabricación y acondicionamiento gráfico de módulos de atención, counters publicitarios, backings fotográficos y stands desmontables para ferias comerciales y lanzamientos de producto.',
-    beforeImage: 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=1200&auto=format&fit=crop',
-    afterImage: 'https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=1200&auto=format&fit=crop',
-    imageAlt: 'Transformación antes y después: área ferial vacía vs stand comercial terminado y equipado',
-    attributes: [
-      {
-        label: 'Estructura Modular',
-        value: 'Aluminio & Madera Laqueada',
-        detail: 'Sistemas encastrables de fácil transporte, montaje y desmontaje'
-      },
-      {
-        label: 'Impresión Gráfica',
-        value: 'Tensado en Tela / Backing Rígido',
-        detail: 'Resolución fotográfica sin reflejos molestos para cámaras'
-      },
-      {
-        label: 'Puntos de Atención',
-        value: 'Counters con Vinil Laminado',
-        detail: 'Resistentes al alto tráfico con almacenamiento interior con llave'
-      },
-      {
-        label: 'Logística de Eventos',
-        value: 'Entrega Llave en Mano',
-        detail: 'Nos encargamos del transporte, armado y desarmado post-feria'
-      }
+    id: 'pavonados-arenados',
+    tabLabel: 'Pavonados y Arenados',
+    iconType: 'roll',
+    title: 'Pavonados y Arenados',
+    subtitle: 'Privacidad elegante y diseño gráfico para mamparas de vidrio',
+    description: 'Películas de vinil esmerilado de alta gama para mamparas de oficinas, salas de reuniones y locales. Diseños continuos o franjas de privacidad personalizadas.',
+    features: [
+      'Película de vinil esmerilado 3M Dusted Crystal de máxima uniformidad',
+      'Bloqueo visual directo conservando hasta un 75% de paso de luz natural',
+      'Corte computarizado de alta precisión y remoción limpia sin residuos'
     ],
-    galleryUrl: '/portafolio?categoria=stands',
-    galleryBtnText: 'VER STANDS EN GALERIA'
+    beforeImage: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80',
+    afterImage: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1200&q=80',
+    imageAlt: 'Pavonados y arenados en mamparas de vidrio antes y después',
+    galleryUrl: '/portafolio?categoria=vitrinas',
+    galleryBtnText: 'VER TRABAJOS EN GALERIA'
   }
 ];
 
@@ -229,10 +121,19 @@ export default function CommercialShowcase({
   const safeIndex = Math.min(Math.max(0, activeTab), safeWorks.length - 1);
   const currentWork = safeWorks[safeIndex];
 
-  const beforeImg = currentWork.beforeImage || 'https://images.unsplash.com/photo-1517502166878-34c979606132?q=80&w=1200&auto=format&fit=crop';
+  const beforeImg = currentWork.beforeImage || 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?auto=format&fit=crop&w=1200&q=80';
   const afterImg = currentWork.afterImage || (currentWork as any).image || 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=1200&q=80';
 
-  // Al cambiar de tab, reiniciamos suavemente el slider a 50%
+  // Soporte para features unificadas o atributos de compatibilidad CMS
+  const safeFeatures = currentWork.features && currentWork.features.length > 0
+    ? currentWork.features
+    : currentWork.attributes?.map(a => `${a.label}: ${a.value}`) || [
+        'Materiales certificados de alta durabilidad',
+        'Ingeniería y manufactura en taller propio',
+        'Cumplimiento de estándares técnicos de seguridad'
+      ];
+
+  // Al cambiar de tab, ejecutamos animación suave de apertura (de 0% a 50%)
   useEffect(() => {
     setSliderPosition(0);
     const timeout = setTimeout(() => {
@@ -241,7 +142,7 @@ export default function CommercialShowcase({
     return () => clearTimeout(timeout);
   }, [safeIndex]);
 
-  // Actualización del sliding pill (estilo Showcase / Vehicular Services)
+  // Actualización del sliding pill animado estilo Showcase / Vehicular Services
   const updatePill = () => {
     if (navRef.current) {
       const activeBtn = navRef.current.querySelector(`[data-id="${safeWorks[safeIndex]?.id}"]`) as HTMLButtonElement;
@@ -269,7 +170,10 @@ export default function CommercialShowcase({
     return () => window.removeEventListener('resize', updatePill);
   }, [safeIndex]);
 
-  // Manejo de scroll para el mini-navbar en móvil (formato estricto vehicular services)
+  // Manejo de scroll para la barra de navegación en móvil:
+  // - Oculto (hidden con slide out) antes de la sección
+  // - Flotante inferior (sticky) durante el scroll por la sección
+  // - Acoplado (docked) en su posición real al pie de la tarjeta
   useEffect(() => {
     const handleScroll = () => {
       if (!sectionRef.current || !anchorRef.current) return;
@@ -277,7 +181,7 @@ export default function CommercialShowcase({
       const aRect = anchorRef.current.getBoundingClientRect();
       const vh = window.innerHeight;
 
-      const isSectionInView = sRect.top < vh - 60 && sRect.bottom > 40;
+      const isSectionInView = sRect.top < vh - 60 && sRect.bottom > 60;
 
       if (!isSectionInView) {
         setMobileNavState('hidden');
@@ -314,18 +218,22 @@ export default function CommercialShowcase({
     if (isDragging) handleMove(e.touches[0].clientX);
   };
 
-  const renderIcon = (type: CommercialWorkItem['iconType'], className = 'w-4 h-4') => {
+  const renderIcon = (type: string, className = 'w-4 h-4') => {
     switch (type) {
-      case 'light':
-        return <Sparkles className={className} />;
-      case 'facade':
-        return <Building2 className={className} />;
-      case 'retail':
-        return <Store className={className} />;
-      case 'sign':
-        return <Signpost className={className} />;
-      case 'box':
-        return <Box className={className} />;
+      case 'truck':
+        return <Truck className={className} />;
+      case 'car':
+        return <Car className={className} />;
+      case 'shield':
+        return <Shield className={className} />;
+      case 'roll':
+        return (
+          <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <ellipse cx="12" cy="7" rx="7" ry="3" />
+            <path d="M5 7v10c0 1.66 3.13 3 7 3s7-1.34 7-3V7" />
+            <path d="M5 12c0 1.66 3.13 3 7 3s7-1.34 7-3" />
+          </svg>
+        );
       default:
         return <Sparkles className={className} />;
     }
@@ -353,54 +261,44 @@ export default function CommercialShowcase({
           </div>
         )}
 
-        {/* Tarjeta Principal Dividida en 2 Columnas (Fiel al formato estricto de vehicular services) */}
-        <div className="w-full bg-white dark:bg-zinc-900 rounded-md border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-none transition-colors duration-300">
-          <div className="grid grid-cols-1 lg:grid-cols-12 items-stretch min-h-[440px]">
+        {/* Tarjeta Principal Dividida en 2 Columnas con Altura Estandarizada (No salta ni desborda) */}
+        <div className="w-full bg-white dark:bg-zinc-900 rounded-md border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-none transition-colors duration-300 md:h-[460px]">
+          <div className="grid grid-cols-1 lg:grid-cols-12 items-stretch h-full">
             
-            {/* Columna Izquierda: Información Editorial y Atributos Más Destacables */}
-            <div className="lg:col-span-6 p-6 sm:p-8 md:p-9 flex flex-col justify-between bg-white dark:bg-zinc-900 transition-colors duration-300">
+            {/* Columna Izquierda: Información Editorial Estandarizada */}
+            <div className="lg:col-span-6 p-6 sm:p-8 md:p-9 flex flex-col justify-between h-full bg-white dark:bg-zinc-900 transition-colors duration-300">
               <div>
                 
                 {/* Título Principal de la Línea */}
-                <h3 className="text-xl sm:text-2xl font-display font-bold text-zinc-900 dark:text-white tracking-tight leading-snug mb-1">
+                <h3 className="text-xl sm:text-2xl font-display font-bold text-zinc-900 dark:text-white tracking-tight leading-snug mb-1 line-clamp-1">
                   {currentWork.title}
                 </h3>
                 
                 {/* Subtítulo en Rojo Primario */}
-                <p className="text-xs sm:text-sm font-sans font-semibold text-[#EE2737] mb-3 leading-tight">
+                <p className="text-xs sm:text-sm font-sans font-semibold text-[#EE2737] mb-3 leading-tight line-clamp-1">
                   {currentWork.subtitle}
                 </p>
 
-                {/* Descripción Concisa */}
-                <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-sans leading-relaxed mb-5">
+                {/* Descripción Breve de Altura Homogénea */}
+                <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-sans leading-relaxed mb-6 h-12 sm:h-11 line-clamp-2">
                   {currentWork.description}
                 </p>
 
-                {/* Grilla 2x2 de Atributos Más Destacables */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-6">
-                  {currentWork.attributes.map((attr, idx) => (
-                    <div 
-                      key={idx}
-                      className="p-2.5 rounded-sm bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200/80 dark:border-zinc-700/60 transition-colors"
-                    >
-                      <div className="text-[10px] font-mono uppercase tracking-wider font-semibold text-zinc-500 dark:text-zinc-400 mb-0.5">
-                        {attr.label}
-                      </div>
-                      <div className="text-xs sm:text-sm font-sans font-bold text-zinc-900 dark:text-white leading-tight">
-                        {attr.value}
-                      </div>
-                      {attr.detail && (
-                        <div className="text-[11px] font-sans text-zinc-600 dark:text-zinc-400 mt-0.5 leading-snug">
-                          {attr.detail}
-                        </div>
-                      )}
-                    </div>
+                {/* 3 Viñetas con Checkmark Rojo */}
+                <ul className="space-y-3 mb-6">
+                  {safeFeatures.slice(0, 3).map((feature, idx) => (
+                    <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-zinc-700 dark:text-zinc-300 font-sans leading-snug">
+                      <span className="text-[#EE2737] font-bold shrink-0 mt-0.5 text-sm select-none">
+                        ✓
+                      </span>
+                      <span className="line-clamp-1 sm:line-clamp-2">{feature}</span>
+                    </li>
                   ))}
-                </div>
+                </ul>
 
               </div>
 
-              {/* Botón Único Inferior: Ver Trabajos en Galería (Fiel al formato estricto de vehicular services) */}
+              {/* Botón Único Inferior: Ver Trabajos en Galería */}
               <div className="pt-2">
                 <a
                   href={currentWork.galleryUrl}
@@ -414,11 +312,11 @@ export default function CommercialShowcase({
             </div>
 
             {/* Columna Derecha: Showcase Interactivo de Antes y Después */}
-            <div className="lg:col-span-6 relative bg-zinc-950 flex flex-col justify-between overflow-hidden min-h-[320px] lg:min-h-full border-t lg:border-t-0 lg:border-l border-zinc-200 dark:border-zinc-800">
+            <div className="lg:col-span-6 relative bg-zinc-950 flex flex-col justify-between overflow-hidden h-[340px] lg:h-full border-t lg:border-t-0 lg:border-l border-zinc-200 dark:border-zinc-800">
               
               <div 
                 ref={containerRef}
-                className="relative flex-1 w-full h-full min-h-[320px] overflow-hidden cursor-ew-resize select-none bg-black"
+                className="relative flex-1 w-full h-full overflow-hidden cursor-ew-resize select-none bg-black"
                 onMouseDown={(e) => {
                   setIsDragging(true);
                   handleMove(e.clientX);
@@ -433,20 +331,22 @@ export default function CommercialShowcase({
                 onTouchMove={handleTouchMove}
                 onTouchEnd={() => setIsDragging(false)}
               >
-                {/* Capa DESPUÉS (Base de fondo) */}
+                {/* Capa DESPUÉS (Fondo base) */}
                 <img 
                   src={afterImg} 
                   alt={`Resultado final - ${currentWork.title}`} 
                   className="absolute inset-0 w-full h-full object-cover pointer-events-none transition-opacity duration-500 ease-in"
                   loading="lazy"
                 />
-                <span className="absolute top-4 right-4 bg-[#EE2737] text-white text-[11px] font-sans font-bold uppercase tracking-wider px-3 py-1 rounded-sm z-10 pointer-events-none select-none">
+                
+                {/* Badge DESPUÉS en Rojo Fiel al Boceto */}
+                <span className="absolute top-4 right-4 bg-[#EE2737] text-white text-xs font-sans font-bold px-3 py-1 rounded-md z-10 pointer-events-none select-none shadow-none">
                   Después
                 </span>
 
                 {/* Capa ANTES recortada con clipPath */}
                 <div 
-                  className={`absolute inset-0 w-full h-full pointer-events-none ${isDragging ? '' : 'transition-all duration-300 ease-out'}`}
+                  className={`absolute inset-0 w-full h-full pointer-events-none ${isDragging ? '' : 'transition-all duration-700 ease-out'}`}
                   style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
                 >
                   <img 
@@ -455,17 +355,19 @@ export default function CommercialShowcase({
                     className="absolute inset-0 w-full h-full object-cover pointer-events-none"
                     loading="lazy"
                   />
-                  <span className="absolute top-4 left-4 bg-zinc-900/80 backdrop-blur-xs text-white text-[11px] font-sans font-bold uppercase tracking-wider px-3 py-1 rounded-sm z-10 pointer-events-none select-none border border-white/10">
+                  
+                  {/* Badge ANTES en Rojo Fiel al Boceto */}
+                  <span className="absolute top-4 left-4 bg-[#EE2737] text-white text-xs font-sans font-bold px-3 py-1 rounded-md z-10 pointer-events-none select-none shadow-none">
                     Antes
                   </span>
                 </div>
 
-                {/* Línea divisoria central con tirador */}
+                {/* Línea divisoria central con tirador || */}
                 <div 
-                  className={`absolute top-0 bottom-0 w-[2px] bg-white z-20 flex items-center justify-center pointer-events-none ${isDragging ? '' : 'transition-all duration-300 ease-out'}`}
+                  className={`absolute top-0 bottom-0 w-[2px] bg-white z-20 flex items-center justify-center pointer-events-none ${isDragging ? '' : 'transition-all duration-700 ease-out'}`}
                   style={{ left: `${sliderPosition}%`, transform: 'translateX(-50%)' }}
                 >
-                  <div className="w-9 h-9 bg-white dark:bg-zinc-900 rounded-full flex items-center justify-center border border-zinc-300 dark:border-zinc-700 pointer-events-auto cursor-grab active:cursor-grabbing select-none">
+                  <div className="w-9 h-9 bg-white dark:bg-zinc-900 rounded-full flex items-center justify-center border border-zinc-300 dark:border-zinc-700 pointer-events-auto cursor-grab active:cursor-grabbing select-none shadow-md">
                     <div className="flex gap-[3px]">
                       <div className="w-[2px] h-[12px] bg-zinc-500 rounded-sm"></div>
                       <div className="w-[2px] h-[12px] bg-zinc-500 rounded-sm"></div>
@@ -480,19 +382,19 @@ export default function CommercialShowcase({
           </div>
         </div>
 
-        {/* Mini Navbar Animado con Iconos (Estilo Vehicular Services con ancho alineado a la tarjeta) */}
+        {/* Mini Navbar Animado con Iconos (Estilo Showcase / Vehicular Services) */}
         <div ref={anchorRef} className="relative w-full mt-3 min-h-[48px]">
           <div 
             ref={navRef}
-            className={`w-full bg-gray-100 dark:bg-[#1a1a1a] border border-zinc-200 dark:border-zinc-800/80 rounded-md p-1 transition-all duration-300 select-none shadow-none flex items-center overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory ${
-              // En pantallas medianas y grandes siempre en su posición real (relativo y ancho completo)
-              'md:relative md:inset-auto md:w-full md:opacity-100 md:pointer-events-auto ' +
-              // En pantallas móviles aplica sticky dock o docked en su posición real
+            className={`w-full bg-gray-100 dark:bg-[#1a1a1a] border border-zinc-200 dark:border-zinc-800/80 rounded-md p-1 select-none shadow-none flex items-center overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory ${
+              // En desktop siempre relativo y ancho completo
+              'md:relative md:inset-auto md:w-full md:opacity-100 md:pointer-events-auto md:translate-y-0 ' +
+              // En pantallas móviles aplica sticky dock o docked en su posición real con transiciones
               (mobileNavState === 'sticky'
-                ? 'fixed bottom-4 inset-x-3 z-40 max-w-lg mx-auto opacity-100 pointer-events-auto shadow-xl ring-1 ring-black/10 dark:ring-white/10'
+                ? 'fixed bottom-4 inset-x-3 z-40 max-w-lg mx-auto opacity-100 pointer-events-auto shadow-2xl ring-1 ring-black/10 dark:ring-white/10 translate-y-0 transition-all duration-300 ease-out'
                 : mobileNavState === 'docked'
-                ? 'relative inset-auto w-full opacity-100 pointer-events-auto'
-                : 'opacity-0 pointer-events-none fixed bottom-4 inset-x-3 z-40 max-w-lg mx-auto')
+                ? 'relative inset-auto w-full opacity-100 pointer-events-auto translate-y-0 transition-all duration-300 ease-out'
+                : 'fixed bottom-4 inset-x-3 z-40 max-w-lg mx-auto opacity-0 pointer-events-none translate-y-4 transition-all duration-300 ease-in')
             }`}
           >
             {/* Sliding Pill animado en rojo (#EE2737) */}
@@ -513,7 +415,7 @@ export default function CommercialShowcase({
                   data-id={work.id}
                   onClick={() => setActiveTab(index)}
                   type="button"
-                  className={`relative z-10 flex-1 shrink-0 md:shrink flex items-center justify-center gap-2 py-2.5 px-3.5 sm:px-3 rounded-md text-xs sm:text-sm font-sans transition-colors duration-300 cursor-pointer select-none whitespace-nowrap snap-center ${
+                  className={`relative z-10 flex-1 shrink-0 md:shrink flex items-center justify-center gap-2 py-2.5 px-4 sm:px-3 rounded-md text-xs sm:text-sm font-sans transition-colors duration-300 cursor-pointer select-none whitespace-nowrap snap-center ${
                     isActive
                       ? 'text-white font-semibold'
                       : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-medium'
