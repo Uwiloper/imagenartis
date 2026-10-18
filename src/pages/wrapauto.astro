@@ -115,10 +115,24 @@ const faqs = [
   <WhyChooseVinyl />
 
   <!-- 3. LÍNEAS ESPECIALIZADAS: LOS 5 TIPOS VEHICULARES CON MINI NAVBAR Y VIDEO EN BUCLE -->
-  <VehicularServices client:visible />
+  <VehicularServices 
+    services={cms.vehicularServices?.services}
+    titleStatic={cms.vehicularServices?.titleStatic}
+    titleHighlight={cms.vehicularServices?.titleHighlight}
+    description={cms.vehicularServices?.description}
+    client:visible 
+  />
 
   <!-- 4. NUEVO: CARRUSEL AUTOMÁTICO INFINITO ARRASTRABLE (MARQUEE DRAGGABLE) -->
-  <VehicleGalleryMarquee client:visible />
+  <VehicleGalleryMarquee 
+    items={cms.vehicleGalleryMarquee?.items}
+    titleStatic={cms.vehicleGalleryMarquee?.titleStatic}
+    titleHighlight={cms.vehicleGalleryMarquee?.titleHighlight}
+    description={cms.vehicleGalleryMarquee?.description}
+    buttonText={cms.vehicleGalleryMarquee?.buttonText}
+    buttonUrl={cms.vehicleGalleryMarquee?.buttonUrl}
+    client:visible 
+  />
 
   <!-- 5. CALL TO ACTION FINAL CON LIENZO INTERACTIVO Y CONTACTO DIRECTO -->
   <EngagementCTA />

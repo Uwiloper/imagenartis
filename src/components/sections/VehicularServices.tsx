@@ -361,6 +361,7 @@ export default function VehicularServices({
                     autoPlay
                     loop
                     muted
+                    defaultMuted
                     playsInline
                     onLoadedData={() => setVideoLoaded(true)}
                     className="absolute inset-0 w-full h-full object-cover object-center"

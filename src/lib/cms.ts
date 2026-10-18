@@ -138,6 +138,23 @@ export interface SiteSettings {
   ruc: string;
 }
 
+export interface VehicularServicesData {
+  titleStatic?: string;
+  titleHighlight?: string;
+  description?: string;
+  services?: any[];
+}
+
+export interface VehicleGalleryMarqueeData {
+  badge?: string;
+  titleStatic?: string;
+  titleHighlight?: string;
+  description?: string;
+  buttonText?: string;
+  buttonUrl?: string;
+  items?: any[];
+}
+
 export interface AllCmsData {
   hero: HeroData;
   siteSettings: SiteSettings;
@@ -149,6 +166,8 @@ export interface AllCmsData {
   footer: FooterData;
   engagement: EngagementData;
   homeLayout: string[];
+  vehicularServices?: VehicularServicesData;
+  vehicleGalleryMarquee?: VehicleGalleryMarqueeData;
 }
 
 // Fallback por defecto (100% resiliente a fallos de red)
@@ -209,6 +228,8 @@ export async function fetchAllSections(): Promise<AllCmsData> {
       footer: { ...defaults.footer, ...(map.footer || {}) },
       engagement: { ...defaults.engagement, ...(map.engagement || {}) },
       homeLayout: map.homeLayout?.sections || defaults.homeLayout,
+      vehicularServices: map.vehicularServices || undefined,
+      vehicleGalleryMarquee: map.vehicleGalleryMarquee || undefined,
     };
   } catch (err) {
     console.error('Error al conectar con Supabase en fetchAllSections, usando respaldo:', err);
