@@ -1,0 +1,127 @@
+---
+import { ChevronDown, HelpCircle } from 'lucide-react';
+
+export interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+export interface Props {
+  badge?: string;
+  titleStatic?: string;
+  titleHighlight?: string;
+  description?: string;
+  faqs?: FaqItem[];
+}
+
+const {
+  badge,
+  titleStatic = "Preguntas frecuentes sobre",
+  titleHighlight = "branding comercial",
+  description = "Resolvemos las consultas técnicas y normativas más habituales antes de iniciar tu proyecto de rotulación, letreros o fachada.",
+  faqs = [
+    {
+      question: "¿Gestionan o asesoran en los permisos municipales para letreros exteriores?",
+      answer: "Sí. Todo letrero exterior colocado en vía pública requiere licencia de elementos de publicidad exterior y conformidad INDECI. En Imagenartis entregamos el expediente técnico completo: memoria descriptiva, diagramas unifilares de carga eléctrica, cálculo de resistencia al viento y planos a escala para que tu trámite municipal sea aprobado sin observaciones."
+    },
+    {
+      question: "¿Qué garantía tienen los letreros luminosos y los componentes LED?",
+      answer: "Utilizamos exclusivamente módulos LED Samsung con certificación IP68 y transformadores herméticos Mean Well con protección contra sobretensiones. Ofrecemos 2 años de garantía total en componentes eléctricos/lumínicos y hasta 5 años de garantía estructural en perfilerías de aluminio, acero inoxidable y acrílicos con filtro UV."
+    },
+    {
+      question: "¿Pueden realizar instalaciones en horario nocturno para centros comerciales y oficinas?",
+      answer: "Totalmente. Entendemos que los centros comerciales, torres corporativas y tiendas retail tienen normativas de trabajo que exigen cero ruido y cero polvo durante el día. Nuestro personal técnico cuenta con seguro complementario de trabajo de riesgo (SCTR), EPPs reglamentarios y disponibilidad en turnos de noche o madrugadas para no frenar tu operación comercial."
+    },
+    {
+      question: "¿Qué tipo de vinil recomiendan para mamparas y salas de reuniones?",
+      answer: "Recomendamos vinil esmerilado o pavonado (frosted) de calidad 3M o Avery. Proporciona privacidad visual sin oscurecer los ambientes, permitiendo el paso del 70% de la luz natural. Además, realizamos cortes digitales precisos con tu logotipo corporativo calado, tramas geométricas o franjas de seguridad reglamentarias."
+    },
+    {
+      question: "¿Realizan proyectos de branding comercial fuera de Lima?",
+      answer: "Sí, cubrimos todo el territorio nacional. Fabricamos y pre-ensamblamos las piezas en nuestro taller central en Lima bajo estrictos controles de calidad, embalamos en cajas de madera reforzada y enviamos cuadrillas especializadas para realizar el montaje y conexión en cualquier provincia del Perú."
+    },
+    {
+      question: "¿Cuál es el tiempo promedio de fabricación e instalación de un letrero o fachada?",
+      answer: "Para letreros corpóreos 3D y cajas de luz estándar el tiempo de manufactura oscila entre 4 y 7 días hábiles tras la aprobación del fotomontaje. Para fachadas integrales en ACM o proyectos de señalética masiva se coordina un cronograma técnico por etapas que suele tomar entre 8 y 15 días hábiles."
+    }
+  ]
+} = Astro.props;
+---
+
+<section 
+  id="faq-comercial"
+  class="py-20 md:py-28 bg-white dark:bg-zinc-950 transition-colors duration-300 border-t border-zinc-200 dark:border-zinc-800/80"
+>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    {badge && (
+      <div class="text-center mb-3">
+        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-semibold tracking-wider uppercase bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-800">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#EE2737]"></span>
+          {badge}
+        </span>
+      </div>
+    )}
+
+    <!-- Encabezado Proporcional -->
+    <div class="text-center mb-12 sm:mb-16">
+      <h2 class="text-2xl sm:text-3xl md:text-4xl font-display font-bold tracking-tight text-zinc-900 dark:text-white leading-[1.2]">
+        {titleStatic} <span class="text-[#EE2737]">{titleHighlight}</span>
+      </h2>
+      {description && (
+        <p class="mt-3 text-xs sm:text-sm md:text-base text-zinc-600 dark:text-zinc-400 font-sans leading-relaxed max-w-2xl mx-auto">
+          {description}
+        </p>
+      )}
+    </div>
+
+    <!-- Acordeón de Preguntas y Respuestas (Flat design, sin sombras) -->
+    <div class="space-y-3.5">
+      {faqs.map((faq, index) => (
+        <details 
+          class="group rounded-md border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/50 transition-colors duration-200 overflow-hidden shadow-none [&_summary::-webkit-details-marker]:hidden"
+          open={index === 0}
+        >
+          <summary class="flex items-center justify-between gap-4 p-5 sm:p-6 cursor-pointer select-none font-display font-bold text-sm sm:text-base text-zinc-900 dark:text-white hover:text-[#EE2737] dark:hover:text-[#EE2737] transition-colors">
+            <span class="leading-snug">{faq.question}</span>
+            <span class="w-6 h-6 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center shrink-0 text-zinc-600 dark:text-zinc-300 group-open:rotate-180 group-open:bg-[#EE2737] group-open:text-white transition-all duration-300">
+              <ChevronDown size={15} strokeWidth={2.2} />
+            </span>
+          </summary>
+          <div class="px-5 pb-5 sm:px-6 sm:pb-6 pt-0 text-xs sm:text-sm font-sans text-zinc-600 dark:text-zinc-400 leading-relaxed border-t border-zinc-100 dark:border-zinc-800/60 mt-1">
+            <div class="pt-3">
+              {faq.answer}
+            </div>
+          </div>
+        </details>
+      ))}
+    </div>
+
+    <!-- Bloque de contacto rápido si tienen otra duda -->
+    <div class="mt-10 p-5 sm:p-6 rounded-md bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-[#EE2737]/10 text-[#EE2737] flex items-center justify-center shrink-0">
+          <HelpCircle size={20} />
+        </div>
+        <div>
+          <h4 class="text-xs sm:text-sm font-display font-bold text-zinc-900 dark:text-white">
+            ¿Tienes un requerimiento especial o plano por revisar?
+          </h4>
+          <p class="text-[11px] sm:text-xs text-zinc-600 dark:text-zinc-400 font-sans mt-0.5">
+            Nuestro equipo de ingeniería revisa especificaciones técnicas sin costo de asesoría.
+          </p>
+        </div>
+      </div>
+      <a
+        href="https://wa.me/51994097417?text=¡Hola!%20Tengo%20una%20consulta%20técnica%20sobre%20un%20proyecto%20de%20branding%20comercial"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center justify-center px-5 py-2.5 rounded-sm bg-[#EE2737] hover:bg-[#d61e2e] text-white font-sans text-xs font-bold uppercase tracking-wider transition-colors shrink-0 shadow-none"
+      >
+        <span>Hablar con un asesor</span>
+        <span class="ml-1.5">→</span>
+      </a>
+    </div>
+
+  </div>
+</section>

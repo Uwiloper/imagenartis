@@ -1,0 +1,37 @@
+---
+import Layout from '../layouts/Layout.astro';
+import HeroBrandComercial from '../components/sections/HeroBrandComercial.astro';
+import WhyChooseBrand from '../components/sections/WhyChooseBrand.astro';
+import CommercialShowcase from '../components/sections/CommercialShowcase';
+import CommercialGalleryMarquee from '../components/sections/CommercialGalleryMarquee';
+import CommercialFaq from '../components/sections/CommercialFaq.astro';
+import EngagementCTA from '../components/sections/EngagementCTA.astro';
+import { fetchAllSections } from '../lib/cms';
+
+const cms = await fetchAllSections();
+---
+
+<Layout 
+  title="Branding Comercial, Letreros 3D y Fachadas en Lima | Imagenartis"
+  description="Especialistas en fabricación e instalación de letreros luminosos 3D, fachadas en ACM, señalética corporativa y vinil para vitrinas en Lima y todo el Perú. Taller propio y cumplimiento normativo."
+>
+
+  <!-- 1. HERO DEDICADO DE 80% VIEWPORT CON MÉTRICAS CLAVE -->
+  <HeroBrandComercial secondaryBtnUrl="#showcase-comercial" />
+
+  <!-- 2. SECCIÓN: ¿POR QUÉ LAS MARCAS ELIGEN NUESTRO BRANDING COMERCIAL? (6 BENEFICIOS) -->
+  <WhyChooseBrand />
+
+  <!-- 3. SHOWCASE MÚLTIPLE DE TRABAJOS (SPLIT 50/50 CON ATRIBUTOS DESTACABLES Y MINI NAVBAR) -->
+  <CommercialShowcase client:visible />
+
+  <!-- 4. CASOS DE ÉXITO CON GALERÍA MARQUEE ARRASTRABLE (COMO EL DE AUTOMOTRIZ) -->
+  <CommercialGalleryMarquee client:visible />
+
+  <!-- 5. PREGUNTAS FRECUENTES DE LA CATEGORÍA (ACORDEÓN TÉCNICO Y NORMATIVO) -->
+  <CommercialFaq />
+
+  <!-- 6. CALL TO ACTION FINAL CON CONTACTO DIRECTO -->
+  <EngagementCTA />
+
+</Layout>

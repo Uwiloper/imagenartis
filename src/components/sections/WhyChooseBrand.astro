@@ -1,0 +1,142 @@
+---
+import { 
+  Layers, 
+  ShieldCheck, 
+  FileCheck2, 
+  Clock, 
+  MapPin, 
+  Sparkles,
+  CheckCircle2
+} from 'lucide-react';
+
+export interface WhyBrandFeature {
+  icon?: 'layers' | 'shield' | 'file' | 'clock' | 'pin' | 'sparkles' | 'check';
+  title: string;
+  description: string;
+}
+
+export interface Props {
+  badge?: string;
+  titleLine1?: string;
+  titleLine2Static?: string;
+  titleLine2Highlight?: string;
+  features?: WhyBrandFeature[];
+  image?: string;
+  imageAlt?: string;
+  reverseLayout?: boolean;
+}
+
+const {
+  badge,
+  titleLine1 = '¿Por qué las marcas eligen',
+  titleLine2Static = 'nuestro',
+  titleLine2Highlight = 'branding comercial?',
+  features = [
+    {
+      icon: 'layers',
+      title: 'Fabricación directa en taller propio:',
+      description: 'control milimétrico de acabados, ensambles y costos sin intermediarios ni sobreprecios.'
+    },
+    {
+      icon: 'shield',
+      title: 'Materiales de grado arquitectónico:',
+      description: 'acrílicos con filtro UV, aluminio compuesto ACM, acero inoxidable y módulos LED Samsung.'
+    },
+    {
+      icon: 'file',
+      title: 'Conforme a normas INDECI y municipios:',
+      description: 'asesoría técnica con memoria descriptiva, diagramas unifilares y cálculo de carga para licencias.'
+    },
+    {
+      icon: 'clock',
+      title: 'Instalación en horarios especiales:',
+      description: 'cuadrillas homologadas con SCTR para centros comerciales y torres corporativas en turnos nocturnos.'
+    },
+    {
+      icon: 'pin',
+      title: 'Cobertura en Lima y todas las provincias:',
+      description: 'logística propia y montaje técnico garantizado en cualquier departamento del Perú.'
+    },
+    {
+      icon: 'sparkles',
+      title: 'Garantía técnica y lumínica por escrito:',
+      description: 'respaldo certificado en fuentes herméticas, módulos LED y anclajes estructurales.'
+    }
+  ],
+  image = 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=1200&auto=format&fit=crop',
+  imageAlt = 'Sede corporativa con acabados de letreros 3D y señalética arquitectónica',
+  reverseLayout = false,
+} = Astro.props;
+---
+
+<section class="py-20 md:py-28 bg-white dark:bg-zinc-950 transition-colors duration-300 overflow-hidden">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class={`grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center ${reverseLayout ? 'lg:flex-row-reverse' : ''}`}>
+      
+      <!-- Columna Izquierda: Título y Lista de Beneficios -->
+      <div class={`lg:col-span-7 flex flex-col justify-center ${reverseLayout ? 'lg:order-2' : 'lg:order-1'}`}>
+        
+        {badge && (
+          <div class="mb-4">
+            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-semibold tracking-wider uppercase bg-zinc-100 text-zinc-900 dark:bg-zinc-900 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-800">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#EE2737]"></span>
+              {badge}
+            </span>
+          </div>
+        )}
+
+        <!-- Título proporcionado (sin desbordes) -->
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-display font-bold tracking-tight text-zinc-900 dark:text-white leading-[1.2] mb-6 sm:mb-8">
+          {titleLine1} <br class="hidden sm:inline" />
+          <span>{titleLine2Static}</span>{' '}
+          <span class="text-[#EE2737]">{titleLine2Highlight}</span>
+        </h2>
+
+        <!-- Lista de 6 Beneficios -->
+        <ul class="space-y-5 sm:space-y-6">
+          {features.map((item) => (
+            <li class="flex items-start gap-3.5 sm:gap-4 group">
+              <!-- Icono circular con tono suave y contraste -->
+              <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/90 dark:border-zinc-800 flex items-center justify-center shrink-0 text-zinc-700 dark:text-zinc-300 group-hover:text-[#EE2737] group-hover:border-[#EE2737]/40 transition-all duration-300">
+                {item.icon === 'layers' && <Layers size={18} strokeWidth={1.8} />}
+                {item.icon === 'shield' && <ShieldCheck size={18} strokeWidth={1.8} />}
+                {item.icon === 'file' && <FileCheck2 size={18} strokeWidth={1.8} />}
+                {item.icon === 'clock' && <Clock size={18} strokeWidth={1.8} />}
+                {item.icon === 'pin' && <MapPin size={18} strokeWidth={1.8} />}
+                {item.icon === 'sparkles' && <Sparkles size={18} strokeWidth={1.8} />}
+                {(!item.icon || item.icon === 'check') && <CheckCircle2 size={18} strokeWidth={1.8} />}
+              </div>
+
+              <!-- Texto: Encabezado Negrita + Descripción -->
+              <div class="text-xs sm:text-sm leading-relaxed text-zinc-600 dark:text-zinc-400 font-sans pt-0.5">
+                <strong class="font-bold text-zinc-900 dark:text-white mr-1.5">
+                  {item.title}
+                </strong>
+                <span>{item.description}</span>
+              </div>
+            </li>
+          ))}
+        </ul>
+
+      </div>
+
+      <!-- Columna Derecha: Tarjeta con fotografía arquitectónica SIN SOMBRAS (flat design) -->
+      <div class={`lg:col-span-5 ${reverseLayout ? 'lg:order-1' : 'lg:order-2'}`}>
+        <div class="relative w-full aspect-[4/3] sm:aspect-[16/11] lg:aspect-[4/3] rounded-md overflow-hidden bg-black border border-zinc-200 dark:border-zinc-800 flex items-center justify-center group shadow-none">
+          
+          <img
+            src={image}
+            alt={imageAlt}
+            loading="lazy"
+            class="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+          />
+
+          <!-- Sutil viñeta para contraste -->
+          <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none"></div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
