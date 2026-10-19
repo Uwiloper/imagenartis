@@ -35,37 +35,37 @@ const {
   features = [
     {
       icon: 'palette',
-      title: 'Colores, acabados y texturas ilimitados:',
-      description: 'mate, satinado, fibra de carbono, cromo, cambio de color y mucho más.'
+      title: 'Acabados y texturas sin límites:',
+      description: 'mate, satinado, ultra gloss y texturas exclusivas sin alterar la carrocería.'
     },
     {
       icon: 'undo',
-      title: 'Totalmente reversible:',
-      description: 'se puede quitar en cualquier momento, la pintura original permanece intacta.'
+      title: '100% reversible:',
+      description: 'removible en cualquier momento manteniendo la pintura de fábrica intacta.'
     },
     {
       icon: 'shield',
-      title: 'Protege la pintura original:',
-      description: 'protege contra los rayos UV, las astillas, la sal y los arañazos.'
+      title: 'Escudo protector diario:',
+      description: 'defensa contra rayos UV, gravilla, salitre y arañazos cotidianos.'
     },
     {
       icon: 'trending',
-      title: 'Conserva el valor de reventa:',
-      description: 'retírelo antes de venderlo, el coche parece recién salido de fábrica.'
+      title: 'Preserva el valor de reventa:',
+      description: 'tu auto conserva su pintura original impecable bajo el vinil.'
     },
     {
       icon: 'dollar',
-      title: 'Una fracción del costo de la pintura:',
-      description: 'el mismo impacto a aproximadamente un tercio del precio.'
+      title: 'Costo inteligente:',
+      description: 'mismo impacto visual que pintura premium a una fracción del costo.'
     },
     {
       icon: 'clock',
-      title: 'Instalación en días, no en semanas:',
-      description: 'la mayoría de los vinilos se instalan en 2-3 días.'
+      title: 'Entrega en días, no en semanas:',
+      description: 'instalación técnica especializada lista en solo 48 a 72 horas.'
     }
   ],
   image = '/images/why-vinyl-car.png',
-  imageAlt = 'Vehículo de lujo con wrap automotriz bitono de alta gama',
+  imageAlt = 'Vehículo de lujo con wrap automotriz de alta gama',
   reverseLayout = false,
 } = Astro.props;
 ---
@@ -86,33 +86,33 @@ const {
           </div>
         )}
 
-        <!-- Título proporcionado (sin desbordes ni tamaño desmedido) -->
+        <!-- Título proporcionado (sin desbordes) -->
         <h2 class="text-2xl sm:text-3xl md:text-4xl font-display font-bold tracking-tight text-zinc-900 dark:text-white leading-[1.2] mb-6 sm:mb-8">
           {titleLine1} <br class="hidden sm:inline" />
           <span>{titleLine2Static}</span>{' '}
           <span class="text-[#EE2737]">{titleLine2Highlight}</span>
         </h2>
 
-        <!-- Lista de 6 Beneficios -->
-        <ul class="space-y-5 sm:space-y-6">
+        <!-- Lista de 6 Beneficios: Solo iconos sin marco/fondo con animación hover y texto breve e impactante -->
+        <ul class="space-y-4 sm:space-y-5">
           {features.map((item) => (
-            <li class="flex items-start gap-3.5 sm:gap-4 group">
-              <!-- Icono circular con tono suave y contraste -->
-              <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/90 dark:border-zinc-800 flex items-center justify-center shrink-0 text-zinc-700 dark:text-zinc-300 group-hover:text-[#EE2737] group-hover:border-[#EE2737]/40 transition-all duration-300">
-                {item.icon === 'palette' && <Palette size={18} strokeWidth={1.8} />}
-                {item.icon === 'undo' && <RotateCcw size={17} strokeWidth={1.8} />}
-                {item.icon === 'shield' && <ShieldCheck size={18} strokeWidth={1.8} />}
-                {item.icon === 'trending' && <CircleDollarSign size={18} strokeWidth={1.8} />}
-                {item.icon === 'dollar' && <BadgePercent size={18} strokeWidth={1.8} />}
-                {item.icon === 'clock' && <Clock size={18} strokeWidth={1.8} />}
-                {item.icon === 'sparkles' && <Sparkles size={18} strokeWidth={1.8} />}
-                {item.icon === 'check' && <CheckCircle2 size={18} strokeWidth={1.8} />}
-                {!item.icon && <CheckCircle2 size={18} strokeWidth={1.8} />}
+            <li class="flex items-start gap-3.5 group cursor-default">
+              <!-- Solo icono con animación hover fluida -->
+              <div class="shrink-0 mt-0.5 text-zinc-700 dark:text-zinc-300 group-hover:text-[#EE2737] group-hover:scale-115 transition-all duration-300 ease-out select-none">
+                {item.icon === 'palette' && <Palette size={20} strokeWidth={2} />}
+                {item.icon === 'undo' && <RotateCcw size={19} strokeWidth={2} />}
+                {item.icon === 'shield' && <ShieldCheck size={20} strokeWidth={2} />}
+                {item.icon === 'trending' && <CircleDollarSign size={20} strokeWidth={2} />}
+                {item.icon === 'dollar' && <BadgePercent size={20} strokeWidth={2} />}
+                {item.icon === 'clock' && <Clock size={20} strokeWidth={2} />}
+                {item.icon === 'sparkles' && <Sparkles size={20} strokeWidth={2} />}
+                {item.icon === 'check' && <CheckCircle2 size={20} strokeWidth={2} />}
+                {!item.icon && <CheckCircle2 size={20} strokeWidth={2} />}
               </div>
 
-              <!-- Texto: Encabezado Negrita + Descripción -->
-              <div class="text-xs sm:text-sm leading-relaxed text-zinc-600 dark:text-zinc-400 font-sans pt-0.5">
-                <strong class="font-bold text-zinc-900 dark:text-white mr-1.5">
+              <!-- Texto: Encabezado Negrita + Descripción breve e impactante -->
+              <div class="text-xs sm:text-sm leading-relaxed text-zinc-600 dark:text-zinc-400 font-sans">
+                <strong class="font-bold text-zinc-900 dark:text-white mr-1.5 transition-colors duration-200 group-hover:text-zinc-950 dark:group-hover:text-white">
                   {item.title}
                 </strong>
                 <span>{item.description}</span>
@@ -123,9 +123,9 @@ const {
 
       </div>
 
-      <!-- Columna Derecha: Tarjeta oscura SIN SOMBRAS (flat design) con fotografía de estudio -->
+      <!-- Columna Derecha: Imagen estandarizada (medidas idénticas en ambas secciones) -->
       <div class={`lg:col-span-5 ${reverseLayout ? 'lg:order-1' : 'lg:order-2'}`}>
-        <div class="relative w-full aspect-[4/3] sm:aspect-[16/11] lg:aspect-[4/3] rounded-2xl overflow-hidden bg-black border border-zinc-200 dark:border-zinc-800/80 flex items-center justify-center group">
+        <div class="relative w-full aspect-[4/3] sm:aspect-[16/11] lg:aspect-[4/3] rounded-md overflow-hidden bg-black border border-zinc-200 dark:border-zinc-800 flex items-center justify-center group shadow-none">
           
           <img
             src={image}
@@ -136,7 +136,6 @@ const {
 
           <!-- Sutil viñeta para contraste -->
           <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none"></div>
-          <div class="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-2xl pointer-events-none"></div>
 
         </div>
       </div>

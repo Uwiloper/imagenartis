@@ -34,33 +34,33 @@ const {
   features = [
     {
       icon: 'layers',
-      title: 'Fabricación directa en taller propio:',
-      description: 'control milimétrico de acabados, ensambles y costos sin intermediarios ni sobreprecios.'
+      title: 'Taller propio de metalmecánica:',
+      description: 'control total de acabados, precisión y costos sin intermediarios.'
     },
     {
       icon: 'shield',
-      title: 'Materiales de grado arquitectónico:',
-      description: 'acrílicos con filtro UV, aluminio compuesto ACM, acero inoxidable y módulos LED Samsung.'
+      title: 'Materiales arquitectónicos:',
+      description: 'aluminio compuesto ACM, acrílico con filtro UV y módulos LED Samsung IP67.'
     },
     {
       icon: 'file',
-      title: 'Conforme a normas INDECI y municipios:',
-      description: 'asesoría técnica con memoria descriptiva, diagramas unifilares y cálculo de carga para licencias.'
+      title: '100% normativo INDECI:',
+      description: 'planos eléctricos, memorias descriptivas y cálculo estructural para licencias.'
     },
     {
       icon: 'clock',
-      title: 'Instalación en horarios especiales:',
-      description: 'cuadrillas homologadas con SCTR para centros comerciales y torres corporativas en turnos nocturnos.'
+      title: 'Montajes nocturnos homologados:',
+      description: 'cuadrillas con SCTR para centros comerciales y torres corporativas.'
     },
     {
       icon: 'pin',
-      title: 'Cobertura en Lima y todas las provincias:',
-      description: 'logística propia y montaje técnico garantizado en cualquier departamento del Perú.'
+      title: 'Cobertura a nivel nacional:',
+      description: 'logística propia y montajes técnicos garantizados en todo el Perú.'
     },
     {
       icon: 'sparkles',
-      title: 'Garantía técnica y lumínica por escrito:',
-      description: 'respaldo certificado en fuentes herméticas, módulos LED y anclajes estructurales.'
+      title: 'Garantía por escrito:',
+      description: 'respaldo formal certificado en fuentes de poder, módulos LED y anclajes.'
     }
   ],
   image = 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=1200&auto=format&fit=crop',
@@ -92,24 +92,24 @@ const {
           <span class="text-[#EE2737]">{titleLine2Highlight}</span>
         </h2>
 
-        <!-- Lista de 6 Beneficios -->
-        <ul class="space-y-5 sm:space-y-6">
+        <!-- Lista de 6 Beneficios: Solo iconos sin marco/fondo con animación hover y texto breve e impactante -->
+        <ul class="space-y-4 sm:space-y-5">
           {features.map((item) => (
-            <li class="flex items-start gap-3.5 sm:gap-4 group">
-              <!-- Icono circular con tono suave y contraste -->
-              <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/90 dark:border-zinc-800 flex items-center justify-center shrink-0 text-zinc-700 dark:text-zinc-300 group-hover:text-[#EE2737] group-hover:border-[#EE2737]/40 transition-all duration-300">
-                {item.icon === 'layers' && <Layers size={18} strokeWidth={1.8} />}
-                {item.icon === 'shield' && <ShieldCheck size={18} strokeWidth={1.8} />}
-                {item.icon === 'file' && <FileCheck2 size={18} strokeWidth={1.8} />}
-                {item.icon === 'clock' && <Clock size={18} strokeWidth={1.8} />}
-                {item.icon === 'pin' && <MapPin size={18} strokeWidth={1.8} />}
-                {item.icon === 'sparkles' && <Sparkles size={18} strokeWidth={1.8} />}
-                {(!item.icon || item.icon === 'check') && <CheckCircle2 size={18} strokeWidth={1.8} />}
+            <li class="flex items-start gap-3.5 group cursor-default">
+              <!-- Solo icono con animación hover fluida -->
+              <div class="shrink-0 mt-0.5 text-zinc-700 dark:text-zinc-300 group-hover:text-[#EE2737] group-hover:scale-115 transition-all duration-300 ease-out select-none">
+                {item.icon === 'layers' && <Layers size={20} strokeWidth={2} />}
+                {item.icon === 'shield' && <ShieldCheck size={20} strokeWidth={2} />}
+                {item.icon === 'file' && <FileCheck2 size={20} strokeWidth={2} />}
+                {item.icon === 'clock' && <Clock size={20} strokeWidth={2} />}
+                {item.icon === 'pin' && <MapPin size={20} strokeWidth={2} />}
+                {item.icon === 'sparkles' && <Sparkles size={20} strokeWidth={2} />}
+                {(!item.icon || item.icon === 'check') && <CheckCircle2 size={20} strokeWidth={2} />}
               </div>
 
-              <!-- Texto: Encabezado Negrita + Descripción -->
-              <div class="text-xs sm:text-sm leading-relaxed text-zinc-600 dark:text-zinc-400 font-sans pt-0.5">
-                <strong class="font-bold text-zinc-900 dark:text-white mr-1.5">
+              <!-- Texto: Encabezado Negrita + Descripción breve e impactante -->
+              <div class="text-xs sm:text-sm leading-relaxed text-zinc-600 dark:text-zinc-400 font-sans">
+                <strong class="font-bold text-zinc-900 dark:text-white mr-1.5 transition-colors duration-200 group-hover:text-zinc-950 dark:group-hover:text-white">
                   {item.title}
                 </strong>
                 <span>{item.description}</span>
@@ -120,7 +120,7 @@ const {
 
       </div>
 
-      <!-- Columna Derecha: Tarjeta con fotografía arquitectónica SIN SOMBRAS (flat design) -->
+      <!-- Columna Derecha: Imagen estandarizada (medidas idénticas en ambas secciones) -->
       <div class={`lg:col-span-5 ${reverseLayout ? 'lg:order-1' : 'lg:order-2'}`}>
         <div class="relative w-full aspect-[4/3] sm:aspect-[16/11] lg:aspect-[4/3] rounded-md overflow-hidden bg-black border border-zinc-200 dark:border-zinc-800 flex items-center justify-center group shadow-none">
           
