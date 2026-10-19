@@ -1,0 +1,16 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PinterestGallery from '../components/gallery/PinterestGallery';
+import EngagementCTA from '../components/sections/EngagementCTA.astro';
+---
+
+<Layout 
+  title="Galería de Proyectos & Casos de Éxito | Imagenartis"
+  description="Explora nuestra galería interactiva de proyectos en wrapping vehicular, branding comercial, letreros arquitectónicos 3D y diseño de identidad visual en Lima y todo el Perú."
+>
+  <!-- Galería Interactiva Estilo Pinterest (Buscador, Filtros por Servicio y Detalle) -->
+  <PinterestGallery client:load />
+
+  <!-- CTA de Cierre y Contacto -->
+  <EngagementCTA />
+</Layout>

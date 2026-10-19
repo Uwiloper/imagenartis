@@ -39,7 +39,7 @@ export const DEFAULT_VEHICULAR_SERVICES: VehicularServiceItem[] = [
       'Vinil fundido con laminado UV resistente a hidrolavado continuo',
       'Rotulado coordinado por turnos para no frenar tu operación comercial'
     ],
-    galleryUrl: '/portafolio?categoria=flotas',
+    galleryUrl: '/galeria?categoria=flotas',
     galleryBtnText: 'VER TRABAJOS EN GALERIA',
     quoteUrl: 'https://wa.me/51994097417?text=¡Hola!%20Deseo%20cotizar%20el%20servicio%20de%20Vinil%20Corporativo%20para%20Flotas%20Comerciales',
     videoUrl: '/videos/fondo-hero.mp4',
@@ -58,7 +58,7 @@ export const DEFAULT_VEHICULAR_SERVICES: VehicularServiceItem[] = [
       'Películas 3M Serie 2080 y Avery Supreme Wrap con canales anti-burbujas',
       'Protege la pintura original de fábrica preservando el valor de reventa'
     ],
-    galleryUrl: '/portafolio?categoria=wrap-personalizado',
+    galleryUrl: '/galeria?categoria=wrap-personalizado',
     galleryBtnText: 'VER TRABAJOS EN GALERIA',
     quoteUrl: 'https://wa.me/51994097417?text=¡Hola!%20Deseo%20cotizar%20el%20servicio%20de%20Vinil%20Automotriz%20Personalizado',
     videoUrl: '/videos/fondo-hero.mp4',
@@ -77,7 +77,7 @@ export const DEFAULT_VEHICULAR_SERVICES: VehicularServiceItem[] = [
       'Propiedad hidrofóbica que repele agua, grasas y contaminantes',
       'Hasta 10 años de garantía oficial contra amarilleamiento y fisuras'
     ],
-    galleryUrl: '/portafolio?categoria=ppf',
+    galleryUrl: '/galeria?categoria=ppf',
     galleryBtnText: 'VER TRABAJOS EN GALERIA',
     quoteUrl: 'https://wa.me/51994097417?text=¡Hola!%20Deseo%20cotizar%20el%20servicio%20de%20Protección%20PPF',
     videoUrl: '/videos/fondo-hero.mp4',
@@ -96,7 +96,7 @@ export const DEFAULT_VEHICULAR_SERVICES: VehicularServiceItem[] = [
       'Adhesivo de grado estructural que retiene esquirlas cortantes de vidrio',
       'Transparencia óptica con certificación y homologación legal oficial'
     ],
-    galleryUrl: '/portafolio?categoria=laminas-seguridad',
+    galleryUrl: '/galeria?categoria=laminas-seguridad',
     galleryBtnText: 'VER TRABAJOS EN GALERIA',
     quoteUrl: 'https://wa.me/51994097417?text=¡Hola!%20Deseo%20cotizar%20el%20servicio%20de%20Láminas%20de%20Seguridad',
     videoUrl: '/videos/fondo-hero.mp4',
@@ -115,7 +115,7 @@ export const DEFAULT_VEHICULAR_SERVICES: VehicularServiceItem[] = [
       'Bloqueo del 99% de rayos UV protegiendo interiores y tapicería',
       'Cero interferencia con señales de GPS, radiofrecuencia y telepeajes'
     ],
-    galleryUrl: '/portafolio?categoria=polarizados',
+    galleryUrl: '/galeria?categoria=polarizados',
     galleryBtnText: 'VER TRABAJOS EN GALERIA',
     quoteUrl: 'https://wa.me/51994097417?text=¡Hola!%20Deseo%20cotizar%20el%20servicio%20de%20Polarizados%20Nano-Cerámicos',
     videoUrl: '/videos/fondo-hero.mp4',

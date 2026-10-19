@@ -31,7 +31,7 @@ const gallery = data || getMiniGalleryData();
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
       {gallery.items.map((item) => (
         <a 
-          href={item.linkUrl || '/portafolio'}
+          href={item.linkUrl || '/galeria'}
           class="group relative block aspect-[16/11] w-full overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/90 dark:border-zinc-800/90 hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors duration-200"
         >
           <!-- Badge de ubicación / cliente en la esquina superior izquierda -->
@@ -60,7 +60,7 @@ const gallery = data || getMiniGalleryData();
     <!-- Botón CTA centrado que lleva a la página de portafolio / galería -->
     <div class="flex justify-center mt-12 md:mt-14">
       <a
-        href={gallery.buttonUrl || '/portafolio'}
+        href={gallery.buttonUrl || '/galeria'}
         class="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-sm font-semibold tracking-wide bg-[#18181b] text-white hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-100 transition-colors duration-200"
       >
         <span>{gallery.buttonText || 'Ver todos los proyectos →'}</span>

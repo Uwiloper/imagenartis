@@ -4,43 +4,43 @@
   "titleSuffix": "marcas en todo el país",
   "subtitle": "Trabajos reales de alta precisión para flotas corporativas, vehículos comerciales y proyectos especiales.",
   "buttonText": "Ver todos los proyectos →",
-  "buttonUrl": "/portafolio",
+  "buttonUrl": "/galeria",
   "items": [
     {
       "title": "Van Comercial Rush Bowls",
       "location": "San Isidro, Lima",
       "image": "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=800&q=80",
-      "linkUrl": "/portafolio"
+      "linkUrl": "/galeria"
     },
     {
       "title": "Furgón The Happy Plumber",
       "location": "Miraflores, Lima",
       "image": "https://images.unsplash.com/photo-1570125909232-eb263c188f7e?auto=format&fit=crop&w=800&q=80",
-      "linkUrl": "/portafolio"
+      "linkUrl": "/galeria"
     },
     {
       "title": "Camión de Carga Classic Bins",
       "location": "Arequipa, Perú",
       "image": "https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=800&q=80",
-      "linkUrl": "/portafolio"
+      "linkUrl": "/galeria"
     },
     {
       "title": "Cybertruck Wrap Gráfico Artístico",
       "location": "Surco, Lima",
       "image": "https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&w=800&q=80",
-      "linkUrl": "/portafolio"
+      "linkUrl": "/galeria"
     },
     {
       "title": "Trailer Semi-Truck Edición Patriótica",
       "location": "Callao, Perú",
       "image": "https://images.unsplash.com/photo-1519003722824-194d4455a60c?auto=format&fit=crop&w=800&q=80",
-      "linkUrl": "/portafolio"
+      "linkUrl": "/galeria"
     },
     {
       "title": "Dodge Challenger SRT Red Wrap",
       "location": "Trujillo, Perú",
       "image": "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&w=800&q=80",
-      "linkUrl": "/portafolio"
+      "linkUrl": "/galeria"
     }
   ]
 }

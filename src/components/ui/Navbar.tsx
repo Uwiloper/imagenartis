@@ -45,7 +45,7 @@ export default function Navbar({ data }: { data?: NavbarData }) {
   const navLinks = data?.navLinks && data.navLinks.length > 0 ? data.navLinks : [
     { label: 'Inicio', href: '/' },
     { label: 'Proceso', href: '/#proceso' },
-    { label: 'Galería', href: '/portafolio' },
+    { label: 'Galería', href: '/galeria' },
     { label: 'Nosotros', href: '/nosotros' },
   ];
 

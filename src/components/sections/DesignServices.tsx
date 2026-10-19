@@ -55,7 +55,7 @@ export const DEFAULT_DESIGN_WORKS: DesignWorkItem[] = [
       'Paquete completo de archivos editables en curvas (AI, EPS, PDF, SVG)',
       'Aplicaciones básicas: tarjetas personales, hojas membretadas y firmas'
     ],
-    galleryUrl: '/portafolio?categoria=branding',
+    galleryUrl: '/galeria?categoria=diseno',
     galleryBtnText: 'VER TRABAJOS EN GALERIA',
     images: [
       {
@@ -92,7 +92,7 @@ export const DEFAULT_DESIGN_WORKS: DesignWorkItem[] = [
       'Jerarquía visual estratégica pensada para captar atención en el scroll',
       'Adaptación a lineamientos de marca y tono de comunicación corporativo'
     ],
-    galleryUrl: '/portafolio?categoria=digital',
+    galleryUrl: '/galeria?categoria=diseno',
     galleryBtnText: 'VER TRABAJOS EN GALERIA',
     images: [
       {
@@ -129,7 +129,7 @@ export const DEFAULT_DESIGN_WORKS: DesignWorkItem[] = [
       'Resolución DPI calibrada según distancia visual para cero pixelado',
       'Demasías y márgenes de sangrado exactos para confección y ojales'
     ],
-    galleryUrl: '/portafolio?categoria=impresion',
+    galleryUrl: '/galeria?categoria=diseno',
     galleryBtnText: 'VER TRABAJOS EN GALERIA',
     images: [
       {
@@ -166,7 +166,7 @@ export const DEFAULT_DESIGN_WORKS: DesignWorkItem[] = [
       'Preparación de acabados especiales: sectorizado UV, hot stamping y relieve',
       'Asesoría en sustratos: papeles ecológicos, vinil adhesivo y cartulinas'
     ],
-    galleryUrl: '/portafolio?categoria=packaging',
+    galleryUrl: '/galeria?categoria=diseno',
     galleryBtnText: 'VER TRABAJOS EN GALERIA',
     images: [
       {

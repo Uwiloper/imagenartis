@@ -31,7 +31,7 @@ export const DEFAULT_COMMERCIAL_PROJECTS: CommercialProjectItem[] = [
     image: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80',
     imageAlt: 'Letrero luminoso corpóreo para cafetería gourmet',
     client: 'San Isidro, Lima',
-    url: '/portafolio?proyecto=letrero-artisan-cafe&categoria=letreros'
+    url: '/galeria?proyecto=letrero-artisan-cafe&categoria=letreros'
   },
   {
     id: 'fachada-acm-corporativa',
@@ -41,7 +41,7 @@ export const DEFAULT_COMMERCIAL_PROJECTS: CommercialProjectItem[] = [
     image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80',
     imageAlt: 'Revestimiento en paneles de aluminio compuesto para edificio de oficinas',
     client: 'Miraflores, Lima',
-    url: '/portafolio?proyecto=fachada-acm-corporativa&categoria=fachadas'
+    url: '/galeria?proyecto=fachada-acm-corporativa&categoria=fachadas'
   },
   {
     id: 'vitrinas-banco-real',
@@ -51,7 +51,7 @@ export const DEFAULT_COMMERCIAL_PROJECTS: CommercialProjectItem[] = [
     image: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=800&q=80',
     imageAlt: 'Mamparas y cristales corporativos con vinil esmerilado de privacidad',
     client: 'San Borja, Lima',
-    url: '/portafolio?proyecto=vitrinas-banco-real&categoria=vitrinas'
+    url: '/galeria?proyecto=vitrinas-banco-real&categoria=vitrinas'
   },
   {
     id: 'senaletica-clinica-sanitas',
@@ -61,7 +61,7 @@ export const DEFAULT_COMMERCIAL_PROJECTS: CommercialProjectItem[] = [
     image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80',
     imageAlt: 'Directorio general de acrílico y señalética arquitectónica',
     client: 'Surco, Lima',
-    url: '/portafolio?proyecto=senaletica-clinica-sanitas&categoria=senaletica'
+    url: '/galeria?proyecto=senaletica-clinica-sanitas&categoria=senaletica'
   },
   {
     id: 'stand-expo-tech',
@@ -71,7 +71,7 @@ export const DEFAULT_COMMERCIAL_PROJECTS: CommercialProjectItem[] = [
     image: 'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=80',
     imageAlt: 'Stand publicitario con counter de atención y backing tensado',
     client: 'Jockey Plaza, Lima',
-    url: '/portafolio?proyecto=stand-expo-tech&categoria=stands'
+    url: '/galeria?proyecto=stand-expo-tech&categoria=stands'
   },
   {
     id: 'letrero-neoled-bistrot',
@@ -81,7 +81,7 @@ export const DEFAULT_COMMERCIAL_PROJECTS: CommercialProjectItem[] = [
     image: 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=800&q=80',
     imageAlt: 'Letrero de acero inoxidable con luz cálida para restaurante bistró',
     client: 'Barranco, Lima',
-    url: '/portafolio?proyecto=letrero-neoled-bistrot&categoria=letreros'
+    url: '/galeria?proyecto=letrero-neoled-bistrot&categoria=letreros'
   }
 ];
 
@@ -91,7 +91,7 @@ export default function CommercialGalleryMarquee({
   titleHighlight = 'autoridad de marca',
   description = 'Fabricación con ingeniería propia y montaje profesional en todo el Perú. Desde la identidad en recepción hasta la fachada monumental de tu sede corporativa.',
   buttonText = 'Conoce nuestro portafolio de branding comercial',
-  buttonUrl = '/portafolio?categoria=branding',
+  buttonUrl = '/galeria?categoria=branding',
   items = DEFAULT_COMMERCIAL_PROJECTS,
   autoSpeed = 0.8
 }: CommercialGalleryMarqueeProps) {
@@ -271,7 +271,7 @@ export default function CommercialGalleryMarquee({
               className="flex-none w-[280px] sm:w-[360px] md:w-[420px] group"
             >
               <a
-                href={item.url || `/portafolio?categoria=${item.category}`}
+                href={item.url || `/galeria?categoria=${item.category}`}
                 onClick={handleLinkClick}
                 className="block relative aspect-[16/10] sm:aspect-[16/10] rounded-md overflow-hidden bg-zinc-900 border border-zinc-200 dark:border-zinc-800 transition-all duration-300 select-none shadow-none"
               >

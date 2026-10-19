@@ -27,7 +27,7 @@ const {
   titleHighlight = "wrap vehicular perfecto",
   description = "Imagenartis gestiona el diseño, la impresión y la instalación certificada de principio a fin en todo el país. Ya sea un solo vehículo o una flota a nivel nacional, entregamos un resultado impecable y de alta gama en cada entrega.",
   buttonText = "Conoce nuestro portafolio de proyectos",
-  buttonUrl = "/portafolio",
+  buttonUrl = "/galeria",
   speedSeconds = 35,
   items = [
     {
@@ -38,7 +38,7 @@ const {
       image: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=800&q=80",
       imageAlt: "Rotulado integral de van comercial para flota de distribución",
       client: "San Isidro, Lima",
-      url: "/portafolio?proyecto=van-comercial-rush&categoria=flotas"
+      url: "/galeria?proyecto=van-comercial-rush&categoria=flotas"
     },
     {
       id: "pickup-camo-4x4",
@@ -48,7 +48,7 @@ const {
       image: "https://images.unsplash.com/photo-1550355291-bbee04a92027?auto=format&fit=crop&w=800&q=80",
       imageAlt: "Pickup con diseño gráfico camuflado de alto impacto",
       client: "Surco, Lima",
-      url: "/portafolio?proyecto=pickup-camo-4x4&categoria=wrap-personalizado"
+      url: "/galeria?proyecto=pickup-camo-4x4&categoria=wrap-personalizado"
     },
     {
       id: "van-rotulada-plumber",
@@ -58,7 +58,7 @@ const {
       image: "https://images.unsplash.com/photo-1570125909232-eb263c188f7e?auto=format&fit=crop&w=800&q=80",
       imageAlt: "Furgón comercial con branding corporativo y datos de contacto",
       client: "Miraflores, Lima",
-      url: "/portafolio?proyecto=van-rotulada-plumber&categoria=flotas"
+      url: "/galeria?proyecto=van-rotulada-plumber&categoria=flotas"
     },
     {
       id: "sports-satin-black",
@@ -68,7 +68,7 @@ const {
       image: "https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&w=800&q=80",
       imageAlt: "Auto deportivo con wrap integral en vinil negro satinado",
       client: "San Borja, Lima",
-      url: "/portafolio?proyecto=sports-satin-black&categoria=wrap-personalizado"
+      url: "/galeria?proyecto=sports-satin-black&categoria=wrap-personalizado"
     },
     {
       id: "suv-ppf-hydro",
@@ -78,7 +78,7 @@ const {
       image: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&w=800&q=80",
       imageAlt: "Camioneta protegida con film PPF transparente autorregenerativo",
       client: "La Molina, Lima",
-      url: "/portafolio?proyecto=suv-ppf-hydro&categoria=ppf"
+      url: "/galeria?proyecto=suv-ppf-hydro&categoria=ppf"
     },
     {
       id: "furgon-classic-bins",
@@ -88,7 +88,7 @@ const {
       image: "https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=800&q=80",
       imageAlt: "Camión de carga con rotulación corporativa para transporte",
       client: "Callao, Lima",
-      url: "/portafolio?proyecto=furgon-classic-bins&categoria=flotas"
+      url: "/galeria?proyecto=furgon-classic-bins&categoria=flotas"
     }
   ]
 } = Astro.props;
@@ -148,7 +148,7 @@ const displayItems = [...items, ...items];
     >
       {displayItems.map((item, index) => (
         <a
-          href={item.url || `/portafolio?proyecto=${item.id}&categoria=${item.category}`}
+          href={item.url || `/galeria?proyecto=${item.id}&categoria=${item.category}`}
           class="group relative block w-[280px] sm:w-[340px] md:w-[380px] shrink-0 rounded-md overflow-hidden bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-[#EE2737]/70 dark:hover:border-[#EE2737]/80 transition-all duration-300 select-none shadow-none"
           title={`Ver proyecto ${item.title} en galería`}
         >

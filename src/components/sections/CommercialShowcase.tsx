@@ -41,7 +41,7 @@ export const DEFAULT_COMMERCIAL_WORKS: CommercialWorkItem[] = [
     beforeImage: 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?auto=format&fit=crop&w=1200&q=80',
     afterImage: 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=1200&q=80',
     imageAlt: 'Letreros luminosos antes y después',
-    galleryUrl: '/portafolio?categoria=letreros',
+    galleryUrl: '/galeria?categoria=letreros',
     galleryBtnText: 'VER TRABAJOS EN GALERIA'
   },
   {
@@ -59,7 +59,7 @@ export const DEFAULT_COMMERCIAL_WORKS: CommercialWorkItem[] = [
     beforeImage: 'https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?auto=format&fit=crop&w=1200&q=80',
     afterImage: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80',
     imageAlt: 'Fachadas arquitectónicas en ACM antes y después',
-    galleryUrl: '/portafolio?categoria=fachadas',
+    galleryUrl: '/galeria?categoria=fachadas',
     galleryBtnText: 'VER TRABAJOS EN GALERIA'
   },
   {
@@ -77,7 +77,7 @@ export const DEFAULT_COMMERCIAL_WORKS: CommercialWorkItem[] = [
     beforeImage: 'https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=1200&q=80',
     afterImage: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1200&q=80',
     imageAlt: 'Señalizaciones y directorios antes y después',
-    galleryUrl: '/portafolio?categoria=senaletica',
+    galleryUrl: '/galeria?categoria=senaletica',
     galleryBtnText: 'VER TRABAJOS EN GALERIA'
   },
   {
@@ -95,7 +95,7 @@ export const DEFAULT_COMMERCIAL_WORKS: CommercialWorkItem[] = [
     beforeImage: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80',
     afterImage: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1200&q=80',
     imageAlt: 'Pavonados y arenados en mamparas de vidrio antes y después',
-    galleryUrl: '/portafolio?categoria=vitrinas',
+    galleryUrl: '/galeria?categoria=vitrinas',
     galleryBtnText: 'VER TRABAJOS EN GALERIA'
   }
 ];
