@@ -232,6 +232,25 @@ async function sync() {
     console.log('✓ vehicleGalleryMarquee subido con éxito:', d2[0]?.id);
   }
 
+  // 3. Subir Marcas y Clientes (30 logos SVG de clientes reales)
+  const clientLogosPath = path.resolve('src/content/clientLogos/data.json');
+  if (fs.existsSync(clientLogosPath)) {
+    const clientLogosData = JSON.parse(fs.readFileSync(clientLogosPath, 'utf-8'));
+    const { data: d3, error: e3 } = await supabase.from('site_sections').upsert({
+      id: 'marcas',
+      name: 'Marcas y Clientes',
+      category: 'home',
+      data: clientLogosData,
+      updated_at: new Date().toISOString()
+    }).select();
+
+    if (e3) {
+      console.error('Error al subir marcas:', e3.message);
+    } else {
+      console.log('✓ marcas subido con éxito:', d3[0]?.id, `(${clientLogosData.logos?.length || 0} logos)`);
+    }
+  }
+
   console.log('--- Sincronización completada exitosamente ---');
 }
 

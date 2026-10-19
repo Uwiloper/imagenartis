@@ -4,52 +4,154 @@
   "titleSuffix": "en nosotros",
   "logos": [
     {
-      "name": "Google",
-      "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg"
+      "name": "Ampco",
+      "logoUrl": "/logosclientes/ampco.svg",
+      "image": "/logosclientes/ampco.svg"
     },
     {
-      "name": "Netflix",
-      "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg"
+      "name": "Asist Mecánica",
+      "logoUrl": "/logosclientes/asistmecanica.svg",
+      "image": "/logosclientes/asistmecanica.svg"
     },
     {
-      "name": "YouTube",
-      "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg"
+      "name": "Asist Motor",
+      "logoUrl": "/logosclientes/asistmotor.svg",
+      "image": "/logosclientes/asistmotor.svg"
     },
     {
-      "name": "Amazon",
-      "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg"
+      "name": "Casa Silva",
+      "logoUrl": "/logosclientes/casasilva.svg",
+      "image": "/logosclientes/casasilva.svg"
     },
     {
-      "name": "Nike",
-      "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg"
+      "name": "Castro Car",
+      "logoUrl": "/logosclientes/castrocar.svg",
+      "image": "/logosclientes/castrocar.svg"
     },
     {
-      "name": "IBM",
-      "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg"
+      "name": "Centra SAC",
+      "logoUrl": "/logosclientes/centrasac.svg",
+      "image": "/logosclientes/centrasac.svg"
     },
     {
-      "name": "Microsoft",
-      "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg"
+      "name": "Comercial Giova",
+      "logoUrl": "/logosclientes/comercialgiova.svg",
+      "image": "/logosclientes/comercialgiova.svg"
     },
     {
-      "name": "Spotify",
-      "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg"
+      "name": "Copep",
+      "logoUrl": "/logosclientes/copep.svg",
+      "image": "/logosclientes/copep.svg"
     },
     {
-      "name": "ampco",
-      "logoUrl": "/logosclientes/ampco.svg"
+      "name": "Copetrol",
+      "logoUrl": "/logosclientes/copetrol.svg",
+      "image": "/logosclientes/copetrol.svg"
     },
     {
-      "name": "American Express",
-      "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/3/30/American_Express_logo.svg"
+      "name": "Dorcher",
+      "logoUrl": "/logosclientes/dorcher.svg",
+      "image": "/logosclientes/dorcher.svg"
     },
     {
-      "name": "eBay",
-      "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/1/1b/EBay_logo.svg"
+      "name": "Envak",
+      "logoUrl": "/logosclientes/envak.svg",
+      "image": "/logosclientes/envak.svg"
     },
     {
-      "name": "Coca-Cola",
-      "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/c/ce/Coca-Cola_logo.svg"
+      "name": "Gaspetrol",
+      "logoUrl": "/logosclientes/gaspetrol.svg",
+      "image": "/logosclientes/gaspetrol.svg"
+    },
+    {
+      "name": "Grupo Intrex",
+      "logoUrl": "/logosclientes/grupointrex.svg",
+      "image": "/logosclientes/grupointrex.svg"
+    },
+    {
+      "name": "Hospital Santa Teresa",
+      "logoUrl": "/logosclientes/hospitalsantateresa.svg",
+      "image": "/logosclientes/hospitalsantateresa.svg"
+    },
+    {
+      "name": "Hydropress",
+      "logoUrl": "/logosclientes/hydropress.svg",
+      "image": "/logosclientes/hydropress.svg"
+    },
+    {
+      "name": "Icomplement",
+      "logoUrl": "/logosclientes/icomplement.svg",
+      "image": "/logosclientes/icomplement.svg"
+    },
+    {
+      "name": "IK Tours",
+      "logoUrl": "/logosclientes/iktours.svg",
+      "image": "/logosclientes/iktours.svg"
+    },
+    {
+      "name": "Kayen Corp",
+      "logoUrl": "/logosclientes/kayencorp.svg",
+      "image": "/logosclientes/kayencorp.svg"
+    },
+    {
+      "name": "Medinet",
+      "logoUrl": "/logosclientes/medinet.svg",
+      "image": "/logosclientes/medinet.svg"
+    },
+    {
+      "name": "Megamaq",
+      "logoUrl": "/logosclientes/megamaq.svg",
+      "image": "/logosclientes/megamaq.svg"
+    },
+    {
+      "name": "Pervor",
+      "logoUrl": "/logosclientes/pervor.svg",
+      "image": "/logosclientes/pervor.svg"
+    },
+    {
+      "name": "Piscoya",
+      "logoUrl": "/logosclientes/piscoya.svg",
+      "image": "/logosclientes/piscoya.svg"
+    },
+    {
+      "name": "Pizza Raúl",
+      "logoUrl": "/logosclientes/pizzaraul.svg",
+      "image": "/logosclientes/pizzaraul.svg"
+    },
+    {
+      "name": "Roosevelt",
+      "logoUrl": "/logosclientes/roosevelt.svg",
+      "image": "/logosclientes/roosevelt.svg"
+    },
+    {
+      "name": "Total Inmobiliaria",
+      "logoUrl": "/logosclientes/totalinmobiliaria.svg",
+      "image": "/logosclientes/totalinmobiliaria.svg"
+    },
+    {
+      "name": "Totalmaq",
+      "logoUrl": "/logosclientes/totalmaq.svg",
+      "image": "/logosclientes/totalmaq.svg"
+    },
+    {
+      "name": "Ulloa",
+      "logoUrl": "/logosclientes/ulloa.svg",
+      "image": "/logosclientes/ulloa.svg"
+    },
+    {
+      "name": "Urdwheels",
+      "logoUrl": "/logosclientes/urdwheels.svg",
+      "image": "/logosclientes/urdwheels.svg"
+    },
+    {
+      "name": "Yokohama",
+      "logoUrl": "/logosclientes/yokohama.svg",
+      "image": "/logosclientes/yokohama.svg"
+    },
+    {
+      "name": "Zehlendorf",
+      "logoUrl": "/logosclientes/zehlendorf.svg",
+      "image": "/logosclientes/zehlendorf.svg"
     }
   ]
 }

@@ -93,7 +93,7 @@ const DraggableRow = ({ logos, speed = 1 }: { logos: string[], speed?: number })
           src={src} 
           alt="Logotipo de Cliente"
           draggable={false} // Evita el bug visual de arrastrar la imagen nativamente
-          className="h-10 md:h-12 w-auto object-contain shrink-0 grayscale opacity-40 hover:grayscale-0 hover:opacity-100 hover:scale-[1.3] transition-all duration-300 cursor-pointer relative z-10 hover:z-20" 
+          className="h-10 md:h-12 w-auto object-contain shrink-0 grayscale opacity-50 hover:grayscale-0 hover:opacity-100 hover:scale-[1.25] transition-all duration-300 cursor-pointer relative z-10 hover:z-20 dark:brightness-0 dark:invert dark:opacity-70 dark:hover:filter-none dark:hover:opacity-100" 
         />
       ))}
     </div>
@@ -106,7 +106,7 @@ export default function ClientLogos({ data }: { data?: ClientLogosData }) {
   const titleSuffix = data?.titleSuffix || 'en nosotros';
 
   const logoList = data?.logos && data.logos.length > 0
-    ? data.logos.map(l => l.logoUrl).filter(Boolean)
+    ? (data.logos.map(l => l.logoUrl || l.image).filter(Boolean) as string[])
     : [...FALLBACK_ROW_1, ...FALLBACK_ROW_2];
 
   const mid = Math.ceil(logoList.length / 2);
