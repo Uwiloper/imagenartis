@@ -1,0 +1,144 @@
+---
+import { 
+  Compass, 
+  Layers, 
+  Palette, 
+  Printer, 
+  ShieldCheck, 
+  Clock,
+  Sparkles,
+  CheckCircle2
+} from 'lucide-react';
+
+export interface WhyDesignFeature {
+  icon?: 'compass' | 'layers' | 'palette' | 'printer' | 'shield' | 'clock' | 'sparkles' | 'check';
+  title: string;
+  description: string;
+}
+
+export interface Props {
+  badge?: string;
+  titleLine1?: string;
+  titleLine2Static?: string;
+  titleLine2Highlight?: string;
+  features?: WhyDesignFeature[];
+  image?: string;
+  imageAlt?: string;
+  reverseLayout?: boolean;
+}
+
+const {
+  badge,
+  titleLine1 = '¿Por qué elegir nuestro',
+  titleLine2Static = 'diseño e',
+  titleLine2Highlight = 'identidad visual?',
+  features = [
+    {
+      icon: 'compass',
+      title: 'Estrategia antes de diseñar:',
+      description: 'cada concepto visual nace del análisis de tu mercado, clientes y competencia directa.'
+    },
+    {
+      icon: 'layers',
+      title: 'Archivos listos para producción:',
+      description: 'entregamos vectores limpios en curvas con perfiles técnicos CMYK y RGB.'
+    },
+    {
+      icon: 'palette',
+      title: 'Sistemas visuales completos:',
+      description: 'paletas cromáticas armónicas, jerarquía tipográfica y manual de normas de marca.'
+    },
+    {
+      icon: 'printer',
+      title: 'Especialistas en gran formato:',
+      description: 'preparación milimétrica para letreros 3D, rotulado vehicular y paneles gigantes.'
+    },
+    {
+      icon: 'shield',
+      title: 'Propiedad intelectual total:',
+      description: 'cesión completa de derechos y entrega de archivos fuente editables (AI, PDF, SVG).'
+    },
+    {
+      icon: 'clock',
+      title: 'Entregas en tiempos ágiles:',
+      description: 'propuestas iniciales conceptualizadas y listas para revisión en solo 3 a 5 días.'
+    }
+  ],
+  image = 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=1200&q=80',
+  imageAlt = 'Diseño de identidad corporativa y branding gráfico profesional',
+  reverseLayout = false,
+} = Astro.props;
+---
+
+<section class="py-20 md:py-28 bg-white dark:bg-zinc-950 transition-colors duration-300 overflow-hidden">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class={`grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center ${reverseLayout ? 'lg:flex-row-reverse' : ''}`}>
+      
+      <!-- Columna Izquierda: Título y Lista de Beneficios -->
+      <div class={`lg:col-span-7 flex flex-col justify-center ${reverseLayout ? 'lg:order-2' : 'lg:order-1'}`}>
+        
+        {badge && (
+          <div class="mb-4">
+            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-semibold tracking-wider uppercase bg-zinc-100 text-zinc-900 dark:bg-zinc-900 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-800">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#EE2737]"></span>
+              {badge}
+            </span>
+          </div>
+        )}
+
+        <!-- Título proporcionado (sin desbordes) -->
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-display font-bold tracking-tight text-zinc-900 dark:text-white leading-[1.2] mb-6 sm:mb-8">
+          {titleLine1} <br class="hidden sm:inline" />
+          <span>{titleLine2Static}</span>{' '}
+          <span class="text-[#EE2737]">{titleLine2Highlight}</span>
+        </h2>
+
+        <!-- Lista de 6 Beneficios: Solo iconos sin marco/fondo con animación hover y texto breve e impactante -->
+        <ul class="space-y-4 sm:space-y-5">
+          {features.map((item) => (
+            <li class="flex items-start gap-3.5 group cursor-default">
+              <!-- Solo icono con animación hover fluida -->
+              <div class="shrink-0 mt-0.5 text-zinc-700 dark:text-zinc-300 group-hover:text-[#EE2737] group-hover:scale-115 transition-all duration-300 ease-out select-none">
+                {item.icon === 'compass' && <Compass size={20} strokeWidth={2} />}
+                {item.icon === 'layers' && <Layers size={20} strokeWidth={2} />}
+                {item.icon === 'palette' && <Palette size={20} strokeWidth={2} />}
+                {item.icon === 'printer' && <Printer size={20} strokeWidth={2} />}
+                {item.icon === 'shield' && <ShieldCheck size={20} strokeWidth={2} />}
+                {item.icon === 'clock' && <Clock size={20} strokeWidth={2} />}
+                {item.icon === 'sparkles' && <Sparkles size={20} strokeWidth={2} />}
+                {(!item.icon || item.icon === 'check') && <CheckCircle2 size={20} strokeWidth={2} />}
+              </div>
+
+              <!-- Texto: Encabezado Negrita + Descripción breve e impactante -->
+              <div class="text-xs sm:text-sm leading-relaxed text-zinc-600 dark:text-zinc-400 font-sans">
+                <strong class="font-bold text-zinc-900 dark:text-white mr-1.5 transition-colors duration-200 group-hover:text-zinc-950 dark:group-hover:text-white">
+                  {item.title}
+                </strong>
+                <span>{item.description}</span>
+              </div>
+            </li>
+          ))}
+        </ul>
+
+      </div>
+
+      <!-- Columna Derecha: Imagen estandarizada (medidas idénticas a wrapauto y brandcomercial) -->
+      <div class={`lg:col-span-5 ${reverseLayout ? 'lg:order-1' : 'lg:order-2'}`}>
+        <div class="relative w-full aspect-[4/3] sm:aspect-[16/11] lg:aspect-[4/3] rounded-md overflow-hidden bg-black border border-zinc-200 dark:border-zinc-800 flex items-center justify-center group shadow-none">
+          
+          <img
+            src={image}
+            alt={imageAlt}
+            loading="lazy"
+            class="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+          />
+
+          <!-- Sutil viñeta para contraste -->
+          <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none"></div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>

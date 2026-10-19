@@ -1,0 +1,123 @@
+---
+import { ChevronDown, HelpCircle } from 'lucide-react';
+
+export interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+export interface Props {
+  badge?: string;
+  titleStatic?: string;
+  titleHighlight?: string;
+  description?: string;
+  faqs?: FaqItem[];
+}
+
+const {
+  badge,
+  titleStatic = "Preguntas frecuentes sobre",
+  titleHighlight = "diseño e identidad",
+  description = "Resolvemos las dudas más comunes sobre formatos de entrega, derechos de autor y procesos técnicos de impresión.",
+  faqs = [
+    {
+      question: "¿Qué archivos y formatos recibo al finalizar el diseño de mi marca?",
+      answer: "Entregamos un paquete digital maestro completo: archivos vectoriales editables en curvas (Adobe Illustrator .AI, .EPS y PDF de alta fidelidad), formatos escalables web (.SVG) y exportaciones en mapa de bits en máxima resolución (.PNG con fondo transparente y .JPG en CMYK y RGB). Además, se incluye el Manual de Marca con códigos de color Pantone, CMYK, RGB y HEX."
+    },
+    {
+      question: "¿Ustedes preparan los artes técnicos listos para imprenta y gran formato?",
+      answer: "Sí, absolutamente. Contamos con amplia experiencia en pre-prensa y gigantografías. Todos los artes para impresión se entregan configurados con los perfiles de color correctos (FOGRA39 / GRACoL), márgenes de sangrado reglamentarios, demasías para doblez y confección, y resolución DPI calibrada para que tu imprenta no tenga que corregir nada."
+    },
+    {
+      question: "¿Quién es el propietario de los derechos de autor del diseño?",
+      answer: "Tú. Una vez concluido el proyecto y cancelado el servicio, te transferimos la totalidad de los derechos patrimoniales y de explotación comercial de la marca y de los diseños creados. No cobramos regalías posteriores ni limitamos el uso de tus archivos."
+    },
+    {
+      question: "¿Cuántas propuestas conceptuales y rondas de ajustes se incluyen?",
+      answer: "Presentamos de 2 a 3 rutas conceptuales diferenciadas basadas en el brief estratégico acordado. Tras la selección de la ruta ganadora, incluimos hasta 3 rondas de ajustes finos (color, tipografía, proporciones) para asegurar que el resultado final supere todas tus expectativas."
+    },
+    {
+      question: "¿Pueden modernizar o rediseñar un logotipo existente sin perder su esencia?",
+      answer: "Sí, realizamos servicios de 'Restyling' y modernización de marca. Redibujamos vectorialmente identidades antiguas, corregimos desajustes ópticos, optimizamos la legibilidad en pantallas digitales y refinamos la paleta de color manteniendo el reconocimiento histórico que ya lograste con tus clientes."
+    },
+    {
+      question: "¿Cuánto tiempo toma el desarrollo de un proyecto de identidad visual?",
+      answer: "Para diseño de logotipo y sistema básico el tiempo habitual de presentación de primeras propuestas es de 3 a 5 días hábiles. El desarrollo integral de identidad corporativa con manual de normas completo toma entre 7 y 10 días hábiles."
+    }
+  ]
+} = Astro.props;
+---
+
+<section 
+  id="faq-diseno"
+  class="py-20 md:py-28 bg-white dark:bg-zinc-950 transition-colors duration-300 border-t border-zinc-200 dark:border-zinc-800/80"
+>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    {badge && (
+      <div class="text-center mb-3">
+        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-semibold tracking-wider uppercase bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-800">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#EE2737]"></span>
+          {badge}
+        </span>
+      </div>
+    )}
+
+    <!-- Encabezado Proporcional -->
+    <div class="text-center mb-12 sm:mb-16">
+      <h2 class="text-2xl sm:text-3xl md:text-4xl font-display font-bold tracking-tight text-zinc-900 dark:text-white leading-[1.2]">
+        {titleStatic} <span className="text-[#EE2737]">{titleHighlight}</span>
+      </h2>
+      {description && (
+        <p class="mt-3 text-xs sm:text-sm md:text-base text-zinc-600 dark:text-zinc-400 font-sans leading-relaxed max-w-2xl mx-auto">
+          {description}
+        </p>
+      )}
+    </div>
+
+    <!-- Lista de Preguntas Acordeón Flat (Sin sombras) -->
+    <div class="space-y-3">
+      {faqs.map((faq, index) => (
+        <details 
+          class="group rounded-md border border-zinc-200 dark:border-zinc-800/90 bg-white dark:bg-zinc-900/40 overflow-hidden transition-colors duration-200 [&_summary::-webkit-details-marker]:hidden"
+          open={index === 0}
+        >
+          <summary class="flex items-center justify-between gap-4 p-5 sm:p-6 cursor-pointer select-none text-left font-display font-semibold text-sm sm:text-base text-zinc-900 dark:text-white group-hover:text-[#EE2737] transition-colors">
+            <span class="flex items-center gap-3">
+              <span class="font-mono text-xs text-[#EE2737] font-bold">0{index + 1}.</span>
+              <span>{faq.question}</span>
+            </span>
+            <span class="shrink-0 p-1 rounded-sm text-zinc-500 group-hover:text-[#EE2737] transition-transform duration-300 group-open:rotate-180">
+              <ChevronDown size={18} />
+            </span>
+          </summary>
+          <div class="px-5 pb-6 sm:px-6 pt-1 text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-sans leading-relaxed border-t border-zinc-100 dark:border-zinc-800/60">
+            {faq.answer}
+          </div>
+        </details>
+      ))}
+    </div>
+
+    <!-- Caja de Contacto Rápido Técnico -->
+    <div class="mt-12 p-6 sm:p-8 rounded-md bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 text-center flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="text-left">
+        <h4 class="font-display font-bold text-base text-zinc-900 dark:text-white">
+          ¿Tienes una consulta sobre tus artes o identidad?
+        </h4>
+        <p class="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-sans mt-0.5">
+          Escríbenos directamente y nuestro director creativo resolverá tus dudas técnicas.
+        </p>
+      </div>
+      <a 
+        href="https://wa.me/51994097417?text=¡Hola!%20Tengo%20una%20consulta%20técnica%20sobre%20un%20proyecto%20de%20diseño%20gráfico"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-sm bg-[#EE2737] hover:bg-zinc-900 dark:hover:bg-white text-white dark:hover:text-black font-sans text-xs font-bold uppercase tracking-wider transition-colors duration-200"
+      >
+        <span>CONSULTAR POR WHATSAPP</span>
+        <span>→</span>
+      </a>
+    </div>
+
+  </div>
+</section>

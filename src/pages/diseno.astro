@@ -1,0 +1,33 @@
+---
+import Layout from '../layouts/Layout.astro';
+import HeroDesign from '../components/sections/HeroDesign.astro';
+import WhyChooseDesign from '../components/sections/WhyChooseDesign.astro';
+import DesignServices from '../components/sections/DesignServices';
+import DesignFaq from '../components/sections/DesignFaq.astro';
+import EngagementCTA from '../components/sections/EngagementCTA.astro';
+import { fetchAllSections } from '../lib/cms';
+
+const cms = await fetchAllSections();
+---
+
+<Layout 
+  title="Diseño Gráfico, Identidad Visual y Preprensa en Lima | Imagenartis"
+  description="Estudio de diseño gráfico profesional especializado en branding, logotipos corporativos, diseño publicitario y preparación técnica para imprenta de gran formato en Lima y todo el Perú."
+>
+
+  <!-- 1. HERO DEDICADO DE 80% VIEWPORT CON MÉTRICAS CLAVE -->
+  <HeroDesign secondaryBtnUrl="#servicios-diseno" />
+
+  <!-- 2. SECCIÓN: ¿POR QUÉ ELEGIR NUESTRO DISEÑO? (6 BENEFICIOS CON ICONOS PUROS) -->
+  <WhyChooseDesign />
+
+  <!-- 3. ESPECIALIDADES DE DISEÑO: IMPRESIÓN Y DIGITAL (SHOWCASE ANTES Y DESPUÉS + MINI NAVBAR) -->
+  <DesignServices client:visible />
+
+  <!-- 4. PREGUNTAS FRECUENTES DE DISEÑO (ACORDEÓN TÉCNICO Y FORMATOS) -->
+  <DesignFaq />
+
+  <!-- 5. CALL TO ACTION FINAL CON CONTACTO DIRECTO -->
+  <EngagementCTA />
+
+</Layout>
