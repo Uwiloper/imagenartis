@@ -514,23 +514,10 @@ export default function DesignServices({
                 {/* Viñeta sutil de contraste */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/30 pointer-events-none transition-opacity duration-300 group-hover:opacity-90"></div>
 
-                {/* Badge Superior Izquierdo: Contador de fotos */}
-                <div className="absolute top-3.5 left-3.5 z-10 flex items-center gap-2 px-2.5 py-1 rounded-sm bg-black/60 backdrop-blur-md border border-white/10 text-white font-mono text-[11px] font-semibold">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#EE2737] animate-pulse"></span>
-                  <span>{String(safeImageIndex + 1).padStart(2, '0')} / {String(currentImages.length).padStart(2, '0')}</span>
-                </div>
-
                 {/* Badge Superior Derecho: Clic para Ampliar */}
                 <div className="absolute top-3.5 right-3.5 z-10 flex items-center gap-1.5 px-2.5 py-1 rounded-sm bg-black/60 group-hover:bg-[#EE2737] backdrop-blur-md border border-white/10 text-white font-sans text-xs font-semibold tracking-wide transition-all duration-300">
                   <Maximize2 size={13} />
                   <span className="hidden sm:inline">Ver de cerca</span>
-                </div>
-
-                {/* Pie de Foto Principal */}
-                <div className="absolute bottom-3 left-4 right-4 z-10 pointer-events-none">
-                  <p className="text-xs sm:text-sm font-sans font-semibold text-white truncate drop-shadow-md">
-                    {activeImage.title}
-                  </p>
                 </div>
               </div>
 
@@ -564,13 +551,6 @@ export default function DesignServices({
                           style={{ width: `${progress}%` }}
                         />
                       )}
-
-                      {/* Indicador numérico tenue */}
-                      <span className={`absolute top-1 left-1 font-mono text-[9px] font-bold px-1 rounded-xs backdrop-blur-xs ${
-                        isActive ? 'bg-[#EE2737] text-white' : 'bg-black/60 text-zinc-300'
-                      }`}>
-                        0{idx + 1}
-                      </span>
                     </button>
                   );
                 })}
