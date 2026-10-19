@@ -1,5 +1,22 @@
-import React, { useState, useEffect, useRef, MouseEvent as ReactMouseEvent, TouchEvent as ReactTouchEvent } from 'react';
-import { PenTool, Layout, Printer, Package } from 'lucide-react';
+import React, { useState, useEffect, useRef, useCallback, MouseEvent as ReactMouseEvent, TouchEvent as ReactTouchEvent } from 'react';
+import { 
+  PenTool, 
+  Layout, 
+  Printer, 
+  Package, 
+  ZoomIn, 
+  ZoomOut, 
+  ChevronLeft, 
+  ChevronRight, 
+  X, 
+  Maximize2 
+} from 'lucide-react';
+
+export interface DesignGalleryImage {
+  url: string;
+  title: string;
+  alt: string;
+}
 
 export interface DesignWorkItem {
   id: string;
@@ -9,12 +26,12 @@ export interface DesignWorkItem {
   subtitle: string;
   description: string;
   features: string[];
-  beforeImage: string;
-  afterImage: string;
-  imageAlt?: string;
+  images: DesignGalleryImage[];
   galleryUrl: string;
   galleryBtnText?: string;
   attributes?: { label: string; value: string; detail?: string }[];
+  beforeImage?: string;
+  afterImage?: string;
 }
 
 export interface DesignServicesProps {
@@ -38,11 +55,30 @@ export const DEFAULT_DESIGN_WORKS: DesignWorkItem[] = [
       'Paquete completo de archivos editables en curvas (AI, EPS, PDF, SVG)',
       'Aplicaciones básicas: tarjetas personales, hojas membretadas y firmas'
     ],
-    beforeImage: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=1200&q=80',
-    afterImage: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=1200&q=80',
-    imageAlt: 'Identidad de marca antes y después: boceto inicial vs manual y papelería terminada',
     galleryUrl: '/portafolio?categoria=branding',
-    galleryBtnText: 'VER TRABAJOS EN GALERIA'
+    galleryBtnText: 'VER TRABAJOS EN GALERIA',
+    images: [
+      {
+        url: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=1200&q=80',
+        title: 'Manual de Marca & Papelería Corporativa',
+        alt: 'Manual de identidad corporativa y papelería institucional'
+      },
+      {
+        url: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=1200&q=80',
+        title: 'Bocetado & Conceptualización de Logotipo',
+        alt: 'Proceso de bocetado y trazado vectorial de isotipo'
+      },
+      {
+        url: 'https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?auto=format&fit=crop&w=1200&q=80',
+        title: 'Sistemas Visuales & Tipografía Corporativa',
+        alt: 'Selección tipográfica y jerarquía visual de marca'
+      },
+      {
+        url: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1200&q=80',
+        title: 'Guía Normativa & Despliegue de Marca',
+        alt: 'Guía de normas gráficas y aplicaciones de marca'
+      }
+    ]
   },
   {
     id: 'publicidad-digital',
@@ -56,11 +92,30 @@ export const DEFAULT_DESIGN_WORKS: DesignWorkItem[] = [
       'Jerarquía visual estratégica pensada para captar atención en el scroll',
       'Adaptación a lineamientos de marca y tono de comunicación corporativo'
     ],
-    beforeImage: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1200&q=80',
-    afterImage: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80',
-    imageAlt: 'Diseño publicitario antes y después: wireframe vs pieza digital comercial',
     galleryUrl: '/portafolio?categoria=digital',
-    galleryBtnText: 'VER TRABAJOS EN GALERIA'
+    galleryBtnText: 'VER TRABAJOS EN GALERIA',
+    images: [
+      {
+        url: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80',
+        title: 'Piezas Publicitarias para Pauta Digital',
+        alt: 'Diseño publicitario digital y anuncios de alto rendimiento'
+      },
+      {
+        url: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80',
+        title: 'Estrategia Visual de Rendimiento Comercial',
+        alt: 'Gráficas orientadas a métricas y conversión publicitaria'
+      },
+      {
+        url: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=1200&q=80',
+        title: 'Campañas Comerciales & Banners de Conversión',
+        alt: 'Banners publicitarios corporativos y banners web'
+      },
+      {
+        url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80',
+        title: 'Composiciones Creativas para Redes Sociales',
+        alt: 'Diseño editorial y visual para feed y stories'
+      }
+    ]
   },
   {
     id: 'gran-formato-impresion',
@@ -74,11 +129,30 @@ export const DEFAULT_DESIGN_WORKS: DesignWorkItem[] = [
       'Resolución DPI calibrada según distancia visual para cero pixelado',
       'Demasías y márgenes de sangrado exactos para confección y ojales'
     ],
-    beforeImage: 'https://images.unsplash.com/photo-1542744094-3a31f272c490?auto=format&fit=crop&w=1200&q=80',
-    afterImage: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=1200&q=80',
-    imageAlt: 'Gran formato antes y después: prueba de color vs gigantografía instalada',
     galleryUrl: '/portafolio?categoria=impresion',
-    galleryBtnText: 'VER TRABAJOS EN GALERIA'
+    galleryBtnText: 'VER TRABAJOS EN GALERIA',
+    images: [
+      {
+        url: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=1200&q=80',
+        title: 'Gigantografías & Paneles Publicitarios CMYK',
+        alt: 'Impresión en gran formato para paneles y vallas publicitarias'
+      },
+      {
+        url: 'https://images.unsplash.com/photo-1542744094-3a31f272c490?auto=format&fit=crop&w=1200&q=80',
+        title: 'Artes en Escala 1:1 & Preparación Técnica',
+        alt: 'Planificación de artes a escala real para estructuras de vía pública'
+      },
+      {
+        url: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=1200&q=80',
+        title: 'Revisión Milimétrica de Sangrías & Perfiles',
+        alt: 'Ajuste de color y perfiles técnicos de pre-prensa'
+      },
+      {
+        url: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80',
+        title: 'Rotulación & Estructuras Comerciales',
+        alt: 'Instalación de gráficas comerciales de gran escala'
+      }
+    ]
   },
   {
     id: 'packaging-etiquetas',
@@ -92,13 +166,34 @@ export const DEFAULT_DESIGN_WORKS: DesignWorkItem[] = [
       'Preparación de acabados especiales: sectorizado UV, hot stamping y relieve',
       'Asesoría en sustratos: papeles ecológicos, vinil adhesivo y cartulinas'
     ],
-    beforeImage: 'https://images.unsplash.com/photo-1589365278144-c9e705f843ba?auto=format&fit=crop&w=1200&q=80',
-    afterImage: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1200&q=80',
-    imageAlt: 'Packaging antes y después: troquel crudo vs empaque con acabados de lujo',
     galleryUrl: '/portafolio?categoria=packaging',
-    galleryBtnText: 'VER TRABAJOS EN GALERIA'
+    galleryBtnText: 'VER TRABAJOS EN GALERIA',
+    images: [
+      {
+        url: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1200&q=80',
+        title: 'Diseño Estructural de Empaques & Troqueles',
+        alt: 'Empaques de producto y planos de troquel plegadizo'
+      },
+      {
+        url: 'https://images.unsplash.com/photo-1589365278144-c9e705f843ba?auto=format&fit=crop&w=1200&q=80',
+        title: 'Etiquetas Comerciales para Botellas & Frascos',
+        alt: 'Etiquetas adhesivas en vinil con acabados sectorizados'
+      },
+      {
+        url: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=1200&q=80',
+        title: 'Acabados Especiales: Hot Stamping & Relieve',
+        alt: 'Diseño de cajas de lujo con aplicaciones metalizadas'
+      },
+      {
+        url: 'https://images.unsplash.com/photo-1547949003-9792a18a2601?auto=format&fit=crop&w=1200&q=80',
+        title: 'Bolsas Corporativas & Material POP',
+        alt: 'Bolsas impresas y material promocional para punto de venta'
+      }
+    ]
   }
 ];
+
+const AUTOPLAY_INTERVAL = 4000; // 4 segundos de transición automática
 
 export default function DesignServices({
   titleStatic = 'Nuestras especialidades en',
@@ -108,21 +203,41 @@ export default function DesignServices({
 }: DesignServicesProps) {
   const safeWorks = works && works.length > 0 ? works : DEFAULT_DESIGN_WORKS;
   const [activeTab, setActiveTab] = useState(0);
-  const [sliderPosition, setSliderPosition] = useState(50);
-  const [isDragging, setIsDragging] = useState(false);
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [progress, setProgress] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+
+  // Estados del Mini Modal / Lightbox
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalImageIndex, setModalImageIndex] = useState(0);
+  const [isZoomed, setIsZoomed] = useState(false);
+  const [zoomOrigin, setZoomOrigin] = useState({ x: 50, y: 50 });
+
+  // Estados de navegación móvil y barrita
   const [pillStyle, setPillStyle] = useState({ left: 0, width: 0, opacity: 0 });
   const [mobileNavState, setMobileNavState] = useState<'hidden' | 'sticky' | 'docked'>('hidden');
 
   const sectionRef = useRef<HTMLElement>(null);
   const anchorRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLDivElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const touchStartRef = useRef<number | null>(null);
 
   const safeIndex = Math.min(Math.max(0, activeTab), safeWorks.length - 1);
   const currentWork = safeWorks[safeIndex];
 
-  const beforeImg = currentWork.beforeImage || 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=1200&q=80';
-  const afterImg = currentWork.afterImage || (currentWork as any).image || 'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=1200&q=80';
+  // Imágenes seguras de la especialidad actual
+  const currentImages: DesignGalleryImage[] = (currentWork.images && currentWork.images.length > 0)
+    ? currentWork.images
+    : [
+        {
+          url: currentWork.afterImage || 'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=1200&q=80',
+          title: currentWork.title,
+          alt: currentWork.title
+        }
+      ];
+
+  const safeImageIndex = Math.min(Math.max(0, activeImageIndex), currentImages.length - 1);
+  const activeImage = currentImages[safeImageIndex];
 
   const safeFeatures = currentWork.features && currentWork.features.length > 0
     ? currentWork.features
@@ -132,16 +247,105 @@ export default function DesignServices({
         'Entrega de manual de uso y tipografías'
       ];
 
-  // Animación de apertura suave de Antes y Después al alternar de servicio
+  // Cambio de pestaña de servicio: reiniciar imagen activa y barra de progreso
   useEffect(() => {
-    setSliderPosition(0);
-    const timeout = setTimeout(() => {
-      setSliderPosition(50);
-    }, 120);
-    return () => clearTimeout(timeout);
+    setActiveImageIndex(0);
+    setProgress(0);
   }, [safeIndex]);
 
-  // Actualización del sliding pill animado estilo Showcase / Vehicular Services
+  // Temporizador de Autoplay con barra de progreso para las fotos chiquitas
+  useEffect(() => {
+    if (isPaused || isModalOpen) return;
+
+    const intervalStep = 50; // ms
+    const totalSteps = AUTOPLAY_INTERVAL / intervalStep;
+    const progressIncrement = 100 / totalSteps;
+
+    const timer = setInterval(() => {
+      setProgress(prev => {
+        if (prev >= 100) {
+          setActiveImageIndex(oldIdx => (oldIdx + 1) % currentImages.length);
+          return 0;
+        }
+        return prev + progressIncrement;
+      });
+    }, intervalStep);
+
+    return () => clearInterval(timer);
+  }, [isPaused, isModalOpen, currentImages.length, safeImageIndex]);
+
+  // Selección manual de miniatura: cambia la foto y reinicia el timer inmediatamente
+  const handleSelectThumbnail = (index: number) => {
+    setActiveImageIndex(index);
+    setProgress(0);
+  };
+
+  // Abrir Lightbox en la foto seleccionada
+  const openModal = (index: number) => {
+    setModalImageIndex(index);
+    setIsZoomed(false);
+    setZoomOrigin({ x: 50, y: 50 });
+    setIsModalOpen(true);
+    document.body.style.overflow = 'hidden';
+  };
+
+  // Cerrar Lightbox y sincronizar la foto activa con la tarjeta
+  const closeModal = useCallback(() => {
+    setIsModalOpen(false);
+    setIsZoomed(false);
+    setActiveImageIndex(modalImageIndex);
+    setProgress(0);
+    document.body.style.overflow = '';
+  }, [modalImageIndex]);
+
+  // Navegación dentro del Lightbox
+  const handleModalPrev = useCallback((e?: ReactMouseEvent) => {
+    e?.stopPropagation();
+    setIsZoomed(false);
+    setModalImageIndex(prev => (prev - 1 + currentImages.length) % currentImages.length);
+  }, [currentImages.length]);
+
+  const handleModalNext = useCallback((e?: ReactMouseEvent) => {
+    e?.stopPropagation();
+    setIsZoomed(false);
+    setModalImageIndex(prev => (prev + 1) % currentImages.length);
+  }, [currentImages.length]);
+
+  // Toggle de zoom con cálculo de coordenadas del clic
+  const handleToggleZoom = (e: ReactMouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    if (!isZoomed) {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      setZoomOrigin({ x, y });
+      setIsZoomed(true);
+    } else {
+      setIsZoomed(false);
+    }
+  };
+
+  // Atajos de teclado para el Lightbox (ESC, flechas izquierda/derecha, Z)
+  useEffect(() => {
+    if (!isModalOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        closeModal();
+      } else if (e.key === 'ArrowLeft') {
+        handleModalPrev();
+      } else if (e.key === 'ArrowRight') {
+        handleModalNext();
+      } else if (e.key === 'z' || e.key === 'Z') {
+        setIsZoomed(prev => !prev);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isModalOpen, closeModal, handleModalPrev, handleModalNext]);
+
+  // Sliding pill animado de la barrita inferior
   const updatePill = () => {
     if (navRef.current) {
       const activeBtn = navRef.current.querySelector(`[data-id="${safeWorks[safeIndex]?.id}"]`) as HTMLButtonElement;
@@ -151,7 +355,6 @@ export default function DesignServices({
           width: activeBtn.offsetWidth,
           opacity: 1
         });
-        // En móvil centrar suavemente el botón activo
         const scrollLeft = activeBtn.offsetLeft - navRef.current.offsetWidth / 2 + activeBtn.offsetWidth / 2;
         navRef.current.scrollTo({ left: scrollLeft, behavior: 'smooth' });
       }
@@ -200,23 +403,6 @@ export default function DesignServices({
     };
   }, []);
 
-  // Lógica de arrastre interactivo del Antes y Después
-  const handleMove = (clientX: number) => {
-    if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = clientX - rect.left;
-    const position = Math.max(0, Math.min(100, (x / rect.width) * 100));
-    setSliderPosition(position);
-  };
-
-  const handleMouseMove = (e: ReactMouseEvent) => {
-    if (isDragging) handleMove(e.clientX);
-  };
-
-  const handleTouchMove = (e: ReactTouchEvent) => {
-    if (isDragging) handleMove(e.touches[0].clientX);
-  };
-
   const renderIcon = (type: string, className = 'w-4 h-4') => {
     switch (type) {
       case 'brand':
@@ -254,8 +440,8 @@ export default function DesignServices({
           </div>
         )}
 
-        {/* Tarjeta Principal Dividida en 2 Columnas con Altura Estandarizada (md:h-[460px]) */}
-        <div className="w-full bg-white dark:bg-zinc-900 rounded-md border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-none transition-colors duration-300 md:h-[460px]">
+        {/* Tarjeta Principal Dividida en 2 Columnas con Altura Estandarizada (md:h-[480px]) */}
+        <div className="w-full bg-white dark:bg-zinc-900 rounded-md border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-none transition-colors duration-300 md:h-[480px]">
           <div className="grid grid-cols-1 lg:grid-cols-12 items-stretch h-full">
             
             {/* Columna Izquierda: Información Editorial Estandarizada */}
@@ -291,7 +477,7 @@ export default function DesignServices({
 
               </div>
 
-              {/* Botón Único Inferior: Ver Trabajos en Galería */}
+              {/* Botón Inferior: Ver Trabajos en Galería */}
               <div className="pt-2">
                 <a
                   href={currentWork.galleryUrl}
@@ -304,70 +490,90 @@ export default function DesignServices({
 
             </div>
 
-            {/* Columna Derecha: Showcase Interactivo de Antes y Después */}
-            <div className="lg:col-span-6 relative bg-zinc-950 flex flex-col justify-between overflow-hidden h-[340px] lg:h-full border-t lg:border-t-0 lg:border-l border-zinc-200 dark:border-zinc-800">
+            {/* Columna Derecha: Foto Principal Interactiva + Miniaturas con Autoplay y Timer */}
+            <div 
+              className="lg:col-span-6 relative bg-zinc-950 flex flex-col justify-between overflow-hidden h-[390px] lg:h-full border-t lg:border-t-0 lg:border-l border-zinc-200 dark:border-zinc-800 select-none"
+              onMouseEnter={() => setIsPaused(true)}
+              onMouseLeave={() => setIsPaused(false)}
+            >
               
+              {/* 1. Foto Principal Grande con Botón de Ampliar */}
               <div 
-                ref={containerRef}
-                className="relative flex-1 w-full h-full overflow-hidden cursor-ew-resize select-none bg-black"
-                onMouseDown={(e) => {
-                  setIsDragging(true);
-                  handleMove(e.clientX);
-                }}
-                onMouseMove={handleMouseMove}
-                onMouseUp={() => setIsDragging(false)}
-                onMouseLeave={() => setIsDragging(false)}
-                onTouchStart={(e) => {
-                  setIsDragging(true);
-                  handleMove(e.touches[0].clientX);
-                }}
-                onTouchMove={handleTouchMove}
-                onTouchEnd={() => setIsDragging(false)}
+                onClick={() => openModal(safeImageIndex)}
+                className="relative flex-1 w-full overflow-hidden cursor-pointer group bg-black"
+                title="Haz clic para ver de cerca y hacer zoom"
               >
-                {/* Capa DESPUÉS (Fondo base) */}
                 <img 
-                  src={afterImg} 
-                  alt={`Resultado final - ${currentWork.title}`} 
-                  className="absolute inset-0 w-full h-full object-cover pointer-events-none transition-opacity duration-500 ease-in"
+                  key={activeImage.url}
+                  src={activeImage.url} 
+                  alt={activeImage.alt}
+                  className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
                   loading="lazy"
                 />
-                
-                {/* Badge DESPUÉS en Rojo */}
-                <span className="absolute top-4 right-4 bg-[#EE2737] text-white text-xs font-sans font-bold px-3 py-1 rounded-md z-10 pointer-events-none select-none shadow-none">
-                  Después
-                </span>
 
-                {/* Capa ANTES recortada con clipPath */}
-                <div 
-                  className={`absolute inset-0 w-full h-full pointer-events-none ${isDragging ? '' : 'transition-all duration-700 ease-out'}`}
-                  style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
-                >
-                  <img 
-                    src={beforeImg} 
-                    alt={`Boceto o concepto previo - ${currentWork.title}`} 
-                    className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-                    loading="lazy"
-                  />
-                  
-                  {/* Badge ANTES en Rojo */}
-                  <span className="absolute top-4 left-4 bg-[#EE2737] text-white text-xs font-sans font-bold px-3 py-1 rounded-md z-10 pointer-events-none select-none shadow-none">
-                    Antes
-                  </span>
+                {/* Viñeta sutil de contraste */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/30 pointer-events-none transition-opacity duration-300 group-hover:opacity-90"></div>
+
+                {/* Badge Superior Izquierdo: Contador de fotos */}
+                <div className="absolute top-3.5 left-3.5 z-10 flex items-center gap-2 px-2.5 py-1 rounded-sm bg-black/60 backdrop-blur-md border border-white/10 text-white font-mono text-[11px] font-semibold">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#EE2737] animate-pulse"></span>
+                  <span>{String(safeImageIndex + 1).padStart(2, '0')} / {String(currentImages.length).padStart(2, '0')}</span>
                 </div>
 
-                {/* Línea divisoria central con tirador || */}
-                <div 
-                  className={`absolute top-0 bottom-0 w-[2px] bg-white z-20 flex items-center justify-center pointer-events-none ${isDragging ? '' : 'transition-all duration-700 ease-out'}`}
-                  style={{ left: `${sliderPosition}%`, transform: 'translateX(-50%)' }}
-                >
-                  <div className="w-9 h-9 bg-white dark:bg-zinc-900 rounded-full flex items-center justify-center border border-zinc-300 dark:border-zinc-700 pointer-events-auto cursor-grab active:cursor-grabbing select-none shadow-md">
-                    <div className="flex gap-[3px]">
-                      <div className="w-[2px] h-[12px] bg-zinc-500 rounded-sm"></div>
-                      <div className="w-[2px] h-[12px] bg-zinc-500 rounded-sm"></div>
-                    </div>
-                  </div>
+                {/* Badge Superior Derecho: Clic para Ampliar */}
+                <div className="absolute top-3.5 right-3.5 z-10 flex items-center gap-1.5 px-2.5 py-1 rounded-sm bg-black/60 group-hover:bg-[#EE2737] backdrop-blur-md border border-white/10 text-white font-sans text-xs font-semibold tracking-wide transition-all duration-300">
+                  <Maximize2 size={13} />
+                  <span className="hidden sm:inline">Ver de cerca</span>
                 </div>
 
+                {/* Pie de Foto Principal */}
+                <div className="absolute bottom-3 left-4 right-4 z-10 pointer-events-none">
+                  <p className="text-xs sm:text-sm font-sans font-semibold text-white truncate drop-shadow-md">
+                    {activeImage.title}
+                  </p>
+                </div>
+              </div>
+
+              {/* 2. Miniaturas Inferiores con Temporizador y Reseteo al Clic */}
+              <div className="p-2 sm:p-2.5 bg-zinc-950/95 border-t border-zinc-800/80 flex items-center gap-2">
+                {currentImages.map((img, idx) => {
+                  const isActive = idx === safeImageIndex;
+                  return (
+                    <button
+                      key={img.url + idx}
+                      type="button"
+                      onClick={() => handleSelectThumbnail(idx)}
+                      className={`relative flex-1 h-13 sm:h-15 rounded-sm overflow-hidden transition-all duration-200 cursor-pointer select-none group border ${
+                        isActive
+                          ? 'border-[#EE2737] ring-1 ring-[#EE2737]/40 opacity-100 scale-[1.02]'
+                          : 'border-white/10 opacity-55 hover:opacity-95 hover:border-white/30'
+                      }`}
+                      title={img.title}
+                    >
+                      <img 
+                        src={img.url} 
+                        alt={img.alt}
+                        className="w-full h-full object-cover object-center pointer-events-none"
+                        loading="lazy"
+                      />
+
+                      {/* Barrita de Progreso del Timer en la Miniatura Activa */}
+                      {isActive && (
+                        <div 
+                          className="absolute bottom-0 left-0 h-[2.5px] bg-[#EE2737] transition-all duration-75 pointer-events-none z-10"
+                          style={{ width: `${progress}%` }}
+                        />
+                      )}
+
+                      {/* Indicador numérico tenue */}
+                      <span className={`absolute top-1 left-1 font-mono text-[9px] font-bold px-1 rounded-xs backdrop-blur-xs ${
+                        isActive ? 'bg-[#EE2737] text-white' : 'bg-black/60 text-zinc-300'
+                      }`}>
+                        0{idx + 1}
+                      </span>
+                    </button>
+                  );
+                })}
               </div>
 
             </div>
@@ -380,9 +586,7 @@ export default function DesignServices({
           <div 
             ref={navRef}
             className={`w-full bg-gray-100 dark:bg-[#1a1a1a] border border-zinc-200 dark:border-zinc-800/80 rounded-md p-1 select-none shadow-none flex items-center overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory ${
-              // En desktop siempre relativo y ancho completo
               'md:relative md:inset-auto md:w-full md:opacity-100 md:pointer-events-auto md:translate-y-0 ' +
-              // En pantallas móviles aplica sticky dock o docked en su posición real con transiciones
               (mobileNavState === 'sticky'
                 ? 'fixed bottom-4 inset-x-3 z-40 max-w-lg mx-auto opacity-100 pointer-events-auto shadow-2xl ring-1 ring-black/10 dark:ring-white/10 translate-y-0 transition-all duration-300 ease-out'
                 : mobileNavState === 'docked'
@@ -423,6 +627,157 @@ export default function DesignServices({
         </div>
 
       </div>
+
+      {/* 3. Mini Modal / Lightbox con Zoom, Flechas y Navegación ("Bien UX") */}
+      {isModalOpen && (
+        <div 
+          className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex flex-col justify-between select-none animate-in fade-in duration-200"
+          onClick={closeModal}
+        >
+          {/* Barra Superior del Modal */}
+          <div 
+            className="w-full flex items-center justify-between px-4 sm:px-8 py-4 border-b border-zinc-800 bg-black/50 backdrop-blur-md z-30"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Info y Contador */}
+            <div className="flex items-center gap-3">
+              <span className="px-2.5 py-1 rounded-sm bg-[#EE2737] text-white font-mono text-xs font-bold uppercase">
+                {String(modalImageIndex + 1).padStart(2, '0')} / {String(currentImages.length).padStart(2, '0')}
+              </span>
+              <div>
+                <h4 className="font-display font-bold text-sm sm:text-base text-white truncate max-w-[200px] sm:max-w-md">
+                  {currentImages[modalImageIndex]?.title || currentWork.title}
+                </h4>
+                <p className="text-xs text-zinc-400 hidden sm:block font-sans">
+                  {currentWork.title}
+                </p>
+              </div>
+            </div>
+
+            {/* Controles: Zoom y Cerrar */}
+            <div className="flex items-center gap-2 sm:gap-3">
+              <button
+                type="button"
+                onClick={() => setIsZoomed(prev => !prev)}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm bg-zinc-800 hover:bg-zinc-700 text-white font-sans text-xs font-semibold tracking-wide transition-colors cursor-pointer"
+                title={isZoomed ? 'Restablecer vista 100%' : 'Hacer zoom al 200%'}
+              >
+                {isZoomed ? <ZoomOut size={16} /> : <ZoomIn size={16} />}
+                <span className="hidden sm:inline">{isZoomed ? 'Restablecer' : 'Zoom 2x'}</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={closeModal}
+                className="p-1.5 rounded-sm bg-zinc-800 hover:bg-[#EE2737] text-white transition-colors cursor-pointer"
+                title="Cerrar modal (Esc)"
+              >
+                <X size={20} />
+              </button>
+            </div>
+          </div>
+
+          {/* Área Central: Flechas y Visor con Zoom */}
+          <div 
+            className="relative flex-1 w-full flex items-center justify-center overflow-hidden p-2 sm:p-6"
+            onClick={closeModal}
+            onTouchStart={(e) => {
+              touchStartRef.current = e.touches[0].clientX;
+            }}
+            onTouchEnd={(e) => {
+              if (touchStartRef.current === null) return;
+              const touchEnd = e.changedTouches[0].clientX;
+              const diff = touchStartRef.current - touchEnd;
+              if (diff > 50) handleModalNext();
+              if (diff < -50) handleModalPrev();
+              touchStartRef.current = null;
+            }}
+          >
+            {/* Flecha Izquierda */}
+            <button
+              type="button"
+              onClick={handleModalPrev}
+              className="absolute left-3 sm:left-8 z-30 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-zinc-900/80 hover:bg-[#EE2737] border border-white/10 text-white flex items-center justify-center transition-all duration-200 shadow-xl cursor-pointer hover:scale-105 active:scale-95"
+              title="Foto anterior (←)"
+            >
+              <ChevronLeft size={24} />
+            </button>
+
+            {/* Contenedor de la Imagen con Zoom */}
+            <div 
+              className={`relative max-w-5xl max-h-[70vh] sm:max-h-[76vh] flex items-center justify-center overflow-hidden rounded-md transition-all duration-300 ${
+                isZoomed ? 'cursor-zoom-out' : 'cursor-zoom-in'
+              }`}
+              onClick={handleToggleZoom}
+            >
+              <img 
+                src={currentImages[modalImageIndex]?.url} 
+                alt={currentImages[modalImageIndex]?.alt}
+                style={{
+                  transformOrigin: `${zoomOrigin.x}% ${zoomOrigin.y}%`
+                }}
+                className={`max-w-full max-h-[70vh] sm:max-h-[76vh] object-contain rounded-md transition-transform duration-300 ease-out select-none ${
+                  isZoomed ? 'scale-[2.1]' : 'scale-100'
+                }`}
+              />
+            </div>
+
+            {/* Flecha Derecha */}
+            <button
+              type="button"
+              onClick={handleModalNext}
+              className="absolute right-3 sm:right-8 z-30 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-zinc-900/80 hover:bg-[#EE2737] border border-white/10 text-white flex items-center justify-center transition-all duration-200 shadow-xl cursor-pointer hover:scale-105 active:scale-95"
+              title="Foto siguiente (→)"
+            >
+              <ChevronRight size={24} />
+            </button>
+          </div>
+
+          {/* Tira Inferior: Miniaturas en el Modal + Indicaciones de Teclado */}
+          <div 
+            className="w-full border-t border-zinc-800 bg-black/60 backdrop-blur-md px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-3 z-30"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Lista de Miniaturas Horizontales */}
+            <div className="flex items-center justify-center gap-2 overflow-x-auto w-full sm:w-auto">
+              {currentImages.map((img, idx) => {
+                const isActive = idx === modalImageIndex;
+                return (
+                  <button
+                    key={'modal-thumb-' + idx}
+                    type="button"
+                    onClick={() => {
+                      setIsZoomed(false);
+                      setModalImageIndex(idx);
+                    }}
+                    className={`relative w-14 h-10 sm:w-16 sm:h-11 rounded-sm overflow-hidden border-2 transition-all duration-200 cursor-pointer ${
+                      isActive 
+                        ? 'border-[#EE2737] ring-1 ring-[#EE2737]/50 scale-105 opacity-100' 
+                        : 'border-transparent opacity-50 hover:opacity-90'
+                    }`}
+                    title={img.title}
+                  >
+                    <img 
+                      src={img.url} 
+                      alt={img.alt} 
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Atajos de Teclado */}
+            <div className="hidden sm:flex items-center gap-4 text-[11px] font-mono text-zinc-400">
+              <span>← / → Cambiar foto</span>
+              <span>•</span>
+              <span>Clic: Zoom</span>
+              <span>•</span>
+              <span>ESC: Cerrar</span>
+            </div>
+          </div>
+        </div>
+      )}
 
       <style>{`
         .no-scrollbar::-webkit-scrollbar {
