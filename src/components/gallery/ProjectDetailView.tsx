@@ -1,27 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   ChevronLeft, 
   ChevronRight, 
   ZoomIn, 
   ZoomOut, 
-  ShieldCheck, 
-  Clock, 
-  Layers, 
-  MapPin, 
-  Calendar, 
-  Check, 
   ArrowLeft,
   Share2,
-  ExternalLink
+  X,
+  Check,
+  Copy,
+  Play,
+  ExternalLink,
+  MessageCircle,
+  Smartphone
 } from 'lucide-react';
-import type { ProjectItem } from '../../lib/projects';
+import type { ProjectItem, MediaItem } from '../../lib/projects';
 
 interface ProjectDetailViewProps {
   project: ProjectItem;
   relatedProjects: ProjectItem[];
 }
 
-export function WhatsAppIcon({ size = 20, className = '' }: { size?: number; className?: string }) {
+// Icono SVG exacto de WhatsApp
+export function WhatsAppIcon({ size = 18, className = '' }: { size?: number; className?: string }) {
   return (
     <svg
       xmlns="http://www.w3.org"
@@ -37,17 +38,94 @@ export function WhatsAppIcon({ size = 20, className = '' }: { size?: number; cla
 }
 
 export default function ProjectDetailView({ project, relatedProjects }: ProjectDetailViewProps) {
-  const images = project.galleryImages && project.galleryImages.length > 0 
-    ? project.galleryImages 
-    : [project.featuredImage];
+  // Construir lista de medios combinando galleryMedia si existe, o galleryImages, o featuredImage
+  const mediaList: MediaItem[] = React.useMemo(() => {
+    if (project.galleryMedia && project.galleryMedia.length > 0) {
+      return project.galleryMedia;
+    }
+    if (project.galleryImages && project.galleryImages.length > 0) {
+      return project.galleryImages.map(img => ({
+        type: 'image' as const,
+        url: img,
+        title: project.title
+      }));
+    }
+    return [
+      {
+        type: 'image' as const,
+        url: project.featuredImage,
+        title: project.title
+      }
+    ];
+  }, [project]);
 
-  const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isZoomed, setIsZoomed] = useState(false);
   const [zoomOrigin, setZoomOrigin] = useState({ x: 50, y: 50 });
+
+  // Estado del modal de compartir
+  const [isShareOpen, setIsShareOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [currentUrl, setCurrentUrl] = useState('');
 
-  const activeImage = images[activeImageIndex] || project.featuredImage;
+  const currentMedia = mediaList[activeIndex] || mediaList[0];
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setCurrentUrl(window.location.href);
+    }
+  }, []);
+
+  // Bloquear scroll cuando el modal Lightbox está abierto
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+      setIsZoomed(false);
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isModalOpen]);
+
+  // Atajos de teclado para el Lightbox modal (ESC, flechas, Z)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (isShareOpen && e.key === 'Escape') {
+        setIsShareOpen(false);
+        return;
+      }
+
+      if (!isModalOpen) return;
+
+      if (e.key === 'Escape') {
+        setIsModalOpen(false);
+      } else if (e.key === 'ArrowLeft') {
+        handlePrevMedia();
+      } else if (e.key === 'ArrowRight') {
+        handleNextMedia();
+      } else if (e.key === 'z' || e.key === 'Z') {
+        setIsZoomed(prev => !prev);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isModalOpen, isShareOpen, mediaList.length]);
+
+  const handlePrevMedia = () => {
+    setIsZoomed(false);
+    setActiveIndex(prev => (prev - 1 + mediaList.length) % mediaList.length);
+  };
+
+  const handleNextMedia = () => {
+    setIsZoomed(false);
+    setActiveIndex(prev => (prev + 1) % mediaList.length);
+  };
+
+  // Toggle de zoom con origen en las coordenadas del clic del usuario
   const handleToggleZoom = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!isZoomed) {
       const rect = e.currentTarget.getBoundingClientRect();
@@ -60,36 +138,50 @@ export default function ProjectDetailView({ project, relatedProjects }: ProjectD
     }
   };
 
-  const handlePrevImage = () => {
+  const openLightbox = (index?: number) => {
+    if (typeof index === 'number') {
+      setActiveIndex(index);
+    }
     setIsZoomed(false);
-    setActiveImageIndex(prev => (prev - 1 + images.length) % images.length);
+    setIsModalOpen(true);
   };
 
-  const handleNextImage = () => {
-    setIsZoomed(false);
-    setActiveImageIndex(prev => (prev + 1) % images.length);
-  };
-
-  const handleShare = () => {
+  // Manejo de compartir y copiado al portapapeles
+  const handleCopyLink = () => {
     if (typeof navigator !== 'undefined' && navigator.clipboard) {
-      navigator.clipboard.writeText(window.location.href);
+      navigator.clipboard.writeText(currentUrl);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      setTimeout(() => setCopied(false), 2200);
     }
   };
 
-  const whatsappMessage = encodeURIComponent(
-    `¡Hola Imagen Artis! Vi en su galería el proyecto "${project.title}" (ID: ${project.id}) y me gustaría cotizar un trabajo similar para mi empresa/vehículo.`
-  );
+  const handleNativeShare = async () => {
+    if (typeof navigator !== 'undefined' && navigator.share) {
+      try {
+        await navigator.share({
+          title: project.title,
+          text: `Mira este proyecto de ${project.categoryLabel} en Imagen Artis: ${project.title}`,
+          url: currentUrl
+        });
+      } catch (err) {
+        // Usuario canceló compartir
+      }
+    }
+  };
+
+  // Mensaje predeterminado de WhatsApp para cotización
+  const whatsappQuoteUrl = `https://wa.me/51994097417?text=${encodeURIComponent(
+    `¡Hola Imagen Artis! Vi en su galería el proyecto "${project.title}" y deseo cotizar un trabajo similar.`
+  )}`;
 
   return (
     <article className="w-full bg-white dark:bg-zinc-950 text-zinc-900 dark:text-white transition-colors duration-300">
       
-      {/* 1. Barra Superior con Breadcrumbs y Botón de Volver */}
+      {/* 1. Barra Superior con Breadcrumbs, Volver y Compartir */}
       <div className="pt-28 sm:pt-32 md:pt-36 pb-4 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between gap-4 py-2 border-b border-zinc-200 dark:border-zinc-800/80">
           
-          {/* Navegación Breadcrumb */}
+          {/* Breadcrumb de navegación */}
           <nav className="flex items-center gap-2 text-xs font-sans text-zinc-500 dark:text-zinc-400 overflow-x-auto no-scrollbar whitespace-nowrap">
             <a href="/" className="hover:text-zinc-900 dark:hover:text-white transition-colors">
               Inicio
@@ -107,309 +199,203 @@ export default function ProjectDetailView({ project, relatedProjects }: ProjectD
             </a>
           </nav>
 
-          {/* Botones de Acción Superior (Volver y Compartir) */}
-          <div className="flex items-center gap-3 shrink-0">
+          {/* Botones de Acción Superior */}
+          <div className="flex items-center gap-2.5 shrink-0">
+            {/* Botón de Compartir con Modal */}
             <button
               type="button"
-              onClick={handleShare}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-xs font-sans text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white transition-colors cursor-pointer"
-              title="Copiar enlace"
+              onClick={() => setIsShareOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-xs font-sans font-medium text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white transition-colors cursor-pointer"
+              title="Compartir este proyecto"
             >
               <Share2 size={13} />
-              <span className="hidden sm:inline">{copied ? '¡Copiado!' : 'Compartir'}</span>
+              <span className="hidden sm:inline">Compartir</span>
             </button>
 
+            {/* Volver a Galería */}
             <a
               href="/galeria"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-sm bg-zinc-100 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 text-xs font-sans font-semibold text-zinc-900 dark:text-white transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm bg-zinc-100 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 text-xs font-sans font-semibold text-zinc-900 dark:text-white transition-colors"
             >
-              <ArrowLeft size={14} />
-              <span>Volver a Galería</span>
+              <ArrowLeft size={13} />
+              <span className="hidden sm:inline">Volver</span>
             </a>
           </div>
 
         </div>
       </div>
 
-      {/* 2. Cuerpo Principal Estilo Ficha de Producto E-Commerce */}
+      {/* 2. Cuerpo Principal: 60% Visuales (Izquierda) / 40% Contenido (Derecha) en PC y Tablet */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+        <div className="flex flex-col lg:flex-row items-start gap-8 lg:gap-12">
           
-          {/* COLUMNA IZQUIERDA (7 Columnas): Galería de Imágenes de Producto con Zoom */}
-          <div className="lg:col-span-7 flex flex-col gap-4">
+          {/* COLUMNA IZQUIERDA (60%): Visuales, Fotos, Videos YouTube, Video MP4 */}
+          <div className="w-full lg:w-[60%] shrink-0 flex flex-col gap-4">
             
-            {/* Visor Principal de Foto en Alta Resolución */}
-            <div className="relative w-full aspect-[4/3] sm:aspect-[16/11] bg-black rounded-md border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-none select-none group">
+            {/* Visor Principal */}
+            <div className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-black rounded-md border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-none select-none group">
               
-              {/* Contenedor con Zoom Interactivo */}
-              <div 
-                className={`w-full h-full flex items-center justify-center overflow-hidden ${
-                  isZoomed ? 'cursor-zoom-out' : 'cursor-zoom-in'
-                }`}
-                onClick={handleToggleZoom}
-                title={isZoomed ? 'Haz clic para restablecer tamaño' : 'Haz clic para zoom 2x'}
-              >
-                <img
-                  src={activeImage}
-                  alt={project.title}
-                  style={{ transformOrigin: `${zoomOrigin.x}% ${zoomOrigin.y}%` }}
-                  className={`w-full h-full object-cover transition-transform duration-300 ease-out ${
-                    isZoomed ? 'scale-[2.1]' : 'scale-100'
-                  }`}
-                  loading="eager"
-                />
-              </div>
+              {/* RENDERIZADO CONDICIONAL DE MEDIOS */}
+              {currentMedia.type === 'youtube' ? (
+                <div className="w-full h-full bg-black flex items-center justify-center">
+                  <iframe
+                    src={currentMedia.url}
+                    title={currentMedia.title || project.title}
+                    className="w-full h-full border-0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                </div>
+              ) : currentMedia.type === 'video' ? (
+                <div className="w-full h-full bg-black flex items-center justify-center">
+                  <video
+                    src={currentMedia.url}
+                    poster={currentMedia.thumbnail || project.featuredImage}
+                    controls
+                    playsInline
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              ) : (
+                /* Imagen con Clic para Abrir Modal Lightbox */
+                <div 
+                  className="w-full h-full flex items-center justify-center cursor-pointer group relative overflow-hidden"
+                  onClick={() => openLightbox(activeIndex)}
+                  title="Haz clic para ver de cerca y hacer zoom"
+                >
+                  <img
+                    src={currentMedia.url}
+                    alt={currentMedia.title || project.title}
+                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                    loading="eager"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity pointer-events-none" />
+                </div>
+              )}
 
-              {/* Botón Flotante de Zoom */}
+              {/* ÚNICO BADGE PERMITIDO: Botón de Zoom (Abre el Lightbox Modal como en Diseño Servicios) */}
               <button
                 type="button"
-                onClick={() => setIsZoomed(prev => !prev)}
-                className="absolute top-3.5 right-3.5 z-20 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-sm bg-black/75 hover:bg-[#EE2737] text-white font-sans text-xs font-semibold backdrop-blur-md transition-colors cursor-pointer border border-white/10"
+                onClick={() => openLightbox(activeIndex)}
+                className="absolute top-3.5 right-3.5 z-20 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm bg-black/75 hover:bg-[#EE2737] text-white font-sans text-xs font-semibold backdrop-blur-md transition-colors cursor-pointer border border-white/10"
+                title="Ampliar vista en modal interactivo"
               >
-                {isZoomed ? <ZoomOut size={13} /> : <ZoomIn size={13} />}
-                <span>{isZoomed ? 'Restablecer' : 'Zoom 2x'}</span>
+                <ZoomIn size={13} />
+                <span>Zoom</span>
               </button>
 
-              {/* Flechas de Navegación de Fotos (si hay más de 1 imagen) */}
-              {images.length > 1 && (
+              {/* Flechas de Navegación de Medios (si hay más de 1) */}
+              {mediaList.length > 1 && (
                 <>
                   <button
                     type="button"
-                    onClick={handlePrevImage}
+                    onClick={handlePrevMedia}
                     className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-black/70 hover:bg-[#EE2737] text-white flex items-center justify-center transition-all cursor-pointer shadow-lg hover:scale-105 active:scale-95 border border-white/10"
-                    title="Foto anterior"
+                    title="Medio anterior"
                   >
                     <ChevronLeft size={18} />
                   </button>
                   <button
                     type="button"
-                    onClick={handleNextImage}
+                    onClick={handleNextMedia}
                     className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-black/70 hover:bg-[#EE2737] text-white flex items-center justify-center transition-all cursor-pointer shadow-lg hover:scale-105 active:scale-95 border border-white/10"
-                    title="Foto siguiente"
+                    title="Medio siguiente"
                   >
                     <ChevronRight size={18} />
                   </button>
                 </>
               )}
 
-              {/* Indicador de posición de foto */}
-              {images.length > 1 && (
-                <div className="absolute bottom-3 right-3 z-20 px-2 py-0.5 rounded-xs bg-black/70 text-white font-mono text-[10px] backdrop-blur-xs">
-                  {activeImageIndex + 1} / {images.length}
+              {/* Indicador de posición de medio */}
+              {mediaList.length > 1 && (
+                <div className="absolute bottom-3 right-3 z-20 px-2 py-0.5 rounded-xs bg-black/75 text-white font-mono text-[10px] backdrop-blur-xs">
+                  {activeIndex + 1} / {mediaList.length}
                 </div>
               )}
             </div>
 
-            {/* Miniaturas Horizontales de Selección de Foto */}
-            {images.length > 1 && (
-              <div className="grid grid-cols-4 sm:grid-cols-5 gap-2.5">
-                {images.map((img, idx) => {
-                  const isActive = idx === activeImageIndex;
+            {/* Miniaturas Horizontales de Selección de Medio */}
+            {mediaList.length > 1 && (
+              <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2.5">
+                {mediaList.map((media, idx) => {
+                  const isActive = idx === activeIndex;
+                  const thumbSrc = media.thumbnail || (media.type === 'image' ? media.url : project.featuredImage);
+                  const isVideoType = media.type === 'video' || media.type === 'youtube';
+
                   return (
                     <button
                       key={idx}
                       type="button"
-                      onClick={() => {
-                        setIsZoomed(false);
-                        setActiveImageIndex(idx);
-                      }}
-                      className={`relative aspect-[16/11] rounded-sm overflow-hidden border-2 transition-all cursor-pointer ${
+                      onClick={() => setActiveIndex(idx)}
+                      className={`relative aspect-[16/11] rounded-sm overflow-hidden border-2 transition-all cursor-pointer bg-black ${
                         isActive
                           ? 'border-[#EE2737] ring-1 ring-[#EE2737]/40 opacity-100 scale-[1.02]'
                           : 'border-zinc-200 dark:border-zinc-800 opacity-60 hover:opacity-100 hover:border-zinc-400'
                       }`}
+                      title={media.title || `Elemento ${idx + 1}`}
                     >
-                      <img src={img} alt={`Vista ${idx + 1}`} className="w-full h-full object-cover" />
+                      <img 
+                        src={thumbSrc} 
+                        alt={`Miniatura ${idx + 1}`} 
+                        className="w-full h-full object-cover" 
+                      />
+
+                      {/* Icono de Reproducción si es Video o YouTube */}
+                      {isVideoType && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+                          <div className="w-5 h-5 rounded-full bg-[#EE2737] text-white flex items-center justify-center">
+                            <Play size={10} fill="white" className="ml-0.5" />
+                          </div>
+                        </div>
+                      )}
                     </button>
                   );
                 })}
               </div>
             )}
 
-            {/* Bloque Destacado de Garantía y Confianza */}
-            <div className="p-4 sm:p-5 rounded-md bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 grid grid-cols-1 sm:grid-cols-3 gap-4 mt-2">
-              <div className="flex items-start gap-2.5">
-                <ShieldCheck size={20} className="text-[#EE2737] shrink-0 mt-0.5" />
-                <div>
-                  <h4 className="text-xs font-bold text-zinc-900 dark:text-white font-sans">Materiales Originales</h4>
-                  <p className="text-[11px] text-zinc-500 dark:text-zinc-400 font-sans mt-0.5">3M, Avery Dennison y Arlon certificados</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-2.5">
-                <Clock size={20} className="text-[#EE2737] shrink-0 mt-0.5" />
-                <div>
-                  <h4 className="text-xs font-bold text-zinc-900 dark:text-white font-sans">Entrega Puntual</h4>
-                  <p className="text-[11px] text-zinc-500 dark:text-zinc-400 font-sans mt-0.5">Cronograma de producción garantizado</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-2.5">
-                <Layers size={20} className="text-[#EE2737] shrink-0 mt-0.5" />
-                <div>
-                  <h4 className="text-xs font-bold text-zinc-900 dark:text-white font-sans">Taller Propio</h4>
-                  <p className="text-[11px] text-zinc-500 dark:text-zinc-400 font-sans mt-0.5">Instalación y fabricación sin intermediarios</p>
-                </div>
-              </div>
-            </div>
-
           </div>
 
-          {/* COLUMNA DERECHA (5 Columnas): Ficha de Producto, Especificaciones y Botón de Cotización */}
-          <div className="lg:col-span-5 flex flex-col justify-start lg:sticky lg:top-28">
+          {/* COLUMNA DERECHA (40%): SOLO Título, Descripción Corta y Botón de Cotizar con Efecto WhatsApp */}
+          <div className="w-full lg:w-[40%] flex flex-col justify-start">
             
-            {/* Tag de Categoría */}
-            <div className="mb-2">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xs bg-[#EE2737]/10 text-[#EE2737] border border-[#EE2737]/25 text-xs font-mono font-bold uppercase tracking-wider">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#EE2737]"></span>
-                {project.categoryLabel}
-              </span>
-            </div>
-
-            {/* Título Principal */}
-            <h1 className="text-2xl sm:text-3xl md:text-[2rem] font-display font-extrabold tracking-tight text-zinc-900 dark:text-white leading-[1.2] mb-3">
+            {/* 1. Título Principal (Sin badges ni categorías encima) */}
+            <h1 className="text-2xl sm:text-3xl md:text-[2.2rem] font-display font-extrabold tracking-tight text-zinc-900 dark:text-white leading-[1.15] mb-4">
               {project.title}
             </h1>
 
-            {/* Metadatos (Cliente, Ubicación, Año) */}
-            <div className="flex flex-wrap items-center gap-y-1 gap-x-4 text-xs font-mono text-zinc-500 dark:text-zinc-400 pb-4 border-b border-zinc-200 dark:border-zinc-800">
-              <span className="font-semibold text-zinc-800 dark:text-zinc-200">
-                Cliente: {project.client}
-              </span>
-              {project.location && (
-                <span className="flex items-center gap-1">
-                  <MapPin size={12} className="text-[#EE2737]" />
-                  {project.location}
-                </span>
-              )}
-              {project.year && (
-                <span className="flex items-center gap-1">
-                  <Calendar size={12} />
-                  {project.year}
-                </span>
-              )}
-            </div>
+            {/* 2. Descripción Corta */}
+            <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-300 font-sans leading-relaxed">
+              {project.description}
+            </p>
 
-            {/* Indicador de Cotización a Medida */}
-            <div className="py-4 border-b border-zinc-200 dark:border-zinc-800">
-              <span className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider block mb-1">
-                Modalidad del Servicio
-              </span>
-              <div className="flex items-baseline gap-2">
-                <span className="text-xl sm:text-2xl font-display font-bold text-zinc-900 dark:text-white">
-                  {project.priceEstimate || 'Cotización Personalizada'}
-                </span>
-              </div>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400 font-sans mt-1">
-                Presupuesto adaptado a las dimensiones, materiales y requerimientos específicos de tu marca o vehículo.
-              </p>
-            </div>
-
-            {/* Descripción del Proyecto */}
-            <div className="py-4 border-b border-zinc-200 dark:border-zinc-800">
-              <p className="text-xs sm:text-sm text-zinc-700 dark:text-zinc-300 font-sans leading-relaxed">
-                {project.description}
-              </p>
-
-              {/* Puntos Destacados */}
-              {project.highlights && project.highlights.length > 0 && (
-                <ul className="mt-3 space-y-1.5">
-                  {project.highlights.map((h, i) => (
-                    <li key={i} className="flex items-start gap-2 text-xs text-zinc-700 dark:text-zinc-300 font-sans">
-                      <span className="text-[#EE2737] font-bold shrink-0 mt-0.5">✓</span>
-                      <span>{h}</span>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-
-            {/* Ficha Técnica (Especificaciones de Materiales y Técnica) */}
-            <div className="py-4 space-y-4 border-b border-zinc-200 dark:border-zinc-800">
-              <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-900 dark:text-white">
-                Ficha Técnica del Proyecto
-              </h3>
-
-              {/* Materiales */}
-              <div>
-                <span className="text-[11px] font-mono text-zinc-500 dark:text-zinc-400 block mb-1.5">
-                  Materiales Certificados:
-                </span>
-                <div className="flex flex-wrap gap-1.5">
-                  {project.materials.map((mat, i) => (
-                    <span 
-                      key={i}
-                      className="inline-block px-2.5 py-1 rounded-xs bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-[11px] font-sans font-medium text-zinc-800 dark:text-zinc-200"
-                    >
-                      {mat}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Técnica */}
-              <div>
-                <span className="text-[11px] font-mono text-zinc-500 dark:text-zinc-400 block mb-0.5">
-                  Técnica Aplicada:
-                </span>
-                <p className="text-xs text-zinc-700 dark:text-zinc-300 font-sans leading-snug">
-                  {project.technique}
-                </p>
-              </div>
-
-              {/* Tiempo y Garantía */}
-              <div className="grid grid-cols-2 gap-3 pt-1">
-                <div className="p-2.5 rounded-sm bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
-                  <span className="text-[10px] font-mono uppercase text-zinc-400 block">Tiempo de Ejecución</span>
-                  <span className="text-xs font-bold text-zinc-900 dark:text-white block mt-0.5">
-                    {project.executionTime}
-                  </span>
-                </div>
-                <div className="p-2.5 rounded-sm bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
-                  <span className="text-[10px] font-mono uppercase text-zinc-400 block">Garantía Escrita</span>
-                  <span className="text-xs font-bold text-zinc-900 dark:text-white block mt-0.5 truncate" title={project.warranty}>
-                    {project.warranty}
-                  </span>
-                </div>
-              </div>
-
-            </div>
-
-            {/* 3. CAJA DE COMPRA / COTIZACIÓN DIRECTA (High Conversion Buy Box) */}
-            <div className="pt-6 flex flex-col gap-3">
-              
-              {/* Botón Primario de WhatsApp (Estilo Add-to-Cart) */}
+            {/* 3. Botón de Cotizar Trabajo con Efecto WhatsApp Idéntico al Navbar y CTA */}
+            <div className="mt-8 pt-6 border-t border-zinc-200 dark:border-zinc-800/80 flex flex-col gap-2.5">
               <a
-                href={`https://wa.me/51994097417?text=${whatsappMessage}`}
+                href={whatsappQuoteUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full inline-flex items-center justify-center gap-2.5 py-4 px-6 rounded-sm bg-[#EE2737] hover:bg-zinc-900 dark:hover:bg-white text-white dark:hover:text-black font-sans text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-200 shadow-none text-center select-none group"
+                className="group w-full inline-flex items-center justify-center bg-[#EE2737] hover:bg-green-700 text-white font-sans font-bold tracking-wider py-4 px-6 rounded-sm text-xs sm:text-sm uppercase transition-all duration-300 overflow-hidden shadow-none cursor-pointer text-center select-none"
               >
-                <WhatsAppIcon size={18} />
-                <span>COTIZAR ESTE PROYECTO</span>
-                <span className="inline-block transition-transform duration-200 group-hover:translate-x-1">→</span>
+                {/* Icono de WhatsApp con animación de expansión suave en hover */}
+                <WhatsAppIcon 
+                  size={18} 
+                  className="w-0 opacity-0 group-hover:w-5 group-hover:opacity-100 group-hover:mr-2.5 transition-all duration-300 shrink-0" 
+                />
+                <span>COTIZAR TRABAJO</span>
+                <span className="ml-2 group-hover:translate-x-1 transition-transform duration-200">→</span>
               </a>
 
-              {/* Botón Secundario de Consulta Técnica */}
-              <a
-                href="https://wa.me/51994097417?text=¡Hola!%20Deseo%20hacer%20una%20consulta%20técnica%20sobre%20materiales%20y%20factibilidad"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-sm bg-zinc-100 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-white font-sans text-xs font-semibold tracking-wide transition-colors text-center"
-              >
-                <span>Consultar dudas con un asesor técnico</span>
-                <ExternalLink size={13} />
-              </a>
-
-              <p className="text-[11px] font-mono text-zinc-400 text-center mt-1">
-                Atención rápida • Asesoría de materiales en nuestro taller o por videollamada
+              <p className="text-[11px] font-mono text-zinc-400 text-center">
+                Respuesta inmediata por WhatsApp • Asesoría personalizada
               </p>
-
             </div>
 
           </div>
 
         </div>
 
-        {/* 4. PROYECTOS RELACIONADOS DE LA MISMA CATEGORÍA */}
+        {/* 3. PROYECTOS RELACIONADOS (Carrusel Infinito si son > 3; Estático si son <= 3) */}
         {relatedProjects && relatedProjects.length > 0 && (
           <section className="mt-20 pt-12 border-t border-zinc-200 dark:border-zinc-800">
             <div className="flex items-center justify-between mb-6">
@@ -429,38 +415,417 @@ export default function ProjectDetailView({ project, relatedProjects }: ProjectD
               </a>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {relatedProjects.map(rel => (
-                <a
-                  key={rel.id}
-                  href={`/galeria/${rel.id}`}
-                  className="group block rounded-md border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden transition-all duration-300 hover:border-zinc-400 dark:hover:border-zinc-600"
-                >
-                  <div className="relative aspect-[16/10] overflow-hidden bg-black">
-                    <img 
-                      src={rel.featuredImage} 
-                      alt={rel.title}
-                      loading="lazy"
-                      className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
-                    <div className="absolute bottom-3 left-3 right-3 pointer-events-none">
-                      <h4 className="text-xs sm:text-sm font-display font-bold text-white leading-snug line-clamp-2 group-hover:text-[#EE2737] transition-colors">
-                        {rel.title}
-                      </h4>
-                      <p className="text-[11px] text-zinc-300 font-sans mt-0.5 truncate">
-                        {rel.client}
-                      </p>
+            {relatedProjects.length > 3 ? (
+              /* CARRUSEL INFINITO AUTOMÁTICO (Marquee continuo con pausa en hover) */
+              <div className="relative w-full overflow-hidden group select-none py-2">
+                <div className="flex items-center gap-5 w-max animate-marquee hover:[animation-play-state:paused]">
+                  {/* Duplicar lista para bucle infinito sin saltos */}
+                  {[...relatedProjects, ...relatedProjects].map((rel, i) => (
+                    <a
+                      key={rel.id + '-' + i}
+                      href={`/galeria/${rel.id}`}
+                      className="w-72 sm:w-80 shrink-0 block rounded-md border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden transition-all duration-300 hover:border-zinc-400 dark:hover:border-zinc-600"
+                    >
+                      <div className="relative aspect-[16/10] overflow-hidden bg-black">
+                        <img 
+                          src={rel.featuredImage} 
+                          alt={rel.title}
+                          loading="lazy"
+                          className="w-full h-full object-cover transition-transform duration-700 ease-out hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
+                        <div className="absolute bottom-3 left-3 right-3 pointer-events-none">
+                          <h4 className="text-xs sm:text-sm font-display font-bold text-white leading-snug line-clamp-2">
+                            {rel.title}
+                          </h4>
+                        </div>
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              /* GRILLA ESTÁTICA SI SON <= 3 */
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {relatedProjects.map(rel => (
+                  <a
+                    key={rel.id}
+                    href={`/galeria/${rel.id}`}
+                    className="group block rounded-md border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden transition-all duration-300 hover:border-zinc-400 dark:hover:border-zinc-600"
+                  >
+                    <div className="relative aspect-[16/10] overflow-hidden bg-black">
+                      <img 
+                        src={rel.featuredImage} 
+                        alt={rel.title}
+                        loading="lazy"
+                        className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
+                      <div className="absolute bottom-3 left-3 right-3 pointer-events-none">
+                        <h4 className="text-xs sm:text-sm font-display font-bold text-white leading-snug line-clamp-2 group-hover:text-[#EE2737] transition-colors">
+                          {rel.title}
+                        </h4>
+                      </div>
                     </div>
-                  </div>
-                </a>
-              ))}
-            </div>
+                  </a>
+                ))}
+              </div>
+            )}
           </section>
         )}
 
       </div>
 
+      {/* 4. MODAL LIGHTBOX DE ZOOM Y PANTALLA COMPLETA (Idéntico al de Diseño Servicios) */}
+      {isModalOpen && (
+        <div 
+          className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex flex-col justify-between select-none animate-fadeIn"
+          onClick={() => setIsModalOpen(false)}
+        >
+          {/* Header Superior del Modal */}
+          <div 
+            className="w-full border-b border-zinc-800 bg-black/60 backdrop-blur-md px-4 sm:px-6 py-3 flex items-center justify-between z-30"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Info y Contador */}
+            <div className="flex items-center gap-3">
+              <span className="px-2.5 py-1 rounded-sm bg-[#EE2737] text-white font-mono text-xs font-bold uppercase">
+                {String(activeIndex + 1).padStart(2, '0')} / {String(mediaList.length).padStart(2, '0')}
+              </span>
+              <div>
+                <h4 className="font-display font-bold text-sm sm:text-base text-white truncate max-w-[200px] sm:max-w-md">
+                  {currentMedia.title || project.title}
+                </h4>
+              </div>
+            </div>
+
+            {/* Controles de Zoom y Cerrar */}
+            <div className="flex items-center gap-2 sm:gap-3">
+              {currentMedia.type === 'image' && (
+                <button
+                  type="button"
+                  onClick={() => setIsZoomed(prev => !prev)}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm bg-zinc-800 hover:bg-zinc-700 text-white font-sans text-xs font-semibold tracking-wide transition-colors cursor-pointer"
+                  title={isZoomed ? 'Restablecer vista 100%' : 'Hacer zoom al 200%'}
+                >
+                  {isZoomed ? <ZoomOut size={16} /> : <ZoomIn size={16} />}
+                  <span className="hidden sm:inline">{isZoomed ? 'Restablecer' : 'Zoom 2x'}</span>
+                </button>
+              )}
+
+              <button
+                type="button"
+                onClick={() => setIsModalOpen(false)}
+                className="p-1.5 rounded-sm bg-zinc-800 hover:bg-[#EE2737] text-white transition-colors cursor-pointer"
+                title="Cerrar modal (Esc)"
+              >
+                <X size={20} />
+              </button>
+            </div>
+          </div>
+
+          {/* Área Central: Flechas de Navegación y Visor con Zoom */}
+          <div 
+            className="relative flex-1 w-full flex items-center justify-center overflow-hidden p-2 sm:p-6"
+            onClick={() => setIsModalOpen(false)}
+          >
+            {/* Flecha Izquierda */}
+            {mediaList.length > 1 && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handlePrevMedia();
+                }}
+                className="absolute left-3 sm:left-8 z-30 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-zinc-900/80 hover:bg-[#EE2737] border border-white/10 text-white flex items-center justify-center transition-all duration-200 shadow-xl cursor-pointer hover:scale-105 active:scale-95"
+                title="Elemento anterior (←)"
+              >
+                <ChevronLeft size={24} />
+              </button>
+            )}
+
+            {/* Contenedor del Medio con Zoom */}
+            <div 
+              className={`relative max-w-5xl max-h-[70vh] sm:max-h-[76vh] flex items-center justify-center overflow-hidden rounded-md transition-all duration-300 ${
+                currentMedia.type === 'image' ? (isZoomed ? 'cursor-zoom-out' : 'cursor-zoom-in') : ''
+              }`}
+              onClick={(e) => {
+                e.stopPropagation();
+                if (currentMedia.type === 'image') {
+                  handleToggleZoom(e);
+                }
+              }}
+            >
+              {currentMedia.type === 'youtube' ? (
+                <div className="w-[85vw] max-w-4xl aspect-video bg-black rounded-md overflow-hidden">
+                  <iframe
+                    src={currentMedia.url}
+                    title={currentMedia.title || project.title}
+                    className="w-full h-full border-0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                </div>
+              ) : currentMedia.type === 'video' ? (
+                <div className="w-[85vw] max-w-4xl aspect-video bg-black rounded-md overflow-hidden flex items-center justify-center">
+                  <video
+                    src={currentMedia.url}
+                    poster={currentMedia.thumbnail || project.featuredImage}
+                    controls
+                    playsInline
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+              ) : (
+                <img 
+                  src={currentMedia.url} 
+                  alt={currentMedia.title || project.title}
+                  style={{
+                    transformOrigin: `${zoomOrigin.x}% ${zoomOrigin.y}%`
+                  }}
+                  className={`max-w-full max-h-[70vh] sm:max-h-[76vh] object-contain rounded-md transition-transform duration-300 ease-out select-none ${
+                    isZoomed ? 'scale-[2.1]' : 'scale-100'
+                  }`}
+                />
+              )}
+            </div>
+
+            {/* Flecha Derecha */}
+            {mediaList.length > 1 && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleNextMedia();
+                }}
+                className="absolute right-3 sm:right-8 z-30 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-zinc-900/80 hover:bg-[#EE2737] border border-white/10 text-white flex items-center justify-center transition-all duration-200 shadow-xl cursor-pointer hover:scale-105 active:scale-95"
+                title="Elemento siguiente (→)"
+              >
+                <ChevronRight size={24} />
+              </button>
+            )}
+          </div>
+
+          {/* Tira Inferior: Miniaturas en el Modal + Indicaciones de Teclado */}
+          <div 
+            className="w-full border-t border-zinc-800 bg-black/60 backdrop-blur-md px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-3 z-30"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Lista de Miniaturas Horizontales */}
+            <div className="flex items-center justify-center gap-2 overflow-x-auto w-full sm:w-auto no-scrollbar">
+              {mediaList.map((media, idx) => {
+                const isActive = idx === activeIndex;
+                const thumbSrc = media.thumbnail || (media.type === 'image' ? media.url : project.featuredImage);
+                return (
+                  <button
+                    key={'modal-thumb-' + idx}
+                    type="button"
+                    onClick={() => {
+                      setIsZoomed(false);
+                      setActiveIndex(idx);
+                    }}
+                    className={`relative w-14 h-10 sm:w-16 sm:h-11 rounded-sm overflow-hidden border-2 transition-all duration-200 cursor-pointer bg-black ${
+                      isActive 
+                        ? 'border-[#EE2737] ring-1 ring-[#EE2737]/50 scale-105 opacity-100' 
+                        : 'border-transparent opacity-50 hover:opacity-90'
+                    }`}
+                    title={media.title}
+                  >
+                    <img 
+                      src={thumbSrc} 
+                      alt={`Miniatura ${idx + 1}`} 
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Atajos de Teclado */}
+            <div className="hidden sm:flex items-center gap-4 text-[11px] font-mono text-zinc-400">
+              <span>← / → Cambiar</span>
+              <span>•</span>
+              <span>Clic: Zoom</span>
+              <span>•</span>
+              <span>Z: Zoom</span>
+              <span>•</span>
+              <span>ESC: Cerrar</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 5. MODAL FLOTANTE DE COMPARTIR (Sin interrumpir navegación ni vista) */}
+      {isShareOpen && (
+        <div 
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 select-none animate-fadeIn"
+          onClick={() => setIsShareOpen(false)}
+        >
+          <div 
+            className="w-full max-w-sm sm:max-w-md bg-white dark:bg-zinc-900 rounded-md border border-zinc-200 dark:border-zinc-800 shadow-2xl overflow-hidden p-6"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header del Modal */}
+            <div className="flex items-center justify-between pb-4 border-b border-zinc-200 dark:border-zinc-800">
+              <div className="flex items-center gap-2">
+                <Share2 size={16} className="text-[#EE2737]" />
+                <h3 className="font-display font-bold text-base sm:text-lg text-zinc-950 dark:text-white">
+                  Compartir Proyecto
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsShareOpen(false)}
+                className="w-8 h-8 rounded-full border border-zinc-200 dark:border-zinc-700 flex items-center justify-center text-zinc-500 hover:text-zinc-950 dark:hover:text-white transition-colors cursor-pointer"
+              >
+                <X size={15} />
+              </button>
+            </div>
+
+            {/* Opciones de Compartir en Redes */}
+            <div className="py-5 space-y-4">
+              <p className="text-xs font-sans text-zinc-500 dark:text-zinc-400">
+                Comparte este trabajo con clientes, socios o en tus redes sociales:
+              </p>
+
+              {/* Botones de Redes */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                {/* WhatsApp */}
+                <a
+                  href={`https://wa.me/?text=${encodeURIComponent(`Mira este trabajo de ${project.title}: ${currentUrl}`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-sm bg-zinc-50 dark:bg-zinc-800 hover:bg-green-500/10 hover:border-green-500/30 border border-zinc-200 dark:border-zinc-700 text-zinc-800 dark:text-zinc-200 hover:text-green-600 dark:hover:text-green-400 transition-colors text-xs font-semibold"
+                >
+                  <WhatsAppIcon size={20} className="text-green-500" />
+                  <span>WhatsApp</span>
+                </a>
+
+                {/* Facebook */}
+                <a
+                  href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-sm bg-zinc-50 dark:bg-zinc-800 hover:bg-blue-500/10 hover:border-blue-500/30 border border-zinc-200 dark:border-zinc-700 text-zinc-800 dark:text-zinc-200 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-xs font-semibold"
+                >
+                  <span className="font-bold text-base text-blue-600">f</span>
+                  <span>Facebook</span>
+                </a>
+
+                {/* X (Twitter) */}
+                <a
+                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(project.title)}&url=${encodeURIComponent(currentUrl)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-sm bg-zinc-50 dark:bg-zinc-800 hover:bg-zinc-950/10 hover:border-zinc-500/30 border border-zinc-200 dark:border-zinc-700 text-zinc-800 dark:text-zinc-200 hover:text-zinc-950 dark:hover:text-white transition-colors text-xs font-semibold"
+                >
+                  <span className="font-bold text-base">𝕏</span>
+                  <span>X / Twitter</span>
+                </a>
+
+                {/* LinkedIn */}
+                <a
+                  href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(currentUrl)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-sm bg-zinc-50 dark:bg-zinc-800 hover:bg-blue-600/10 hover:border-blue-600/30 border border-zinc-200 dark:border-zinc-700 text-zinc-800 dark:text-zinc-200 hover:text-blue-700 dark:hover:text-blue-400 transition-colors text-xs font-semibold"
+                >
+                  <span className="font-bold text-base text-[#0a66c2]">in</span>
+                  <span>LinkedIn</span>
+                </a>
+              </div>
+
+              {/* Caja de Copiar Link */}
+              <div className="pt-2">
+                <span className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider block mb-1.5">
+                  Enlace directo:
+                </span>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    readOnly
+                    value={currentUrl}
+                    className="flex-1 py-2 px-3 rounded-sm bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-xs text-zinc-800 dark:text-zinc-200 select-all font-mono"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleCopyLink}
+                    className={`inline-flex items-center gap-1.5 py-2 px-3.5 rounded-sm text-xs font-sans font-bold uppercase tracking-wider transition-colors cursor-pointer shrink-0 ${
+                      copied 
+                        ? 'bg-green-600 text-white' 
+                        : 'bg-[#EE2737] hover:bg-zinc-900 dark:hover:bg-white text-white dark:hover:text-black'
+                    }`}
+                  >
+                    {copied ? <Check size={14} /> : <Copy size={14} />}
+                    <span>{copied ? '¡Copiado!' : 'Copiar'}</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Botón de Compartir Nativo (si el navegador lo soporta) */}
+              {typeof navigator !== 'undefined' && typeof navigator.share === 'function' && (
+                <div className="pt-2">
+                  <button
+                    type="button"
+                    onClick={handleNativeShare}
+                    className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-sm border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-700 text-xs font-sans font-semibold text-zinc-800 dark:text-zinc-200 transition-colors cursor-pointer"
+                  >
+                    <Smartphone size={14} />
+                    <span>Compartir con aplicaciones de tu teléfono</span>
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Footer del Modal */}
+            <div className="pt-4 border-t border-zinc-200 dark:border-zinc-800 text-right">
+              <button
+                type="button"
+                onClick={() => setIsShareOpen(false)}
+                className="px-4 py-2 rounded-sm bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-xs font-sans font-semibold text-zinc-700 dark:text-zinc-300 transition-colors cursor-pointer"
+              >
+                Cerrar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <style>{`
+        .no-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .no-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        @keyframes marquee {
+          0% {
+            transform: translateX(0%);
+          }
+          100% {
+            transform: translateX(-50%);
+          }
+        }
+        .animate-marquee {
+          display: flex;
+          width: max-content;
+          animation: marquee 35s linear infinite;
+        }
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: scale(0.98);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+        .animate-fadeIn {
+          animation: fadeIn 0.2s ease-out forwards;
+        }
+      `}</style>
     </article>
   );
 }

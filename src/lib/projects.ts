@@ -1,3 +1,12 @@
+export interface MediaItem {
+  type: 'image' | 'video' | 'youtube' | 'social';
+  url: string;
+  thumbnail?: string;
+  title?: string;
+  platform?: 'youtube' | 'instagram' | 'tiktok' | 'facebook';
+  embedUrl?: string;
+}
+
 export interface ProjectItem {
   id: string;
   aliases?: string[];
@@ -10,6 +19,7 @@ export interface ProjectItem {
   priceEstimate?: string;
   featuredImage: string;
   galleryImages: string[];
+  galleryMedia?: MediaItem[];
   materials: string[];
   technique: string;
   executionTime: string;
@@ -40,6 +50,35 @@ export const ALL_PROJECTS: ProjectItem[] = [
       'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1200&q=80',
       'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80'
     ],
+    galleryMedia: [
+      {
+        type: 'image',
+        url: 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=1200&q=80',
+        title: 'Vista Frontal Hilux Camo'
+      },
+      {
+        type: 'video',
+        url: '/videos/fondo-hero.mp4',
+        thumbnail: 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=400&q=80',
+        title: 'Video Proceso de Instalación'
+      },
+      {
+        type: 'youtube',
+        url: 'https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ',
+        thumbnail: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=400&q=80',
+        title: 'Presentación en YouTube'
+      },
+      {
+        type: 'image',
+        url: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1200&q=80',
+        title: 'Detalle de Acabado Lateral'
+      },
+      {
+        type: 'image',
+        url: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80',
+        title: 'Inspección de Bordes y Esquinas'
+      }
+    ],
     materials: [
       'Vinil Fundido Avery Dennison SW900 Supreme',
       'Laminado Mate Anti-reflejo UV',
@@ -56,7 +95,7 @@ export const ALL_PROJECTS: ProjectItem[] = [
       'Acabado mate sedoso de fácil mantenimiento'
     ],
     aspectRatioClass: 'aspect-[3/4]',
-    tags: ['Hilux', 'Toyota', 'Camo', 'Avery Dennison', 'Off-road', 'Matte']
+    tags: ['Camionetas', 'Pickups', 'Camo', 'Avery Dennison', 'Off-road', 'Matte', 'Wrap Total']
   },
   {
     id: 'flota-rush-logistics',
@@ -74,6 +113,23 @@ export const ALL_PROJECTS: ProjectItem[] = [
       'https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=1200&q=80',
       'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1200&q=80'
     ],
+    galleryMedia: [
+      {
+        type: 'image',
+        url: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1200&q=80',
+        title: 'Flota Comercial de Vans'
+      },
+      {
+        type: 'image',
+        url: 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=1200&q=80',
+        title: 'Lateral de Furgón'
+      },
+      {
+        type: 'image',
+        url: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1200&q=80',
+        title: 'Compuertas Traseras con Señalización'
+      }
+    ],
     materials: [
       'Vinil Polimérico Arlon DPF 4500 de alta adherencia',
       'Laminado UV Arlon Series 3220 Brillante',
@@ -89,7 +145,7 @@ export const ALL_PROJECTS: ProjectItem[] = [
       'Fidelidad cromática estricta con el manual de identidad corporativa'
     ],
     aspectRatioClass: 'aspect-[16/11]',
-    tags: ['Flotas', 'Furgón', 'Logística', 'Arlon', 'Comercial']
+    tags: ['Flotas', 'Vans', 'Furgones', 'Logística', 'Arlon', 'Comercial']
   },
   {
     id: 'porsche-gt3-satin-black',
@@ -106,6 +162,24 @@ export const ALL_PROJECTS: ProjectItem[] = [
       'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80',
       'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&w=1200&q=80'
     ],
+    galleryMedia: [
+      {
+        type: 'image',
+        url: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80',
+        title: 'Porsche GT3 Acabado Satin Black'
+      },
+      {
+        type: 'video',
+        url: '/videos/fondo-hero.mp4',
+        thumbnail: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=400&q=80',
+        title: 'Inspección de Brillo y Textura'
+      },
+      {
+        type: 'image',
+        url: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&w=1200&q=80',
+        title: 'Vista Frontal con PPF Instalado'
+      }
+    ],
     materials: [
       'PPF Stek Dynoshield Poliuretano 8 mil Auto-regenerable',
       'Vinil 3M 2080 Series Satin Black',
@@ -121,7 +195,7 @@ export const ALL_PROJECTS: ProjectItem[] = [
       'Hidrofobia superior que repele suciedad y agua'
     ],
     aspectRatioClass: 'aspect-[4/3]',
-    tags: ['Porsche', 'GT3', 'PPF', 'Satin Black', 'Supercar', '3M']
+    tags: ['Supercars', 'Sports Cars', 'PPF', 'Satin Black', '3M', 'Protección']
   },
   {
     id: 'mercedes-sprinter-branding',
@@ -152,7 +226,7 @@ export const ALL_PROJECTS: ProjectItem[] = [
       'Material resistente al lavado frecuente'
     ],
     aspectRatioClass: 'aspect-[3/4]',
-    tags: ['Mercedes', 'Sprinter', 'Van', 'Comercial', 'Rotulado']
+    tags: ['Vans', 'Furgones', 'Comercial', 'Rotulado', 'Flotas']
   },
   {
     id: 'bmw-m4-nardo-grey',
@@ -183,7 +257,7 @@ export const ALL_PROJECTS: ProjectItem[] = [
       'Protección contra micro-impactos de piedras'
     ],
     aspectRatioClass: 'aspect-square',
-    tags: ['BMW', 'M4', 'Nardo Grey', 'Carbon Fiber', '3M']
+    tags: ['Sedán', 'Coupé', 'Sports Cars', '3M', 'Cambio de Color', 'Carbon Fiber']
   },
   {
     id: 'furgon-classic-bins',
@@ -213,7 +287,7 @@ export const ALL_PROJECTS: ProjectItem[] = [
       'Excelente relación costo-beneficio para branding comercial'
     ],
     aspectRatioClass: 'aspect-[16/10]',
-    tags: ['Hyundai', 'Furgón', 'Industrial', 'Distribución']
+    tags: ['Furgones', 'Camiones', 'Flotas', 'Industrial', 'Distribución']
   },
 
   // ==========================================
@@ -234,6 +308,18 @@ export const ALL_PROJECTS: ProjectItem[] = [
       'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1200&q=80',
       'https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=1200&q=80'
     ],
+    galleryMedia: [
+      {
+        type: 'image',
+        url: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1200&q=80',
+        title: 'Letrero 3D en Fachada Exterior'
+      },
+      {
+        type: 'image',
+        url: 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=1200&q=80',
+        title: 'Efecto Retroiluminado Nocturno'
+      }
+    ],
     materials: [
       'Acrílico Cristal 4mm termoformado y laqueado',
       'Tira Neón LED Cálido 3000K alta eficiencia',
@@ -250,7 +336,7 @@ export const ALL_PROJECTS: ProjectItem[] = [
       'Estructura resistente a lluvia y polvo con certificación IP67'
     ],
     aspectRatioClass: 'aspect-[3/4]',
-    tags: ['Letrero 3D', 'Café', 'Neón LED', 'Acrílico', 'Fachadas']
+    tags: ['Letreros 3D', 'Neón LED', 'Acrílico', 'Fachadas', 'Restaurantes', 'Corpóreos']
   },
   {
     id: 'fachada-acm-alpha',
@@ -281,7 +367,7 @@ export const ALL_PROJECTS: ProjectItem[] = [
       'Cero mantenimiento de pintura por más de 10 años'
     ],
     aspectRatioClass: 'aspect-[16/11]',
-    tags: ['ACM', 'Fachada', 'Arquitectura', 'Corporativo', 'Edificio']
+    tags: ['Fachadas ACM', 'Arquitectura', 'Corporativo', 'Edificios', 'Aluminio Compuesto']
   },
   {
     id: 'vitrinas-banco-real',
@@ -311,7 +397,7 @@ export const ALL_PROJECTS: ProjectItem[] = [
       'Diseño institucional a medida con logotipos troquelados'
     ],
     aspectRatioClass: 'aspect-[4/3]',
-    tags: ['Pavonados', '3M', 'Vitrinas', 'Oficinas', 'Privacidad']
+    tags: ['Pavonados & Vitrinas', '3M', 'Vitrinas', 'Oficinas', 'Privacidad', 'Cristales']
   },
   {
     id: 'directorio-clinica-sanitas',
@@ -342,7 +428,7 @@ export const ALL_PROJECTS: ProjectItem[] = [
       'Fijaciones de acero quirúrgico anticorrosivo'
     ],
     aspectRatioClass: 'aspect-square',
-    tags: ['Señalética', 'Acrílico', 'Directorio', 'Clínica', 'Wayfinding']
+    tags: ['Señalética', 'Acrílico', 'Directorio', 'Wayfinding', 'Clínicas']
   },
   {
     id: 'letras-acero-bistro',
@@ -372,7 +458,7 @@ export const ALL_PROJECTS: ProjectItem[] = [
       'Acabado elegante que denota máxima categoría gastronómica'
     ],
     aspectRatioClass: 'aspect-[3/4]',
-    tags: ['Acero', 'Letras Corpóreas', 'Restaurante', 'Barranco', 'LED']
+    tags: ['Acero Inoxidable', 'Letreros 3D', 'Restaurantes', 'Corpóreos', 'LED']
   },
   {
     id: 'stand-expo-tech',
@@ -403,7 +489,7 @@ export const ALL_PROJECTS: ProjectItem[] = [
       'Montaje y desmontaje 100% coordinado por nuestro equipo'
     ],
     aspectRatioClass: 'aspect-[16/10]',
-    tags: ['Stand', 'Feria', 'Eventos', 'Backing', 'Modular']
+    tags: ['Stands & Ferias', 'Eventos', 'Backing', 'Modular', 'Ferias']
   },
 
   // ==========================================
@@ -440,7 +526,7 @@ export const ALL_PROJECTS: ProjectItem[] = [
       'Entregables organizados en carpetas profesionales clasificadas'
     ],
     aspectRatioClass: 'aspect-[3/4]',
-    tags: ['Branding', 'Logotipo', 'Identidad', 'Manual de Marca', 'Papelería']
+    tags: ['Manual de Marca', 'Logotipos', 'Identidad', 'Papelería', 'Branding']
   },
   {
     id: 'packaging-cafe-origen',
@@ -472,7 +558,7 @@ export const ALL_PROJECTS: ProjectItem[] = [
       'Diseño alineado a estándares de exportación internacional'
     ],
     aspectRatioClass: 'aspect-[4/3]',
-    tags: ['Packaging', 'Troquel', 'Café', 'Etiquetas', 'Ecológico']
+    tags: ['Packaging & Troqueles', 'Café', 'Troqueles', 'Ecológico', 'Empaques']
   },
   {
     id: 'etiquetas-gin-altiplano',
@@ -503,7 +589,7 @@ export const ALL_PROJECTS: ProjectItem[] = [
       'Impacto visual de producto de lujo de exportación'
     ],
     aspectRatioClass: 'aspect-square',
-    tags: ['Etiquetas', 'Bebidas', 'Hot Stamping', 'Relieve', 'Packaging']
+    tags: ['Etiquetas de Lujo', 'Hot Stamping', 'Bebidas', 'Relieve', 'Packaging']
   },
   {
     id: 'campana-publicitaria-digital',
@@ -534,7 +620,7 @@ export const ALL_PROJECTS: ProjectItem[] = [
       'Archivos ligeros sin pérdida de definición'
     ],
     aspectRatioClass: 'aspect-[16/11]',
-    tags: ['Publicidad', 'Redes Sociales', 'E-commerce', 'Banners', 'Digital']
+    tags: ['Publicidad Digital', 'Redes Sociales', 'E-commerce', 'Banners', 'Digital']
   },
   {
     id: 'bolsas-boutique-serena',
@@ -565,7 +651,7 @@ export const ALL_PROJECTS: ProjectItem[] = [
       'Experiencia de desempaque (unboxing) sofisticada'
     ],
     aspectRatioClass: 'aspect-[3/4]',
-    tags: ['Bolsas', 'POP', 'Moda', 'Troquel', 'Retail']
+    tags: ['Bolsas & POP', 'POP', 'Moda', 'Retail', 'Troqueles']
   },
   {
     id: 'gigantografia-panamericana',
@@ -596,11 +682,10 @@ export const ALL_PROJECTS: ProjectItem[] = [
       'Colores vivos que no se lavan con la radiación solar'
     ],
     aspectRatioClass: 'aspect-[16/9]',
-    tags: ['Gran Formato', 'Gigantografía', 'Paneles', 'CMYK', 'Valla']
+    tags: ['Gran Formato & Vallas', 'Gigantografías', 'Vallas', 'CMYK', 'Paneles']
   }
 ];
 
-// Helper functions
 export function getAllProjects(): ProjectItem[] {
   return ALL_PROJECTS;
 }
@@ -613,8 +698,96 @@ export function getProjectById(idOrAlias: string): ProjectItem | undefined {
   );
 }
 
-export function getRelatedProjects(currentId: string, category: string, limit = 3): ProjectItem[] {
+export function getRelatedProjects(currentId: string, category: string, limit = 6): ProjectItem[] {
   return ALL_PROJECTS
     .filter(p => p.id !== currentId && p.category === category)
     .slice(0, limit);
+}
+
+export interface FilterOption {
+  id: string;
+  label: string;
+  badge?: string;
+}
+
+export interface FilterGroup {
+  id: string;
+  title: string;
+  isMulti?: boolean;
+  options: FilterOption[];
+}
+
+export const GALLERY_FILTER_GROUPS: FilterGroup[] = [
+  {
+    id: 'category',
+    title: 'Servicio Principal',
+    isMulti: false,
+    options: [
+      { id: 'todos', label: 'Todos los Servicios' },
+      { id: 'wrap', label: 'Wrap Automotriz' },
+      { id: 'branding', label: 'Branding Comercial' },
+      { id: 'diseno', label: 'Diseño e Identidad' }
+    ]
+  },
+  {
+    id: 'application',
+    title: 'Tipo de Aplicación / Proyecto',
+    isMulti: true,
+    options: [
+      { id: 'camionetas', label: 'Camionetas / Pickups' },
+      { id: 'flotas', label: 'Flotas Comerciales' },
+      { id: 'deportivos', label: 'Autos Deportivos' },
+      { id: 'letreros', label: 'Letreros Luminosos' },
+      { id: 'fachadas', label: 'Fachadas Comerciales' },
+      { id: 'vitrinas', label: 'Vitrinas / Tiendas' },
+      { id: 'identidad', label: 'Identidad Corporativa' },
+      { id: 'packaging', label: 'Packaging & Etiquetas' },
+      { id: 'gigantografias', label: 'Gran Formato & Vallas' }
+    ]
+  },
+  {
+    id: 'coverage',
+    title: 'Cobertura y Técnica',
+    isMulti: true,
+    options: [
+      { id: 'wrap-total', label: 'Wrap Total' },
+      { id: 'rotulado', label: 'Rotulado Comercial' },
+      { id: 'corporeo', label: 'Letras Corpóreas 3D' },
+      { id: 'neon', label: 'Neón LED' },
+      { id: 'esmerilado', label: 'Vinil Esmerilado' },
+      { id: 'troquel', label: 'Troquel Digital' }
+    ]
+  },
+  {
+    id: 'materials',
+    title: 'Materiales Certificados',
+    isMulti: true,
+    options: [
+      { id: 'avery', label: 'Avery Dennison' },
+      { id: '3m', label: '3M' },
+      { id: 'arlon', label: 'Arlon Graphics' },
+      { id: 'acrilico', label: 'Acrílico' },
+      { id: 'alucobond', label: 'Alucobond' },
+      { id: 'acero', label: 'Acero Inoxidable' }
+    ]
+  }
+];
+
+// Extracción dinámica de tags únicos para el Drawer de Filtros
+export function getAllUniqueTags(): { category: string; tags: string[] }[] {
+  const categories = [
+    { key: 'wrap', label: 'Wrap Automotriz' },
+    { key: 'branding', label: 'Branding Comercial' },
+    { key: 'diseno', label: 'Diseño e Identidad' }
+  ];
+
+  return categories.map(cat => {
+    const projectsInCat = ALL_PROJECTS.filter(p => p.category === cat.key);
+    const tagSet = new Set<string>();
+    projectsInCat.forEach(p => p.tags.forEach(t => tagSet.add(t)));
+    return {
+      category: cat.label,
+      tags: Array.from(tagSet)
+    };
+  });
 }
