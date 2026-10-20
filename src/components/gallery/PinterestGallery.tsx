@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
+import Fuse from 'fuse.js';
 import { 
   Search, 
   X, 
@@ -8,7 +9,9 @@ import {
   SlidersHorizontal, 
   Check, 
   LayoutGrid,
-  RotateCcw
+  RotateCcw,
+  ChevronDown,
+  Sparkles
 } from 'lucide-react';
 import { 
   ALL_PROJECTS, 
@@ -23,8 +26,11 @@ export default function PinterestGallery() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  // Sincronización inicial con URL query parameters (?categoria=... & ?q=...)
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Sincronización inicial con URL query parameters (?categoria=... & ?q=... & ?tags=...)
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const params = new URLSearchParams(window.location.search);
@@ -65,6 +71,27 @@ export default function PinterestGallery() {
     };
   }, [isDrawerOpen]);
 
+  // Listener para cerrar el desplegable de categoría al hacer clic afuera o presionar Escape
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
   // Actualizar query params sin recargar página
   const updateUrlParams = (cat: CategoryFilter, tags: string[], q: string) => {
     if (typeof window === 'undefined') return;
@@ -93,6 +120,7 @@ export default function PinterestGallery() {
 
   const handleCategoryChange = (cat: CategoryFilter) => {
     setSelectedCategory(cat);
+    setIsDropdownOpen(false);
     updateUrlParams(cat, selectedTags, searchQuery);
   };
 
@@ -173,183 +201,375 @@ export default function PinterestGallery() {
     }
   };
 
-  // Filtrado reactivo en vivo por categoría, tags del drawer y búsqueda
-  const filteredProjects = useMemo(() => {
-    return ALL_PROJECTS.filter((item) => {
-      // 1. Filtro de Categoría Principal
+  // Opciones completas del desplegable de categorías estilo catálogo
+  const categoryOptions = useMemo(() => [
+    { 
+      key: 'todos' as CategoryFilter, 
+      label: 'Todos los Servicios', 
+      shortLabel: 'Todos los Servicios',
+      subtitle: 'Explorar todo el catálogo de proyectos',
+      icon: LayoutGrid,
+      count: ALL_PROJECTS.length
+    },
+    { 
+      key: 'wrap' as CategoryFilter, 
+      label: 'Wrap Automotriz', 
+      shortLabel: 'Wrap Automotriz',
+      subtitle: 'Camionetas, flotas, PPF y cambio de color',
+      icon: Car,
+      count: ALL_PROJECTS.filter(p => p.category === 'wrap').length
+    },
+    { 
+      key: 'branding' as CategoryFilter, 
+      label: 'Branding Comercial', 
+      shortLabel: 'Branding Comercial',
+      subtitle: 'Letreros 3D, fachadas ACM y vitrinas',
+      icon: Store,
+      count: ALL_PROJECTS.filter(p => p.category === 'branding').length
+    },
+    { 
+      key: 'diseno' as CategoryFilter, 
+      label: 'Diseño e Identidad', 
+      shortLabel: 'Diseño e Identidad',
+      subtitle: 'Manuales de marca, empaques y vallas',
+      icon: Palette,
+      count: ALL_PROJECTS.filter(p => p.category === 'diseno').length
+    }
+  ], []);
+
+  const currentCategoryOption = categoryOptions.find(o => o.key === selectedCategory) || categoryOptions[0];
+
+  // Configuración optimizada del motor de búsqueda difusa Fuse.js (Fuzzy Search)
+  const fuse = useMemo(() => {
+    return new Fuse(ALL_PROJECTS, {
+      keys: [
+        { name: 'title', weight: 2.2 },
+        { name: 'tags', weight: 1.8 },
+        { name: 'categoryLabel', weight: 1.5 },
+        { name: 'client', weight: 1.2 },
+        { name: 'materials', weight: 1.0 },
+        { name: 'technique', weight: 0.8 },
+        { name: 'description', weight: 0.6 }
+      ],
+      threshold: 0.42, // Tolerante a errores ortográficos (ej: "jilux", "porche", "letreo", "akrilico")
+      distance: 100,
+      ignoreLocation: true,
+      minMatchCharLength: 2,
+      findAllMatches: true
+    });
+  }, []);
+
+  // Filtrado reactivo híbrido (Exacto/Normalizado + Fuzzy Search con Fuse.js)
+  const { filteredProjects, isFuzzyResult } = useMemo(() => {
+    // 1. Filtrar primero por Categoría y Tags del Drawer
+    const categoryAndTagsPool = ALL_PROJECTS.filter((item) => {
       const matchesCategory = selectedCategory === 'todos' || item.category === selectedCategory;
       if (!matchesCategory) return false;
 
-      // 2. Filtro de Tags seleccionados en el Drawer (debe cumplir todos los seleccionados)
       if (selectedTags.length > 0) {
         const matchesAllTags = selectedTags.every(tagId => matchesTag(item, tagId));
         if (!matchesAllTags) return false;
       }
 
-      // 3. Filtro de Búsqueda
-      if (!searchQuery.trim()) return true;
-      const q = searchQuery.toLowerCase().trim();
-
-      const inTitle = item.title.toLowerCase().includes(q);
-      const inClient = item.client.toLowerCase().includes(q);
-      const inLocation = item.location ? item.location.toLowerCase().includes(q) : false;
-      const inDescription = item.description.toLowerCase().includes(q);
-      const inTechnique = item.technique.toLowerCase().includes(q);
-      const inMaterials = item.materials.some(m => m.toLowerCase().includes(q));
-      const inTags = item.tags.some(t => t.toLowerCase().includes(q));
-
-      return inTitle || inClient || inLocation || inDescription || inTechnique || inMaterials || inTags;
+      return true;
     });
-  }, [selectedCategory, selectedTags, searchQuery]);
 
-  // Pestañas de categoría directas con iconos
-  const categoryTabs = [
-    { key: 'todos' as CategoryFilter, label: 'Todos', icon: LayoutGrid },
-    { key: 'wrap' as CategoryFilter, label: 'Wrap Automotriz', icon: Car },
-    { key: 'branding' as CategoryFilter, label: 'Branding Comercial', icon: Store },
-    { key: 'diseno' as CategoryFilter, label: 'Diseño e Identidad', icon: Palette }
-  ];
+    // Si no hay término de búsqueda, retornar el pool directo
+    if (!searchQuery.trim()) {
+      return { filteredProjects: categoryAndTagsPool, isFuzzyResult: false };
+    }
+
+    const q = searchQuery.trim();
+    const qLower = q.toLowerCase();
+    // Normalizar tildes para búsqueda sin acentos (ej: acrílico -> acrilico)
+    const qNorm = qLower.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+    // 2. Coincidencias exactas o de subcadena directa dentro del pool activo
+    const exactMatches = categoryAndTagsPool.filter(item => {
+      const textCorpus = [
+        item.title,
+        item.client,
+        item.location || '',
+        item.categoryLabel,
+        item.description,
+        item.technique,
+        ...item.materials,
+        ...item.tags
+      ].join(' ').toLowerCase();
+
+      const corpusNorm = textCorpus.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      return textCorpus.includes(qLower) || corpusNorm.includes(qNorm);
+    });
+
+    // 3. Búsqueda difusa (Fuzzy Search) mediante Fuse.js tolerante a faltas de ortografía
+    const poolIds = new Set(categoryAndTagsPool.map(p => p.id));
+    const fuseMatches = fuse.search(q);
+    const fuzzyMatches = fuseMatches
+      .map(res => res.item)
+      .filter(item => poolIds.has(item.id));
+
+    // 4. Combinar resultados priorizando coincidencias directas y añadiendo fuzzy sin duplicados
+    const seenIds = new Set<string>();
+    const combined: ProjectItem[] = [];
+
+    for (const item of exactMatches) {
+      if (!seenIds.has(item.id)) {
+        seenIds.add(item.id);
+        combined.push(item);
+      }
+    }
+
+    for (const item of fuzzyMatches) {
+      if (!seenIds.has(item.id)) {
+        seenIds.add(item.id);
+        combined.push(item);
+      }
+    }
+
+    const isFuzzy = exactMatches.length === 0 && fuzzyMatches.length > 0;
+
+    return { filteredProjects: combined, isFuzzyResult: isFuzzy };
+  }, [selectedCategory, selectedTags, searchQuery, fuse]);
 
   const totalActiveFilters = (selectedCategory !== 'todos' ? 1 : 0) + selectedTags.length + (searchQuery ? 1 : 0);
+  const CurrentIcon = currentCategoryOption.icon;
 
   return (
     <section className="relative w-full bg-white dark:bg-zinc-950 transition-colors duration-300">
       
-      {/* 1. Barra de Control Superior (Sin Hero, Sin Título ni Descripción, con espacio superior para el Navbar) */}
+      {/* 1. Barra de Control Superior Optimizada (Con espacio superior para el Navbar y Layout Limpio) */}
       <div className="pt-28 sm:pt-32 md:pt-36 pb-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4 pb-4 border-b border-zinc-200 dark:border-zinc-800/80">
+        <div className="pb-4 border-b border-zinc-200 dark:border-zinc-800/80">
           
-          {/* Pestañas de Categoría con Iconos */}
-          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 select-none">
-            {categoryTabs.map(tab => {
-              const isActive = selectedCategory === tab.key;
-              const Icon = tab.icon;
-              return (
-                <button
-                  key={tab.key}
-                  type="button"
-                  onClick={() => handleCategoryChange(tab.key)}
-                  className={`inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-sm text-xs sm:text-sm font-sans font-semibold transition-all duration-200 cursor-pointer whitespace-nowrap border shadow-none ${
-                    isActive
-                      ? 'bg-[#EE2737] text-white border-[#EE2737]'
-                      : 'bg-zinc-100 dark:bg-zinc-900/90 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-600 hover:text-zinc-950 dark:hover:text-white'
-                  }`}
-                >
-                  <Icon size={15} className={isActive ? 'text-white' : 'text-zinc-500'} />
-                  <span>{tab.label}</span>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Controles de Búsqueda y Botón de Drawer de Filtros */}
-          <div className="flex items-center gap-2.5 w-full lg:w-auto">
+          {/* Fila Principal de Controles: Responsive en Pantallas, Tablets y Móviles */}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 w-full">
             
-            {/* Campo de Búsqueda */}
-            <div className="relative flex-1 lg:w-72">
-              <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => {
-                  setSearchQuery(e.target.value);
-                  updateUrlParams(selectedCategory, selectedTags, e.target.value);
-                }}
-                placeholder="Buscar proyectos..."
-                className="w-full pl-9 pr-8 py-2 rounded-sm bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-xs sm:text-sm text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:border-[#EE2737] dark:focus:border-[#EE2737] transition-colors"
-              />
-              {searchQuery && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setSearchQuery('');
-                    updateUrlParams(selectedCategory, selectedTags, '');
-                  }}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-900 dark:hover:text-white cursor-pointer"
-                  title="Limpiar búsqueda"
+            {/* DESPLEGABLE DE CATEGORÍA / SERVICIO (Estilo Catálogo de Productos) */}
+            <div ref={dropdownRef} className="relative w-full sm:w-auto shrink-0 select-none">
+              <button
+                type="button"
+                onClick={() => setIsDropdownOpen(prev => !prev)}
+                className={`w-full sm:w-[220px] md:w-[245px] flex items-center justify-between gap-2.5 px-3.5 py-2.5 rounded-sm border transition-all duration-200 cursor-pointer ${
+                  isDropdownOpen
+                    ? 'border-[#EE2737] bg-white dark:bg-zinc-900 ring-1 ring-[#EE2737]/30 text-zinc-900 dark:text-white'
+                    : selectedCategory !== 'todos'
+                    ? 'border-[#EE2737]/60 bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-white font-semibold'
+                    : 'border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200 hover:border-zinc-400 dark:hover:border-zinc-700'
+                }`}
+                aria-expanded={isDropdownOpen}
+                aria-haspopup="listbox"
+              >
+                {/* Icono y Nombre de Categoría */}
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div className={`w-6 h-6 rounded-xs flex items-center justify-center shrink-0 ${
+                    selectedCategory !== 'todos' ? 'bg-[#EE2737] text-white' : 'bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300'
+                  }`}>
+                    <CurrentIcon size={13} />
+                  </div>
+                  <div className="text-left truncate">
+                    <span className="block text-xs font-sans font-bold leading-tight truncate">
+                      {currentCategoryOption.shortLabel}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Contador y Flechita Chevron */}
+                <div className="flex items-center gap-1.5 shrink-0 text-zinc-400">
+                  <span className="text-[11px] font-mono">
+                    ({currentCategoryOption.count})
+                  </span>
+                  <ChevronDown 
+                    size={15} 
+                    className={`transition-transform duration-200 ${isDropdownOpen ? 'rotate-180 text-[#EE2737]' : ''}`} 
+                  />
+                </div>
+              </button>
+
+              {/* Menú Desplegable Flotante (Popup Catálogo) */}
+              {isDropdownOpen && (
+                <div 
+                  className="absolute left-0 top-full mt-1.5 w-full sm:w-80 bg-white dark:bg-zinc-900 rounded-md border border-zinc-200 dark:border-zinc-800 shadow-2xl z-40 overflow-hidden py-1.5 animate-fadeIn"
+                  role="listbox"
                 >
-                  <X size={14} />
-                </button>
+                  <div className="px-3.5 py-1.5 border-b border-zinc-100 dark:border-zinc-800 text-[10px] font-mono font-bold uppercase tracking-wider text-zinc-400">
+                    Seleccionar Servicio
+                  </div>
+
+                  <div className="p-1 space-y-0.5">
+                    {categoryOptions.map(option => {
+                      const isSelected = selectedCategory === option.key;
+                      const Icon = option.icon;
+
+                      return (
+                        <button
+                          key={option.key}
+                          type="button"
+                          onClick={() => handleCategoryChange(option.key)}
+                          className={`w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-sm text-left transition-colors cursor-pointer group ${
+                            isSelected
+                              ? 'bg-zinc-100 dark:bg-zinc-800/90 text-zinc-950 dark:text-white font-bold'
+                              : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 hover:text-zinc-950 dark:hover:text-white'
+                          }`}
+                        >
+                          <div className="flex items-center gap-3 min-w-0">
+                            <div className={`w-7 h-7 rounded-sm flex items-center justify-center shrink-0 transition-colors ${
+                              isSelected 
+                                ? 'bg-[#EE2737] text-white' 
+                                : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-white'
+                            }`}>
+                              <Icon size={15} />
+                            </div>
+
+                            <div className="min-w-0">
+                              <span className="block text-xs sm:text-sm font-sans leading-tight">
+                                {option.label}
+                              </span>
+                              <span className="block text-[11px] font-sans text-zinc-400 truncate mt-0.5 font-normal">
+                                {option.subtitle}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-2 shrink-0">
+                            <span className="text-[11px] font-mono text-zinc-400">
+                              {option.count}
+                            </span>
+                            {isSelected && (
+                              <Check size={14} className="text-[#EE2737] stroke-[3]" />
+                            )}
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
               )}
             </div>
 
-            {/* Botón de Apertura de Drawer "Filtros" (Estilo referencia con icono y badge) */}
-            <button
-              type="button"
-              onClick={() => setIsDrawerOpen(true)}
-              className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-full border text-xs sm:text-sm font-sans font-semibold transition-all duration-200 cursor-pointer shrink-0 select-none ${
-                selectedTags.length > 0
-                  ? 'bg-zinc-950 text-white dark:bg-white dark:text-black border-transparent'
-                  : 'bg-zinc-100 dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200 border-zinc-200 dark:border-zinc-800 hover:border-zinc-400'
-              }`}
-              title="Abrir panel de filtros avanzados"
-            >
-              <SlidersHorizontal size={15} />
-              <span>Filtros</span>
-              {selectedTags.length > 0 && (
-                <span className="w-5 h-5 rounded-full bg-[#EE2737] text-white text-[10px] font-mono font-bold flex items-center justify-center">
-                  {selectedTags.length}
-                </span>
-              )}
-            </button>
+            {/* Fila Combinada en Móvil: Buscador Inteligente Expandible + Botón Filtros */}
+            <div className="flex items-center gap-2.5 flex-1 min-w-0 w-full">
+              
+              {/* CAMPO DE BÚSQUEDA INTELIGENTE CON FUZZY SEARCH */}
+              <div className="relative flex-1 min-w-0">
+                <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    updateUrlParams(selectedCategory, selectedTags, e.target.value);
+                  }}
+                  placeholder="Buscar proyectos, marcas o técnicas (ej: Hilux, 3M, Neón, Vallas)..."
+                  className="w-full pl-9 pr-8 py-2.5 rounded-sm bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-xs sm:text-sm text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:border-[#EE2737] dark:focus:border-[#EE2737] transition-colors"
+                />
+                {searchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSearchQuery('');
+                      updateUrlParams(selectedCategory, selectedTags, '');
+                    }}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-900 dark:hover:text-white cursor-pointer"
+                    title="Limpiar búsqueda"
+                  >
+                    <X size={14} />
+                  </button>
+                )}
+              </div>
+
+              {/* BOTÓN "FILTROS" (Off-Canvas Drawer) */}
+              <button
+                type="button"
+                onClick={() => setIsDrawerOpen(true)}
+                className={`inline-flex items-center gap-2 px-3.5 py-2.5 rounded-sm border text-xs sm:text-sm font-sans font-semibold transition-all duration-200 cursor-pointer shrink-0 select-none ${
+                  selectedTags.length > 0
+                    ? 'bg-zinc-950 text-white dark:bg-white dark:text-black border-transparent shadow-sm'
+                    : 'bg-zinc-100 dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200 border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-600'
+                }`}
+                title="Abrir panel de filtros avanzados"
+              >
+                <SlidersHorizontal size={15} />
+                <span className="hidden xs:inline sm:inline">Filtros</span>
+                {selectedTags.length > 0 && (
+                  <span className="w-5 h-5 rounded-full bg-[#EE2737] text-white text-[10px] font-mono font-bold flex items-center justify-center">
+                    {selectedTags.length}
+                  </span>
+                )}
+              </button>
+
+            </div>
 
           </div>
+
+          {/* Barra de Estado con Filtros Activos, Notificación Fuzzy y Limpiar Todo */}
+          {totalActiveFilters > 0 && (
+            <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs font-mono text-zinc-500 dark:text-zinc-400">
+              <div className="flex flex-wrap items-center gap-1.5">
+                <span>Filtros activos:</span>
+                
+                {selectedCategory !== 'todos' && (
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-xs bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200">
+                    {currentCategoryOption.shortLabel}
+                    <button onClick={() => handleCategoryChange('todos')} className="hover:text-[#EE2737]" title="Quitar filtro">
+                      <X size={11} />
+                    </button>
+                  </span>
+                )}
+
+                {selectedTags.map(tagId => (
+                  <span key={tagId} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-xs bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200">
+                    {tagId}
+                    <button onClick={() => handleToggleTag(tagId)} className="hover:text-[#EE2737]" title="Quitar tag">
+                      <X size={11} />
+                    </button>
+                  </span>
+                ))}
+
+                {searchQuery && (
+                  <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-xs bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200">
+                    "{searchQuery}"
+                    {isFuzzyResult && (
+                      <span className="inline-flex items-center gap-0.5 text-[10px] text-[#EE2737] font-sans font-semibold">
+                        <Sparkles size={10} />
+                        tolerante a ortografía
+                      </span>
+                    )}
+                    <button onClick={() => {
+                      setSearchQuery('');
+                      updateUrlParams(selectedCategory, selectedTags, '');
+                    }} className="hover:text-[#EE2737]">
+                      <X size={11} />
+                    </button>
+                  </span>
+                )}
+              </div>
+
+              <button
+                type="button"
+                onClick={handleClearAllFilters}
+                className="inline-flex items-center gap-1 text-[#EE2737] hover:underline cursor-pointer ml-auto font-sans font-medium"
+              >
+                <RotateCcw size={12} />
+                <span>Limpiar todo</span>
+              </button>
+            </div>
+          )}
 
         </div>
-
-        {/* Barra de Estado con Filtros Activos y Limpiar Todo */}
-        {totalActiveFilters > 0 && (
-          <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs font-mono text-zinc-500 dark:text-zinc-400">
-            <div className="flex flex-wrap items-center gap-1.5">
-              <span>Filtros activos:</span>
-              {selectedCategory !== 'todos' && (
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-xs bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200">
-                  {selectedCategory === 'wrap' ? 'Wrap' : selectedCategory === 'branding' ? 'Branding' : 'Diseño'}
-                  <button onClick={() => handleCategoryChange('todos')} className="hover:text-[#EE2737]">
-                    <X size={11} />
-                  </button>
-                </span>
-              )}
-              {selectedTags.map(tagId => (
-                <span key={tagId} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-xs bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200">
-                  {tagId}
-                  <button onClick={() => handleToggleTag(tagId)} className="hover:text-[#EE2737]">
-                    <X size={11} />
-                  </button>
-                </span>
-              ))}
-              {searchQuery && (
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-xs bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200">
-                  "{searchQuery}"
-                  <button onClick={() => setSearchQuery('')} className="hover:text-[#EE2737]">
-                    <X size={11} />
-                  </button>
-                </span>
-              )}
-            </div>
-
-            <button
-              type="button"
-              onClick={handleClearAllFilters}
-              className="inline-flex items-center gap-1 text-[#EE2737] hover:underline cursor-pointer ml-auto font-sans font-medium"
-            >
-              <RotateCcw size={12} />
-              <span>Limpiar todo</span>
-            </button>
-          </div>
-        )}
       </div>
 
       {/* 2. Grilla Dinámica Estilo Pinterest (Minimalista: Sin badges, sin ubicación, SOLO título) */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10">
         
         {filteredProjects.length === 0 ? (
-          <div className="text-center py-24 px-4 rounded-md border border-dashed border-zinc-300 dark:border-zinc-800">
+          <div className="text-center py-20 px-4 rounded-md border border-dashed border-zinc-300 dark:border-zinc-800">
             <p className="text-base sm:text-lg font-display font-bold text-zinc-800 dark:text-zinc-200 mb-2">
               No se encontraron proyectos con ese criterio
             </p>
             <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 max-w-md mx-auto mb-6">
-              Prueba cambiando los tags seleccionados o restableciendo los filtros para ver todos los trabajos.
+              {searchQuery 
+                ? `No hubo coincidencias para "${searchQuery}". Nuestro buscador tolera errores de tipeo, pero puedes probar con términos como Hilux, Wrap, Acrílico, Neón o 3M.`
+                : 'Prueba cambiando los tags seleccionados o restableciendo los filtros para ver todos los trabajos.'}
             </p>
             <button
               type="button"
@@ -521,6 +741,19 @@ export default function PinterestGallery() {
         .no-scrollbar {
           -ms-overflow-style: none;
           scrollbar-width: none;
+        }
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: scale(0.97) translateY(-4px);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+          }
+        }
+        .animate-fadeIn {
+          animation: fadeIn 0.15s ease-out forwards;
         }
       `}</style>
     </section>
