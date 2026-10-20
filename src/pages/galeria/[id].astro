@@ -1,0 +1,41 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ProjectDetailView from '../../components/gallery/ProjectDetailView';
+import EngagementCTA from '../../components/sections/EngagementCTA.astro';
+import { ALL_PROJECTS, getProjectById, getRelatedProjects } from '../../lib/projects';
+
+export async function getStaticPaths() {
+  const paths: { params: { id: string } }[] = [];
+  
+  ALL_PROJECTS.forEach((project) => {
+    paths.push({ params: { id: project.id } });
+    if (project.aliases && project.aliases.length > 0) {
+      project.aliases.forEach((alias) => {
+        paths.push({ params: { id: alias } });
+      });
+    }
+  });
+
+  return paths;
+}
+
+const { id } = Astro.params;
+const project = getProjectById(id || '');
+
+if (!project) {
+  return Astro.redirect('/galeria');
+}
+
+const relatedProjects = getRelatedProjects(project.id, project.category, 3);
+---
+
+<Layout 
+  title={`${project.title} | Imagenartis`}
+  description={project.description}
+>
+  <!-- Ficha de Detalle de Proyecto Estilo E-Commerce / Compra -->
+  <ProjectDetailView client:load project={project} relatedProjects={relatedProjects} />
+
+  <!-- CTA de Cierre y Contacto -->
+  <EngagementCTA />
+</Layout>
