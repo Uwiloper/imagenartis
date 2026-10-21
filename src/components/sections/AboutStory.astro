@@ -1,53 +1,42 @@
 ---
-import { CheckCircle2, Shield, Wrench, Sparkles, MapPin } from 'lucide-react';
-
 const stats = [
-  { value: "+10", label: "Años de trayectoria", detail: "Proyectos en Lima y a nivel nacional" },
-  { value: "100%", label: "Taller propio", detail: "Sin intermediarios ni subcontratación" },
-  { value: "3M & Avery", label: "Aplicadores certificados", detail: "Técnicas oficiales de termoformado" },
-  { value: "3 Años", label: "Garantía por escrito", detail: "Respaldo real contra desprendimientos" }
+  { value: "+10", label: "Años de experiencia", detail: "Proyectos en todo el Perú" },
+  { value: "100%", label: "Taller propio", detail: "Sin subcontratación" },
+  { value: "3M & Avery", label: "Certificados", detail: "Aplicadores oficiales" },
+  { value: "3 Años", label: "Garantía escrita", detail: "Respaldo real de taller" }
 ];
 ---
 
-<section id="historia" class="relative w-full bg-white dark:bg-zinc-950 text-zinc-900 dark:text-white py-16 sm:py-20 md:py-24 border-b border-zinc-200 dark:border-zinc-800 transition-colors duration-300">
+<section id="historia" class="relative w-full bg-white dark:bg-zinc-950 text-zinc-900 dark:text-white py-14 sm:py-16 md:py-20 border-b border-zinc-200 dark:border-zinc-800 transition-colors duration-300">
   
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+    <!-- LAYOUT: 40% TEXTO (IZQUIERDA) / 60% IMAGEN HORIZONTAL (DERECHA) -->
+    <div class="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
       
-      <!-- COLUMNA IZQUIERDA (7 Columnas): Narrativa y Manifiesto de Taller -->
-      <div class="lg:col-span-7 flex flex-col justify-center">
+      <!-- COLUMNA CONTENIDO (40% EN ESCRITORIO / TABLET) -->
+      <div class="w-full lg:w-[40%] flex flex-col justify-center">
         
-        <!-- BADGE CON PULSO -->
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-xs bg-[#EE2737]/10 text-[#EE2737] border border-[#EE2737]/25 text-xs font-mono font-bold uppercase tracking-widest mb-4 w-fit">
-          <span class="w-1.5 h-1.5 rounded-full bg-[#EE2737]"></span>
-          <span>QUIÉNES SOMOS & MANIFIESTO</span>
-        </div>
-
-        <!-- TÍTULO EDITORIAL -->
-        <h2 class="text-2xl sm:text-3xl md:text-4xl font-display font-extrabold tracking-tight text-zinc-950 dark:text-white leading-[1.15] mb-6">
-          No somos una imprenta más.<br />
-          Somos un <span class="text-[#EE2737]">taller de ingeniería y manufactura visual</span>.
+        <!-- TÍTULO EDITORIAL DIRECTO (Sin badge arriba) -->
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-display font-extrabold tracking-tight text-zinc-950 dark:text-white leading-[1.15] mb-4">
+          Un taller de <span class="text-[#EE2737]">ingeniería y manufactura visual</span>
         </h2>
 
-        <!-- TEXTO NARRATIVO -->
-        <div class="space-y-4 text-sm sm:text-base text-zinc-600 dark:text-zinc-300 font-sans leading-relaxed">
+        <!-- TEXTO CONCISO Y SIMPLIFICADO -->
+        <div class="space-y-3 text-sm text-zinc-600 dark:text-zinc-300 font-sans leading-relaxed">
           <p>
-            En <strong>Imagen Artis</strong> nacimos de una inconformidad compartida: ver cómo marcas y proyectos de alto calibre perdían presencia debido a instalaciones apresuradas, vinilos despegados o letreros mal fabricados que no resistían el clima.
+            En <strong>Imagen Artis</strong> unimos el diseño industrial con la aplicación artesanal. Contamos con maquinaria propia —plotters látex/UV, mesas de corte CNC y bahías climatizadas— para garantizar control milimétrico sin depender de intermediarios.
           </p>
           <p>
-            Decidimos construir algo distinto: un taller especializado donde el rigor del diseño industrial convive con la destreza artesanal de maestros aplicadores. Invertimos en maquinaria propia —plotters de tintas látex y UV de alta resolución, ruteadoras CNC, mesas de corte y bahías de rotulado climatizadas— para eliminar la subcontratación y tener el control absoluto de cada milímetro que producimos.
-          </p>
-          <p>
-            Para nosotros, un wrap vehicular no es solo pegar una lámina; es entender la memoria elástica del polímero a 95°C. Un letrero arquitectónico no es solo acrílico cortado; es disipar el calor de los módulos LED para que brillen con la misma intensidad durante años.
+            Desde un wrap total hasta fachadas y letreros arquitectónicos 3D, producimos piezas hechas para durar y resistir las exigencias del clima.
           </p>
         </div>
 
-        <!-- GRILLA DE CIFRAS / MÉTRICAS DE CONFIANZA -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8 pt-8 border-t border-zinc-200 dark:border-zinc-800">
+        <!-- 4 CIFRAS CLAVE EN COMPOSICIÓN 2x2 COMPACTA -->
+        <div class="grid grid-cols-2 gap-4 mt-6 pt-6 border-t border-zinc-200 dark:border-zinc-800">
           {stats.map((st) => (
             <div class="flex flex-col">
-              <span class="text-2xl sm:text-3xl font-display font-extrabold text-[#EE2737] leading-none mb-1">
+              <span class="text-xl sm:text-2xl font-display font-extrabold text-[#EE2737] leading-none mb-1">
                 {st.value}
               </span>
               <span class="text-xs font-bold text-zinc-900 dark:text-white font-sans">
@@ -62,37 +51,16 @@ const stats = [
 
       </div>
 
-      <!-- COLUMNA DERECHA (5 Columnas): Composición Visual del Taller en Acción -->
-      <div class="lg:col-span-5 relative">
-        
-        <div class="relative rounded-md overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-950 aspect-[4/5] shadow-none">
+      <!-- COLUMNA IMAGEN HORIZONTAL (60% EN ESCRITORIO / TABLET - LIMPIA SIN BADGES NI TEXTOS) -->
+      <div class="w-full lg:w-[60%]">
+        <div class="relative w-full aspect-[16/10] sm:aspect-[16/9] rounded-md overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-950 shadow-none">
           <img
-            src="https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&w=1200&q=80"
-            alt="Taller de aplicación y manufactura en Imagen Artis Lima"
+            src="https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&w=1400&q=80"
+            alt="Taller de Manufactura y Aplicación Imagen Artis"
             class="w-full h-full object-cover object-center transition-transform duration-700 hover:scale-105"
             loading="lazy"
           />
-
-          <!-- DEGRADADO INFERIOR -->
-          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent pointer-events-none"></div>
-
-          <!-- BADGE FLOTANTE DE UBICACIÓN Y CONTROL DIRECTO -->
-          <div class="absolute top-4 left-4 z-10 inline-flex items-center gap-2 px-3 py-1.5 rounded-sm bg-black/75 backdrop-blur-md border border-white/10 text-white font-sans text-xs font-semibold">
-            <MapPin size={13} className="text-[#EE2737]" />
-            <span>Taller Operativo en Lima, Perú</span>
-          </div>
-
-          <!-- BLOQUE DE TEXTO FLOTANTE INFERIOR -->
-          <div class="absolute bottom-5 left-5 right-5 z-10 pointer-events-none text-white">
-            <span class="text-[10px] font-mono uppercase tracking-widest text-[#EE2737] block mb-1">
-              ESTÁNDAR CERTIFICADO
-            </span>
-            <p class="text-sm font-display font-bold leading-snug">
-              Instalaciones en bahías limpias libres de polvo y temperatura controlada.
-            </p>
-          </div>
         </div>
-
       </div>
 
     </div>

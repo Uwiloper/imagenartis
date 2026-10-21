@@ -4,9 +4,7 @@ import HeroAbout from '../components/sections/HeroAbout.astro';
 import AboutProblem from '../components/sections/AboutProblem.astro';
 import AboutStory from '../components/sections/AboutStory.astro';
 import AboutSolution from '../components/sections/AboutSolution.astro';
-import AboutValues from '../components/sections/AboutValues.astro';
-import AboutProcess from '../components/sections/AboutProcess.astro';
-import AboutAudiences from '../components/sections/AboutAudiences.astro';
+import AboutProcessInteractive from '../components/sections/AboutProcessInteractive';
 import ClientLogos from '../components/sections/ClientLogos';
 import EngagementCTA from '../components/sections/EngagementCTA.astro';
 import { fetchAllSections } from '../lib/cms';
@@ -19,41 +17,25 @@ const cms = await fetchAllSections();
   description="Conoce la historia, valores y metodología de Imagen Artis. Más de 10 años como taller especializado en wrapping vehicular, letreros arquitectónicos 3D y branding en Lima, Perú."
 >
 
-  <!-- 1. HERO DEDICADO EDITORIAL (SIN BARRA DE CARACTERÍSTICAS INFERIOR) -->
+  <!-- 1. HERO DEDICADO EDITORIAL (SOLO TÍTULO) -->
   <HeroAbout />
 
-  <!-- 2. SECCIÓN: LA REALIDAD DEL MERCADO Y EL PROBLEMA DE LA PRODUCCIÓN INFORMAL -->
+  <!-- 2. SECCIÓN: PROBLEMA (3 RIESGOS CON FOTOS, SIN BADGE, CONCISO) -->
   <AboutProblem />
 
-  <!-- 3. SECCIÓN: QUIÉNES SOMOS, HISTORIA DEL TALLER Y MAQUINARIA PROPIA -->
+  <!-- 3. SECCIÓN: QUIÉNES SOMOS (60% FOTO HORIZONTAL / 40% TEXTO) -->
   <AboutStory />
 
-  <!-- 4. SECCIÓN: NUESTRA SOLUCIÓN INTEGRAL (CONTROL DEL VECTOR AL MONTAJE) -->
+  <!-- 4. SECCIÓN: SOLUCIÓN INTEGRAL (TARJETAS LIMPIAS SIN CHECKS NI NÚMEROS) -->
   <AboutSolution />
 
-  <!-- 5. SECCIÓN: NUESTROS 4 VALORES FUNDAMENTALES -->
-  <AboutValues />
+  <!-- 5. SECCIÓN: NUESTRO PROCESO EN 4 FASES (COMPONENTE INTERACTIVO CON FOTO Y BARRA DE AVANCE) -->
+  <AboutProcessInteractive client:visible />
 
-  <!-- 6. SECCIÓN: NUESTRO PROCESO DE PRODUCCIÓN EN 4 FASES -->
-  <AboutProcess />
+  <!-- 6. MARCAS Y ALIADOS QUE CONFÍAN EN NUESTRA CALIDAD -->
+  <ClientLogos data={cms.marcas} client:visible />
 
-  <!-- 7. SECCIÓN: A QUIÉNES SERVIMOS (FLOTAS, RETAIL, PARTICULARES, AGENCIAS) -->
-  <AboutAudiences />
-
-  <!-- 8. MARCAS Y ALIADOS QUE CONFÍAN EN NUESTRA CALIDAD -->
-  <section class="py-12 bg-white dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-800 transition-colors">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-6">
-      <span class="text-[11px] font-mono uppercase tracking-widest text-zinc-400 font-bold block mb-1">
-        RESPALDO TÉCNICO & EXPERIENCIA
-      </span>
-      <h3 class="text-lg sm:text-xl font-display font-bold text-zinc-900 dark:text-white">
-        Marcas y corporaciones que confían en nuestro taller
-      </h3>
-    </div>
-    <ClientLogos data={cms.marcas} client:visible />
-  </section>
-
-  <!-- 9. LLAMADO A LA ACCIÓN FINAL CON CONTACTO DIRECTO -->
+  <!-- 7. LLAMADO A LA ACCIÓN FINAL CON CONTACTO DIRECTO -->
   <EngagementCTA />
 
 </Layout>

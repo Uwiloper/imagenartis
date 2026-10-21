@@ -1,105 +1,61 @@
 ---
-import { Cpu, ShieldCheck, Warehouse, ArrowRight } from 'lucide-react';
+import { Cpu, ShieldCheck, Warehouse } from 'lucide-react';
 
 const solutions = [
   {
     icon: Cpu,
-    number: "01",
-    title: "Ingeniería Gráfica & Preprensa Milimétrica",
-    description: "Modelamos tu vehículo o fachada en 3D a escala 1:1. Calibramos perfiles de color bajo norma Fogra / Pantone para que el tono de tu logotipo en pantalla sea exactamente el que sale del plotter.",
-    highlights: [
-      "Pruebas de color físicas antes de producción",
-      "Planos de despiece milimétricos",
-      "Cero deformación en curvas y molduras"
-    ]
+    title: "Ingeniería Gráfica & Preprensa",
+    description: "Modelamos planos a escala real y calibramos perfiles de color Fogra y Pantone para que el tono en pantalla coincida exactamente con la impresión física."
   },
   {
     icon: ShieldCheck,
-    number: "02",
-    title: "Materiales Genuinos con Ficha Técnica Oficial",
-    description: "Trabajamos exclusivamente con vinilos fundidos (Cast), poliméricos y láminas PPF de 3M, Avery Dennison y Arlon. Entregamos el número de lote y certificado de autenticidad de fábrica.",
-    highlights: [
-      "Filtro UV contra decoloración solar",
-      "Pegamentos reversibles que cuidan la pintura",
-      "Garantía escrita de 2 a 5 años según serie"
-    ]
+    title: "Materiales Genuinos Certificados",
+    description: "Trabajamos con vinilos fundidos y láminas PPF de 3M, Avery Dennison y Arlon con respaldo oficial de fábrica contra decoloración y desprendimiento."
   },
   {
     icon: Warehouse,
-    number: "03",
-    title: "Taller Propio con Bahías Climatizadas",
-    description: "La suciedad y la temperatura son los mayores enemigos del vinil. Nuestras instalaciones cuentan con bahías limpias libres de polvo y pistolas térmicas digitales para fijar la memoria elástica del material a 95°C.",
-    highlights: [
-      "Desmontaje técnico de piezas periféricas",
-      "Cero empalmes en paños principales",
-      "Acabado sin burbujas ni micro-arrugas"
-    ]
+    title: "Taller Propio & Montaje Técnico",
+    description: "Bahías limpias y pistolas térmicas a 95°C para fijar la memoria elástica del vinil. Cero burbujas, cortes precisos y acabado sin empalmes visibles."
   }
 ];
 ---
 
-<section class="relative w-full bg-zinc-50 dark:bg-zinc-900/60 text-zinc-900 dark:text-white py-16 sm:py-20 md:py-24 border-b border-zinc-200 dark:border-zinc-800 transition-colors duration-300">
+<section id="solucion" class="relative w-full bg-zinc-50 dark:bg-zinc-900/60 text-zinc-900 dark:text-white py-14 sm:py-16 md:py-20 border-b border-zinc-200 dark:border-zinc-800 transition-colors duration-300">
   
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     
-    <!-- ENCABEZADO DE SECCIÓN -->
-    <div class="max-w-3xl mb-12 sm:mb-16">
-      
-      <!-- BADGE -->
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-xs bg-[#EE2737]/10 text-[#EE2737] border border-[#EE2737]/25 text-xs font-mono font-bold uppercase tracking-widest mb-4">
-        <span class="w-1.5 h-1.5 rounded-full bg-[#EE2737]"></span>
-        <span>LA VENTAJA IMAGEN ARTIS</span>
-      </div>
-
-      <!-- TÍTULO -->
-      <h2 class="text-2xl sm:text-3xl md:text-4xl font-display font-extrabold tracking-tight text-zinc-950 dark:text-white leading-tight mb-4">
-        Control total de la cadena: <span class="text-[#EE2737]">del vector al montaje</span>
+    <!-- ENCABEZADO SIMPLIFICADO (Sin badge) -->
+    <div class="max-w-3xl mb-10 sm:mb-12">
+      <h2 class="text-2xl sm:text-3xl md:text-4xl font-display font-extrabold tracking-tight text-zinc-950 dark:text-white leading-tight mb-3">
+        Control total: <span class="text-[#EE2737]">del vector al montaje</span>
       </h2>
-
-      <!-- SUBTÍTULO -->
       <p class="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 font-sans leading-relaxed">
-        Eliminamos la incertidumbre de la producción gráfica tradicional. Un solo equipo de ingenieros, diseñadores y aplicadores certificados se hace 100% responsable del éxito de tu proyecto.
+        Un solo equipo técnico se hace responsable de la conceptualización, preprensa, fabricación y montaje final de tu proyecto.
       </p>
-
     </div>
 
-    <!-- 3 COLUMNAS DE SOLUCIÓN EDITORIAL -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- 3 TARJETAS LIMPIAS (Sin números, sin checks, puro icono + título + texto breve) -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-7">
       {solutions.map((sol) => {
         const Icon = sol.icon;
         return (
-          <div class="group relative p-7 sm:p-8 rounded-sm bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800/90 hover:border-zinc-400 dark:hover:border-zinc-600 transition-all duration-300 flex flex-col justify-between shadow-none">
+          <div class="group relative p-6 sm:p-7 rounded-sm bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800/90 hover:border-zinc-400 dark:hover:border-zinc-600 transition-all duration-300 flex flex-col justify-between shadow-none select-none">
             
             <div>
-              <!-- FILA SUPERIOR: ICONO PURO (SIN BORDE NI FONDITO, CON ANIMACIÓN) + NÚMERO -->
-              <div class="flex items-center justify-between mb-6">
-                <div class="text-[#EE2737] transition-transform duration-300 group-hover:scale-110">
-                  <Icon size={28} stroke-width={2} />
-                </div>
-                <span class="font-mono text-xs font-bold text-zinc-400 dark:text-zinc-600 group-hover:text-[#EE2737] transition-colors">
-                  {sol.number}
-                </span>
+              <!-- ICONO PURO (Sin bordes, sin fondos, sin numeración) -->
+              <div class="text-[#EE2737] mb-5 transition-transform duration-300 group-hover:scale-110">
+                <Icon size={28} stroke-width={2} />
               </div>
 
               <!-- TÍTULO -->
-              <h3 class="text-lg sm:text-xl font-display font-bold text-zinc-950 dark:text-white group-hover:text-[#EE2737] transition-colors leading-snug mb-3">
+              <h3 class="text-base sm:text-lg font-display font-bold text-zinc-950 dark:text-white group-hover:text-[#EE2737] transition-colors leading-snug mb-2">
                 {sol.title}
               </h3>
 
-              <!-- DESCRIPCIÓN -->
-              <p class="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-sans leading-relaxed mb-6">
+              <!-- DESCRIPCIÓN CONCISA -->
+              <p class="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-sans leading-relaxed">
                 {sol.description}
               </p>
-
-              <!-- PUNTOS CLAVE DESTACADOS -->
-              <div class="space-y-2 pt-4 border-t border-zinc-100 dark:border-zinc-800/80">
-                {sol.highlights.map(hl => (
-                  <div class="flex items-start gap-2 text-xs font-sans text-zinc-700 dark:text-zinc-300">
-                    <span class="text-[#EE2737] font-bold shrink-0 mt-0.5">✓</span>
-                    <span>{hl}</span>
-                  </div>
-                ))}
-              </div>
             </div>
 
           </div>
