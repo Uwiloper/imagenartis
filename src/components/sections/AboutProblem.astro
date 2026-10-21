@@ -1,0 +1,99 @@
+---
+import { AlertTriangle, Clock, Layers, FileWarning } from 'lucide-react';
+
+const problems = [
+  {
+    icon: AlertTriangle,
+    number: "01",
+    title: "Vinilos genéricos que dañan la pintura",
+    description: "Materiales de baja gama sin filtro UV que se cristalizan en meses, decoloran y al retirarse arrancan el barniz original dejando pegamento corrosivo."
+  },
+  {
+    icon: Clock,
+    number: "02",
+    title: "Retrasos que paralizan tu negocio",
+    description: "Aperturas de tiendas pospuestas y flotas de transporte detenidas por talleres informales sin cronograma de producción ni control de entrega."
+  },
+  {
+    icon: Layers,
+    number: "03",
+    title: "Intermediarios sin taller propio",
+    description: "Empresas 'de escritorio' que subcontratan a terceros no calificados, inflando los costos y deslindando responsabilidades ante desprendimientos."
+  },
+  {
+    icon: FileWarning,
+    number: "04",
+    title: "Colores descalibrados y artes pixelados",
+    description: "Cero perfilación técnica de color (FOGRA39 / Pantone). El resultado son letreros borrosos, contrastes pobres y tonos corporativos distorsionados."
+  }
+];
+---
+
+<section class="relative w-full bg-zinc-900 dark:bg-black text-white py-16 sm:py-20 md:py-24 border-b border-zinc-800 transition-colors duration-300">
+  
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <!-- ENCABEZADO EDITORIAL DE LA SECCIÓN -->
+    <div class="max-w-3xl mb-12 sm:mb-16">
+      
+      <!-- BADGE CON PUNTO ROJO -->
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-xs bg-[#EE2737]/15 text-[#EE2737] border border-[#EE2737]/30 text-xs font-mono font-bold uppercase tracking-widest mb-4">
+        <span class="w-1.5 h-1.5 rounded-full bg-[#EE2737]"></span>
+        <span>LA REALIDAD DEL MERCADO</span>
+      </div>
+
+      <!-- TÍTULO PRINCIPAL -->
+      <h2 class="text-2xl sm:text-3xl md:text-4xl font-display font-extrabold tracking-tight text-white leading-tight mb-4">
+        El costo oculto de la <span class="text-[#EE2737]">producción gráfica informal</span>
+      </h2>
+
+      <!-- SUBTÍTULO PERSUASIVO -->
+      <p class="text-sm sm:text-base text-zinc-400 font-sans leading-relaxed">
+        En branding y rotulado publicitario, ahorrar en materiales de dudosa procedencia o confiar en revendedores sin taller propio casi siempre cuesta el doble en reparaciones, pérdida de imagen de marca y tiempo irrecuperable.
+      </p>
+
+    </div>
+
+    <!-- GRILLA DE PROBLEMAS (BENTO-STYLE DE 4 COLUMNAS CON BORDES DEFINIDOS) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {problems.map((prob) => {
+        const Icon = prob.icon;
+        return (
+          <div class="group relative p-6 sm:p-7 rounded-sm bg-zinc-950/70 border border-zinc-800/80 hover:border-zinc-600 transition-all duration-300 flex flex-col justify-between">
+            
+            <div>
+              <!-- FILA SUPERIOR: ICONO PURO Y NÚMERO MONOSPACE -->
+              <div class="flex items-center justify-between mb-5">
+                <div class="text-[#EE2737] transition-transform duration-300 group-hover:scale-110">
+                  <Icon size={26} stroke-width={2} />
+                </div>
+                <span class="font-mono text-xs font-bold text-zinc-500 group-hover:text-zinc-300 transition-colors">
+                  {prob.number}
+                </span>
+              </div>
+
+              <!-- TÍTULO DEL PROBLEMA -->
+              <h3 class="text-base sm:text-lg font-display font-bold text-white group-hover:text-[#EE2737] transition-colors leading-snug mb-3">
+                {prob.title}
+              </h3>
+
+              <!-- DESCRIPCIÓN CONCISA -->
+              <p class="text-xs sm:text-sm text-zinc-400 font-sans leading-relaxed">
+                {prob.description}
+              </p>
+            </div>
+
+            <!-- LÍNEA SUTIL ROJA EN HOVER -->
+            <div class="mt-6 pt-4 border-t border-zinc-800/60 flex items-center justify-between text-[11px] font-mono text-zinc-500">
+              <span class="text-red-400/80">Riesgo común</span>
+              <span class="text-zinc-600">Evítalo con nosotros</span>
+            </div>
+
+          </div>
+        );
+      })}
+    </div>
+
+  </div>
+
+</section>
