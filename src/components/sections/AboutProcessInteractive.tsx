@@ -94,10 +94,10 @@ export default function AboutProcessInteractive() {
           onMouseLeave={() => setIsPaused(false)}
         >
           
-          <div className="flex flex-col md:flex-row items-stretch min-h-[380px] sm:min-h-[440px]">
+          <div className="flex flex-col md:flex-row items-stretch md:h-[400px]">
             
             {/* COLUMNA IZQUIERDA (~42%): FASE, TEXTO CONCISO Y BOTONES FLANQUEANTES */}
-            <div className="w-full md:w-[42%] p-6 sm:p-10 flex flex-col justify-center items-center text-center relative bg-white dark:bg-zinc-900 border-b md:border-b-0 md:border-r border-zinc-200 dark:border-zinc-800">
+            <div className="w-full md:w-[42%] md:h-[400px] p-6 sm:p-8 md:p-8 flex flex-col justify-center items-center text-center relative bg-white dark:bg-zinc-900 border-b md:border-b-0 md:border-r border-zinc-200 dark:border-zinc-800 shrink-0">
               
               {/* Botón Anterior Flotante a la Izquierda */}
               <button
@@ -161,8 +161,8 @@ export default function AboutProcessInteractive() {
 
             </div>
 
-            {/* COLUMNA DERECHA (~58%): FOTO GRANDE DEL PROCESO */}
-            <div className="w-full md:w-[58%] relative min-h-[260px] sm:min-h-[360px] md:min-h-[440px] bg-black overflow-hidden">
+            {/* COLUMNA DERECHA (~58%): FOTO GRANDE DEL PROCESO CON TAMAÑO ESTRICTO */}
+            <div className="w-full md:w-[58%] h-[260px] sm:h-[320px] md:h-[400px] relative bg-black overflow-hidden shrink-0">
               <img
                 key={currentPhase.image}
                 src={currentPhase.image}

@@ -64,18 +64,18 @@ export default function Navbar({ data }: { data?: NavbarData }) {
   const otherLinks = navLinks.slice(1);
 
   return (
-    <header className={`fixed w-full z-50 flex justify-center transition-all duration-500 ease-in-out ${scrolled ? 'top-4 px-4' : 'top-0 px-0'}`}>
+    <header className={`fixed w-full z-50 flex justify-center transition-all duration-500 ease-in-out ${scrolled ? 'top-2 sm:top-3 px-3 sm:px-4' : 'top-0 px-0'}`}>
       
       {/* --- MAIN NAVBAR (Efecto Morph Restablecido) --- */}
       <nav 
         className={`w-full transition-all duration-500 ease-in-out ${
           scrolled 
-            ? 'max-w-6xl bg-[#EE2737]/90 backdrop-blur-md rounded-2xl shadow-2xl border border-white/10' 
+            ? 'max-w-6xl bg-[#EE2737]/95 backdrop-blur-md rounded-xl sm:rounded-2xl shadow-xl border border-white/10' 
             : 'max-w-full bg-[#EE2737] rounded-none border-b border-white/10'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20">
+          <div className={`flex items-center justify-between transition-all duration-300 ${scrolled ? 'h-13 sm:h-14' : 'h-14 sm:h-16'}`}>
             
             {/* Logo en Imagen */}
             <div className="flex-shrink-0 flex items-center">
@@ -83,13 +83,13 @@ export default function Navbar({ data }: { data?: NavbarData }) {
                 <img 
                   src="/logo-horizontal.svg" 
                   alt="Imagenartis Logo" 
-                  className={`transition-all duration-300 ${scrolled ? 'h-6' : 'h-8'} w-auto`}
+                  className={`transition-all duration-300 ${scrolled ? 'h-5 sm:h-5.5' : 'h-6 sm:h-6.5'} w-auto`}
                 />
               </a>
             </div>
 
             {/* Menú Desktop */}
-            <div className="hidden lg:flex items-center space-x-8 font-heading">
+            <div className="hidden lg:flex items-center space-x-7 font-heading">
               <a href={firstLink.href} className="group relative text-white py-2 text-sm font-semibold tracking-wide">
                 {firstLink.label}
                 <CurvedUnderline />
@@ -97,14 +97,14 @@ export default function Navbar({ data }: { data?: NavbarData }) {
               
               {/* Dropdown Servicios */}
               <div className="relative group">
-                <button className="flex items-center gap-1 text-white py-8 text-sm font-semibold tracking-wide relative">
-                  Servicios <ChevronDown size={16} className="group-hover:rotate-180 transition-transform" />
+                <button className="flex items-center gap-1 text-white py-3.5 text-sm font-semibold tracking-wide relative">
+                  Servicios <ChevronDown size={15} className="group-hover:rotate-180 transition-transform" />
                   <CurvedUnderline />
                 </button>
-                <div className="absolute top-[80%] left-0 w-64 bg-white border border-gray-100 shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 rounded-sm">
+                <div className="absolute top-full left-0 w-64 bg-white border border-gray-100 shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 rounded-sm">
                   <div className="py-2">
                     {servicios.map((s) => (
-                      <a key={s.name} href={s.href} className="block px-4 py-3 text-sm font-sans text-gray-800 hover:bg-gray-50 hover:text-[#EE2737] transition-colors">
+                      <a key={s.name} href={s.href} className="block px-4 py-2.5 text-sm font-sans text-gray-800 hover:bg-gray-50 hover:text-[#EE2737] transition-colors">
                         {s.name}
                       </a>
                     ))}
@@ -126,17 +126,17 @@ export default function Navbar({ data }: { data?: NavbarData }) {
                 href={ctaUrl} 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="group flex items-center justify-center bg-white text-[#EE2737] hover:bg-green-700 hover:text-white transition-all duration-300 px-6 py-2.5 rounded-sm text-sm font-bold tracking-widest shadow-lg overflow-hidden"
+                className="group flex items-center justify-center bg-white text-[#EE2737] hover:bg-green-700 hover:text-white transition-all duration-300 px-5 py-2 rounded-sm text-xs sm:text-sm font-bold tracking-wider shadow-md overflow-hidden"
               >
-                <WhatsAppIcon size={18} className="w-0 opacity-0 group-hover:w-[18px] group-hover:opacity-100 group-hover:mr-2 transition-all duration-300" />
+                <WhatsAppIcon size={16} className="w-0 opacity-0 group-hover:w-[16px] group-hover:opacity-100 group-hover:mr-1.5 transition-all duration-300" />
                 <span>{ctaText}</span>
               </a>
             </div>
 
             {/* Menú Móvil Hamburger */}
             <div className="lg:hidden flex items-center">
-              <button onClick={() => setIsOpen(!isOpen)} className="text-white focus:outline-none" aria-label="Abrir menú">
-                {isOpen ? <X size={28} /> : <Menu size={28} />}
+              <button onClick={() => setIsOpen(!isOpen)} className="text-white focus:outline-none p-1.5" aria-label="Abrir menú">
+                {isOpen ? <X size={24} /> : <Menu size={24} />}
               </button>
             </div>
           </div>
@@ -170,9 +170,9 @@ export default function Navbar({ data }: { data?: NavbarData }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setIsOpen(false)}
-                className="group w-full flex justify-center items-center mt-6 bg-white text-[#EE2737] hover:bg-black hover:text-white font-bold px-4 py-4 rounded-sm tracking-wider shadow-lg transition-all duration-300 overflow-hidden"
+                className="group w-full flex justify-center items-center mt-4 bg-white text-[#EE2737] hover:bg-green-700 hover:text-white font-bold px-4 py-3 rounded-sm text-sm tracking-wider shadow-md transition-all duration-300 overflow-hidden"
               >
-                <Zap size={20} className="w-0 opacity-0 group-hover:w-[20px] group-hover:opacity-100 group-hover:mr-2 transition-all duration-300" />
+                <WhatsAppIcon size={18} className="w-0 opacity-0 group-hover:w-[18px] group-hover:opacity-100 group-hover:mr-2 transition-all duration-300" />
                 <span>{ctaText}</span>
               </a>
             </div>

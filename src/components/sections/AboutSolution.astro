@@ -39,11 +39,11 @@ const solutions = [
       {solutions.map((sol) => {
         const Icon = sol.icon;
         return (
-          <div class="group relative p-6 sm:p-7 rounded-sm bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800/90 hover:border-zinc-400 dark:hover:border-zinc-600 transition-all duration-300 flex flex-col justify-between shadow-none select-none">
+          <div class="group relative p-6 sm:p-7 rounded-sm bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800/90 hover:border-zinc-400 dark:hover:border-zinc-600 hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between shadow-none select-none">
             
             <div>
-              <!-- ICONO PURO (Sin bordes, sin fondos, sin numeración) -->
-              <div class="text-[#EE2737] mb-5 transition-transform duration-300 group-hover:scale-110">
+              <!-- ICONO PURO (inline-flex con origin-left para que no se desplace al hacer hover) -->
+              <div class="inline-flex items-center justify-center origin-left text-[#EE2737] mb-5 transition-transform duration-300 group-hover:scale-110">
                 <Icon size={28} stroke-width={2} />
               </div>
 
