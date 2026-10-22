@@ -38,8 +38,21 @@ export default function Navbar({ data }: { data?: NavbarData }) {
     const handleScroll = () => {
       setScrolled(window.scrollY > 40);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    // Resetea menús móviles y dropdowns en transiciones de página
+    const handlePageLoad = () => {
+      setIsOpen(false);
+      setIsDropdownOpen(false);
+      // Revalida posición de scroll de la nueva página
+      setScrolled(window.scrollY > 40);
+    };
+    document.addEventListener('astro:page-load', handlePageLoad);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('astro:page-load', handlePageLoad);
+    };
   }, []);
 
   const navLinks = data?.navLinks && data.navLinks.length > 0 ? data.navLinks : [

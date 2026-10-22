@@ -60,7 +60,9 @@ const navbarData = cms.navbar;
   
   <body class="bg-bg text-text-main dark:bg-dark dark:text-white antialiased transition-colors duration-300 font-sans">
     
-    <Navbar data={navbarData} client:only="react"/>
+    <div transition:persist="main-navbar" class="w-full">
+      <Navbar data={navbarData} client:load />
+    </div>
 
     
 
