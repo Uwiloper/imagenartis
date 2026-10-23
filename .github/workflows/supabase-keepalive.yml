@@ -1,0 +1,16 @@
+name: Supabase Keep-Alive Ping
+
+on:
+  schedule:
+    # Se ejecuta todos los lunes y jueves a las 12:00 UTC (para evitar que Supabase duerma el proyecto a los 7 días)
+    - cron: '0 12 * * 1,4'
+  workflow_dispatch: # Permite ejecución manual desde GitHub Actions
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Keep-Alive Endpoint
+        run: |
+          echo "Enviando petición fantasma a Imagenartis..."
+          curl -s -f "https://imagenartis.pe/api/keepalive" || echo "Fallo temporal o dominio en configuración"

@@ -9,32 +9,165 @@ import { fetchAllSections } from '../lib/cms';
 interface Props {
   title: string;
   description?: string;
+  image?: string;
+  type?: 'website' | 'article';
 }
 
 const { 
   title, 
-  description = "Imagenartis | Especialistas en branding corporativo, rotulación vehicular, letreros y diseño en Lima." 
+  description = "Imagenartis | Especialistas en branding corporativo, rotulación vehicular, letreros y diseño en Lima, Perú.",
+  image = "/favicon.svg",
+  type = "website"
 } = Astro.props;
 
 const cms = await fetchAllSections();
 const navbarData = cms.navbar;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://imagenartis.pe');
+const ogImageURL = new URL(image, Astro.site || 'https://imagenartis.pe');
+
+const gaId = import.meta.env.PUBLIC_GA_ID || '';
+const clarityId = import.meta.env.PUBLIC_CLARITY_ID || '';
+const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION || '';
+
+// Schema.org LocalBusiness + AutomotiveBusiness + ProfessionalService estructurado para SEO y GEO (ChatGPT / Perplexity)
+const schemaOrgData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": ["AutomotiveBusiness", "LocalBusiness", "ProfessionalService"],
+      "@id": "https://imagenartis.pe/#business",
+      "name": "Imagenartis | Branding & Rotulación Vehicular",
+      "alternateName": "Imagenartis",
+      "url": "https://imagenartis.pe",
+      "logo": "https://imagenartis.pe/favicon.svg",
+      "image": ogImageURL.toString(),
+      "description": "Especialistas en rotulación vehicular (car wrap), branding de flotas comerciales, letreros luminosos en ACM y diseño publicitario en Lima, Perú.",
+      "telephone": "+51994097417",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Balconcillo",
+        "addressLocality": "La Victoria",
+        "addressRegion": "Lima",
+        "postalCode": "15034",
+        "addressCountry": "PE"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": -12.0784,
+        "longitude": -77.0275
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+          "opens": "08:30",
+          "closes": "18:30"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": "Saturday",
+          "opens": "09:00",
+          "closes": "13:30"
+        }
+      ],
+      "priceRange": "$$",
+      "currenciesAccepted": "PEN, USD",
+      "paymentAccepted": "Cash, Credit Card, Bank Transfer, Yape, Plin",
+      "areaServed": [
+        { "@type": "AdministrativeArea", "name": "Lima Metropolitana" },
+        { "@type": "Country", "name": "Perú" }
+      ],
+      "knowsAbout": [
+        "Car Wrap",
+        "Rotulación de Vehículos",
+        "Branding de Flotas",
+        "Letreros en Alucobond ACM",
+        "Letras 3D Iluminadas",
+        "Vinil Automotriz 3M y Avery Dennison"
+      ]
+    }
+  ]
+};
 ---
 
 <!doctype html>
 <html lang="es" class="scroll-smooth">
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="canonical" href={canonicalURL} />
 
+    {googleSiteVerification && (
+      <meta name="google-site-verification" content={googleSiteVerification} />
+    )}
+
+    <!-- Favicon & PWA Icons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#09090b" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:locale" content="es_PE" />
+    <meta property="og:site_name" content="Imagenartis" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonicalURL} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageURL} />
+
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+    <!-- Schema.org JSON-LD para SEO y Motores de IA (GEO / AEO) -->
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(schemaOrgData)} />
 
-    <meta charset="UTF-8" />
-    <meta name="description" content={description} />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="generator" content={Astro.generator} />
-    <title>{title}</title>
+    <!-- Google Analytics (GA4) optimizado para Astro View Transitions -->
+    {gaId && (
+      <>
+        <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
+        <script is:inline define:vars={{ gaId }}>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', gaId, { send_page_view: false });
+
+          // Despacho de page_view en navegación SPA con ClientRouter
+          document.addEventListener('astro:page-load', () => {
+            gtag('event', 'page_view', {
+              page_title: document.title,
+              page_location: window.location.href,
+              page_path: window.location.pathname
+            });
+          });
+        </script>
+      </>
+    )}
+
+    <!-- Microsoft Clarity -->
+    {clarityId && (
+      <script is:inline define:vars={{ clarityId }}>
+        (function(c,l,a,r,i,t,y){
+          c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+          t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+          y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", clarityId);
+      </script>
+    )}
 
     <ClientRouter />
 
@@ -59,21 +192,14 @@ const navbarData = cms.navbar;
   </head>
   
   <body class="bg-bg text-text-main dark:bg-dark dark:text-white antialiased transition-colors duration-300 font-sans">
-    
     <div transition:persist="main-navbar" class="w-full">
       <Navbar data={navbarData} client:load />
     </div>
 
-    
-
-    
-    
     <main>
-
       <slot />
     </main>
 
     <Footer />
-    
   </body>
 </html>

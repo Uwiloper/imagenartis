@@ -32,6 +32,8 @@ const relatedProjects = getRelatedProjects(project.id, project.category, 6);
 <Layout 
   title={`${project.title} | Imagenartis`}
   description={project.description}
+  image={project.featuredImage}
+  type="article"
 >
   <!-- Ficha de Detalle de Proyecto Estilo E-Commerce / Compra -->
   <ProjectDetailView client:load project={project} relatedProjects={relatedProjects} />
