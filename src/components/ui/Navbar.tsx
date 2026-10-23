@@ -83,7 +83,7 @@ export default function Navbar({ data }: { data?: NavbarData }) {
       <nav 
         className={`w-full transition-all duration-500 ease-in-out ${
           scrolled 
-            ? 'max-w-6xl bg-[#EE2737]/95 backdrop-blur-md rounded-xl sm:rounded-2xl shadow-xl border border-white/10' 
+            ? 'max-w-6xl bg-[#EE2737]/95 backdrop-blur-md rounded-md sm:rounded-lg shadow-xl border border-white/10' 
             : 'max-w-full bg-[#EE2737] rounded-none border-b border-white/10'
         }`}
       >
@@ -157,7 +157,7 @@ export default function Navbar({ data }: { data?: NavbarData }) {
 
         {/* --- MENÚ MÓVIL DESPLEGABLE --- */}
         {isOpen && (
-          <div className={`lg:hidden bg-[#EE2737] absolute w-full transition-all duration-300 shadow-2xl ${scrolled ? 'rounded-b-2xl border-t border-white/20' : 'border-t border-white/20'}`}>
+          <div className={`lg:hidden bg-[#EE2737] absolute w-full transition-all duration-300 shadow-2xl ${scrolled ? 'rounded-b-md sm:rounded-b-lg border-t border-white/20' : 'border-t border-white/20'}`}>
             <div className="px-4 pt-4 pb-6 space-y-4 font-heading">
               <a href={firstLink.href} onClick={() => setIsOpen(false)} className="block text-white hover:text-black text-lg font-medium">{firstLink.label}</a>
               <div>
