@@ -110,12 +110,12 @@ export default function Navbar({ data }: { data?: NavbarData }) {
               
               {/* Dropdown Servicios */}
               <div className="relative group">
-                <button className="flex items-center gap-1 text-white py-3.5 text-sm font-semibold tracking-wide relative">
+                <button className="flex items-center gap-1 text-white py-2 text-sm font-semibold tracking-wide relative">
                   Servicios <ChevronDown size={15} className="group-hover:rotate-180 transition-transform" />
                   <CurvedUnderline />
                 </button>
-                <div className="absolute top-full left-0 w-64 bg-white border border-gray-100 shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 rounded-sm">
-                  <div className="py-2">
+                <div className="absolute top-full left-0 pt-2 w-64 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                  <div className="bg-white border border-gray-100 shadow-2xl rounded-md py-2 overflow-hidden">
                     {servicios.map((s) => (
                       <a key={s.name} href={s.href} className="block px-4 py-2.5 text-sm font-sans text-gray-800 hover:bg-gray-50 hover:text-[#EE2737] transition-colors">
                         {s.name}
