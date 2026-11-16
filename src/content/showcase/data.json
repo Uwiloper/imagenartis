@@ -6,8 +6,8 @@
     {
       "id": "vehiculo",
       "category": "Vehículo Comercial",
-      "beforeImage": "https://images.unsplash.com/photo-1550355291-bbee04a92027?q=80&w=1200&auto=format&fit=crop",
-      "afterImage": "https://images.unsplash.com/photo-1619682817481-e994891cd1f5?q=80&w=1200&auto=format&fit=crop",
+      "beforeImage": "/Inicio/dorcher_clean.jpeg",
+      "afterImage": "/Inicio/dorcher_brand.jpg",
       "testimonial": "\"El diseño quedó exactamente como lo imaginé. La instalación fue impecable y rápida.\"",
       "clientName": "Carlos M. - Flota Express",
       "order": 1
